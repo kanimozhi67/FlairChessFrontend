@@ -377,12 +377,13 @@ const btnheaderStyle= {
 
   {user ? (
     <>
-    <Button size="small" onClick={handleLogout }>Logout</Button>
+    <Button size="small" style={{color:"white",fontSize:16,backgroundColor:"blue",borderRadius:20,padding:15, border:"none"}}
+    onClick={handleLogout }>Logout</Button>
  
-<Link to="/categories"> <strong style={{color:"white"}}>{user.username}</strong>
+<Link to="/categories"> <strong style={{color:"white",fontSize:18}}>{user.username}</strong>
   <img
     src={user?.avatar ? avat : avat}
-    style={{ maxWidth: 20, borderRadius: "50%", cursor: "pointer",border :"1px solid blue" }}
+    style={{ maxWidth: 30, borderRadius: "50%", cursor: "pointer",border :"1px solid blue" }}
     alt="avatar"
   />
 </Link>
@@ -564,8 +565,9 @@ transform: "translateX(-50%)",        // ✅ FORCE full width
               <div style={{ color: "#fff", textAlign: "center", fontWeight: 800, fontSize: 18, lineHeight: 1.15 }}>
           <button style={{background:"transparent",border:"none",cursor:"pointer"}}
           onClick={() => {
+             if(!user){
         setIsLogin(true);
-        setModalOpen(true);
+        setModalOpen(true);}
       }}
           >     Flair<br />Olympiad</button> 
               </div>

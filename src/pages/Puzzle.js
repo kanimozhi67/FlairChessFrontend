@@ -139,19 +139,63 @@ useEffect(() => {
   const renderCell = (val) => {
 if (typeof val === "string" && inputs.includes(val)) {
   const icon = inputToIcon[val];
+
+  const isCorrect = results?.[val] === true;
+    const isWrong = results?.[val] === false;
+
+
   return val === "A" ? (
     <InputNumber
       value={answers[val] ?? null}
-      placeholder="🍓"// special placeholder for A
+       disabled={submitted}   // lock after submit
+        placeholder={val === "A" ? "🍓" : icon}
+     // placeholder="🍓"// special placeholder for A
       onChange={(v) => setAnswers((prev) => ({ ...prev, [val]: v ?? null }))}
-      style={{ width: 80 ,fontSize: 30, textAlign: "center" }}
+      style={{ width: 80 ,fontSize: 30, textAlign: "center" ,
+
+         // ✅ coloring logic
+          border: submitted
+            ? isCorrect
+              ? "3px solid green"
+              : isWrong
+              ? "3px solid red"
+              : undefined
+            : undefined,
+
+          backgroundColor: submitted
+            ? isCorrect
+              ? "#85eb85"
+              : isWrong
+              ? "#f36f6f"
+              : undefined
+            : undefined,
+        }}
     />
   ) : (
     <InputNumber
       value={answers[val] ?? null}
+       disabled={submitted}   // lock after submit
       placeholder={icon} // normal placeholder
       onChange={(v) => setAnswers((prev) => ({ ...prev, [val]: v ?? null }))}
-      style={{ width: 80 ,fontSize: 26, textAlign: "center"  }}
+      style={{ width: 80 ,fontSize: 26, textAlign: "center",
+        
+         // ✅ coloring logic
+          border: submitted
+            ? isCorrect
+              ? "3px solid green"
+              : isWrong
+              ? "3px solid red"
+              : undefined
+            : undefined,
+
+          backgroundColor: submitted
+            ? isCorrect
+              ? "#83ee83"
+              : isWrong
+              ? "#e25353"
+              : undefined
+            : undefined,
+        }}
     />
   );
 }
