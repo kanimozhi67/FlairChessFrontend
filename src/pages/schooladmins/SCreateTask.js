@@ -12,6 +12,8 @@ import {
 } from "antd";
 import api from "../../api/axiosClient";
 import "../admin/CreateTask.css";
+import { Upload } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 
 const categoryOptions = [
   "Addition & Subtraction",
@@ -56,8 +58,8 @@ const SCreateTask = ({user}) => {
         title,
         description,
         level, // kindergarten | primary
-        category,
-        selectedLevel,
+       // category,
+       // selectedLevel,
         className,
         section,
         date: date.format("YYYY-MM-DD"),
@@ -74,7 +76,7 @@ const SCreateTask = ({user}) => {
 
   return (
     <div className="create-task-container">
-      <Card className="create-task-card" title="Create New Task">
+      <Card className="create-task-card" title="Create New Post">
         <Form layout="vertical" onFinish={onFinish} initialValues={{ active: true }}>
           <Row gutter={[16, 16]}>
 
@@ -95,13 +97,26 @@ const SCreateTask = ({user}) => {
                 <Input.TextArea rows={3} placeholder="Optional task description" />
               </Form.Item>
             </Col>
+{/* IMAGE UPLOAD */}
+<Col xs={24}>
+  <Form.Item
+    name="image"
+    label="TASK IMAGE"
+    valuePropName="fileList"
+    getValueFromEvent={(e) => (Array.isArray(e) ? e : e?.fileList)}
+  >
+    <Upload beforeUpload={() => false} listType="picture">
+      <Button icon={<UploadOutlined />}>Upload Image</Button>
+    </Upload>
+  </Form.Item>
+</Col>
 
             {/* LEVEL */}
             <Col xs={24} md={12}>
               <Form.Item
                 name="level"
                 label="LEVEL"
-                rules={[{ required: true, message: "Please select a level" }]}
+                rules={[{ message: "Please select a level" }]}
               >
                 <Radio.Group>
                   <Radio value="kindergarten">Kindergarten</Radio>
@@ -126,7 +141,7 @@ const SCreateTask = ({user}) => {
               <Form.Item
                 name="className"
                 label="CLASS NAME"
-                rules={[{ required: true, message: "Please enter class name" }]}
+                rules={[{  message: "Please enter class name" }]}
               >
                 <Input placeholder="e.g. Class 1" />
               </Form.Item>
@@ -137,31 +152,17 @@ const SCreateTask = ({user}) => {
               <Form.Item
                 name="section"
                 label="SECTION"
-                rules={[{ required: true, message: "Please enter section" }]}
+                rules={[{  message: "Please enter section" }]}
               >
                 <Input placeholder="e.g. A" />
               </Form.Item>
             </Col>
 
             {/* CATEGORY */}
-            <Col xs={24}>
-              <Form.Item
-                name="category"
-                label="CATEGORY"
-                rules={[{ required: true, message: "Please select a category" }]}
-              >
-                <Radio.Group className="checkbox-grid">
-                  {categoryOptions.map((cat) => (
-                    <Radio key={cat} value={cat}>
-                      {cat}
-                    </Radio>
-                  ))}
-                </Radio.Group>
-              </Form.Item>
-            </Col>
+         
 
             {/* SELECTED LEVEL */}
-            <Col xs={24}>
+            {/* <Col xs={24}>
               <Form.Item
                 name="selectedLevel"
                 label="SELECTED LEVEL"
@@ -169,10 +170,10 @@ const SCreateTask = ({user}) => {
               >
                 <Radio.Group options={selectedLevelOptions} />
               </Form.Item>
-            </Col>
+            </Col> */}
 
             {/* ACTIVE */}
-            <Col xs={24} md={12}>
+            {/* <Col xs={24} md={12}>
               <Form.Item
                 name="active"
                 label="ACTIVE"
@@ -180,7 +181,7 @@ const SCreateTask = ({user}) => {
               >
                 <Switch />
               </Form.Item>
-            </Col>
+            </Col> */}
 
             {/* SUBMIT */}
             <Col xs={24}>

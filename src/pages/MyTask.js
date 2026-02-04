@@ -18,7 +18,7 @@ const MyTask = ({user,todayTaskCount,setTodayTaskCount,
       {
         const res = await api.get("/users/todaytaskstudent");
       setTasks(res.data);
-    
+    console.log(res.data)
       setTodayTaskCount((res.data).length)
         }
       
@@ -48,7 +48,7 @@ const MyTask = ({user,todayTaskCount,setTodayTaskCount,
        // display: "flex", 
         background: "linear-gradient(135deg, #ffd194, #6a11cb)", 
         padding: 20 }}>
-          
+          {/* <Row><button style={{backgroundColor:" #a0d8e5",padding:15,borderRadius:0}}></button></Row> */}
     <Row gutter={[16, 16]}>
       {tasks.map((task) => (
         <Col xs={24} md={12} lg={8} key={task.userTaskId}>
@@ -61,6 +61,12 @@ const MyTask = ({user,todayTaskCount,setTodayTaskCount,
               
             }
           >
+             {task.description && (
+                <p>
+                  <strong>Description:</strong> {task.description}
+                </p>
+              )}
+              {<br></br>}
             {task.categories.map((cat) =>
               cat.levels.map((lvl) => {
                 const route = categoryRouteMap[cat.name];

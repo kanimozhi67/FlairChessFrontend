@@ -1,92 +1,9 @@
-// import React from "react";
-// import { Form, Input, Button, message,Card, Typography } from "antd";
-// import api from "../api/axiosClient";
-// import { useNavigate } from "react-router-dom";
 
-// const Login = ({ onSuccess, setUser }) => {
-//   const navigate = useNavigate();
-// const { Title } = Typography;
-// const handlePassword=async(value)=>{
-//   const {email,password}=value;
-// try{
-//   if(!email || !password){
-//     message.error("please Enter all the fields")
-//   }
-
-// const res = await api.post("/auth/forgotPassword", value);
-// }catch{
-// message.error(err.response?.data?.message || " Failed to update password");
-// }
-// }
-//   const onFinish = async (values) => {
-//     try {
-//       const res = await api.post("/auth/login", values);
-
-//       const userData = res.data.user;
-
-//       // Save token and userId in localStorage
-//       localStorage.setItem("token", res.data.token);
-//       localStorage.setItem("userId", userData.id);
-// localStorage.setItem("user", JSON.stringify({
-//   ...userData,
-//   model: "User"
-// }));
-//       // Set user in app state
-//       if (setUser) setUser(userData);
-
-//       message.success("Login successful");
-
-//       if (onSuccess) onSuccess(); // close modal
-//       navigate("/categories"); // redirect after login
-//     } catch (err) {
-//       message.error(err.response?.data?.message || "Login failed");
-//     }
-//   };
-
-//   return (
-//     <Card>
-//     <Form
-//       onFinish={onFinish}
-//       layout="vertical"
-//       style={{ width: "100%" }}
-        
-//     >
-//       <Form.Item
-//         name="username"
-//         rules={[{ required: true, message: "Please enter your username" }]}
-//         label="Username"
-//       >
-//         <Input size="large" placeholder="Enter your username" />
-//       </Form.Item>
-
-//       <Form.Item
-//         name="password"
-//         rules={[{ required: true, message: "Please enter your password" }]}
-//         label="Password"
-//       >
-//         <Input.Password size="large" placeholder="Enter your password" />
-//       </Form.Item>
-// <button onClick={handlePassword} style={{border:0,textDecoration:"underline", color:"blueviolet"}}>Forgot password ?</button>
-//       <Button
-//         type="primary"
-//         htmlType="submit"
-//         block
-//         size="large"
-//         style={{ marginTop: 10, borderRadius: 8 }}
-//       >
-//         Login
-//       </Button>
-//     </Form>
-//     </Card>
-  
-//   );
-// };
-
-// export default Login;
 import React, { useState } from "react";
 import { Form, Input, Button, message, Card, Typography, Modal } from "antd";
 import api from "../api/axiosClient";
 import { useNavigate } from "react-router-dom";
+import Password from "antd/es/input/Password";
 
 const Login = ({ onSuccess, setUser }) => {
   const navigate = useNavigate();
@@ -96,6 +13,13 @@ const Login = ({ onSuccess, setUser }) => {
   const [forgotLoading, setForgotLoading] = useState(false);
 
   /* ---------------- LOGIN ---------------- */
+  const onGuest =() =>{
+    const GuestUser={
+  username:"Guest",
+  password:"Guest123"
+};
+onFinish(GuestUser);
+  }
   const onFinish = async (values) => {
     try {
       const res = await api.post("/auth/login", values);
@@ -169,6 +93,9 @@ const Login = ({ onSuccess, setUser }) => {
           Login
         </Button>
       </Form>
+<Button onClick={onGuest} style={{ marginTop: 10 }} block>
+  Login as Guest
+</Button>
 
       {/* ---------------- FORGOT PASSWORD MODAL ---------------- */}
       <Modal

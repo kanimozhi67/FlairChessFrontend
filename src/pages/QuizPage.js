@@ -612,6 +612,7 @@ handleComplete(points);}
       "QUESTIONS:",
       questions.map((q) => q.id)
     );
+    console.log("Correct ANSWERS:", res.data?.correctAnswers);
     const score = res?.data?.score ?? 0;
     setFinalScore(score);
     setSubmitted(true);

@@ -13,7 +13,7 @@ const { Header, Sider, Content } = AntLayout;
 const Layout = ({ user, setUser,todayTaskCount }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
+ const hideCircularFor = ["Admin", "User"];
   const [collapsed, setCollapsed] = useState(false);
   const [todayScore, setTodayScore] = useState(0);
   const [initializing, setInitializing] = useState(true);
@@ -55,7 +55,18 @@ const Layout = ({ user, setUser,todayTaskCount }) => {
 
          { key: "mystickers", label: "👝 My Stickers", path: "/mystickers" },
       ]),
+
+      
     { key: "dashboard", label: "🏆 Dashboard", path: "/quiz/progress" },
+   
+
+
+
+...(["Admin", "User"].includes(user?.role)
+  ? []
+  : [{ key: "circular", label: "📢 Circular", path: "/circular" }]),
+
+
    
     { key: "getMe", label: "👶 My Profile", path: "/profile" },
   ];
@@ -86,6 +97,8 @@ const Layout = ({ user, setUser,todayTaskCount }) => {
 
       ]),
     { key: "dashboard", label: "🏆 ", path: "/quiz/progress" },
+     ...(user?.role !== ("Admin" || "User") &&
+       [{ key: "circular", label: "📢", path: "/circular" }]),
    
     { key: "getMe", label: "👶 ", path: "/profile" },
   ];

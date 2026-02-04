@@ -28,7 +28,7 @@ const QuizCard = ({
   const titleFontSize = width <= 480 ? 17 : width <= 768 ? 30 : 35;
   const questionFontSize = width <= 480 ? 28 : width <= 768 ? 32 : 36;
   const inputFontSize = width <= 480 ? 24 : width <= 768 ? 30 : 36;
-  const inputWidth = width <= 480 ? 80 : width <= 768 ? 100 : 120;
+  const inputWidth = width <= 480 ? 100 : width <= 768 ? 120 : 140;
   const buttonFontSize = width <= 480 ? 20 : width <= 768 ? 22 : 24;
   const buttonPadding =
     width <= 480 ? "8px 0" : width <= 768 ? "10px 0" : "12px 0";

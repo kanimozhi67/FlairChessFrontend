@@ -21,9 +21,9 @@ const SchoolAdminDashboard = ({ user }) => {
   const isTablet = screens.md && !screens.lg;
 
   const menuItems = [
-    { key: "create", icon: <PlusOutlined />, label: "Create Task" },
-    { key: "tasks", icon: <span>📚</span>, label: "All Tasks" },
-    { key: "board", icon: <span>📝</span>, label: "Task Board" },
+    { key: "create", icon: <PlusOutlined />, label: "Create Posts" },
+    { key: "tasks", icon: <span>📚</span>, label: "Circular" },
+    // { key: "board", icon: <span>📝</span>, label: "Task Board" },
     { key: "schools", icon: <span>🏫</span>, label: "Schools" },
     { key: "back", icon: <span>🔙</span>, label: "Back" },
   ];
@@ -34,8 +34,8 @@ const SchoolAdminDashboard = ({ user }) => {
         return <SCreateTask user={user} />;
       case "tasks":
         return <SAllTask  user={user} />;
-      case "board":
-        return <STaskBoard user={user} />;
+      // case "board":
+      //   return <STaskBoard user={user} />;
       case "schools":
         return <SAdminSchoolBoard user={user} />;
       default:

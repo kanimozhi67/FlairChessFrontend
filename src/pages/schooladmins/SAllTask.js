@@ -25,8 +25,8 @@ const SAllTasks = ({user}) => {
 
   const fetchTasks = async () => {
     try {
-      const res = await api.get("/admin/sgettask");
-      setTasks(res.data);
+    //  const res = await api.get("/admin/sgettask");
+     // setTasks(res.data);
      
     } catch {
       message.error("Failed to load tasks");
