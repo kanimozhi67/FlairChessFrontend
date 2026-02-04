@@ -97,8 +97,9 @@ const Layout = ({ user, setUser,todayTaskCount }) => {
 
       ]),
     { key: "dashboard", label: "🏆 ", path: "/quiz/progress" },
-     ...(user?.role !== ("Admin" || "User") &&
-       [{ key: "circular", label: "📢", path: "/circular" }]),
+   ...(["Admin", "User"].includes(user?.role)
+  ? []
+  : [{ key: "circular", label: "📢 ", path: "/circular" }]),
    
     { key: "getMe", label: "👶 ", path: "/profile" },
   ];
