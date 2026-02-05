@@ -36,13 +36,18 @@ const [loadingExplanation, setLoadingExplanation] = useState(false);
   };
 
   // ------------------- OPTIONS GENERATORS -------------------
-  const makeOptionsForMissing = (qArray, mul, skip) => {
-    const correct = computeMissingValue(qArray, mul, skip);
-    const distractors = qArray.filter(v => v !== null).slice(0, 3);
-    const optionsSet = new Set([correct, ...distractors]);
-    return [...optionsSet].sort(() => Math.random() - 0.5);
-  };
+  // const makeOptionsForMissing = (qArray, mul, skip) => {
+  //   const correct = computeMissingValue(qArray, mul, skip);
+  //   const distractors = qArray.filter(v => v !== null).slice(0, 3);
+  //   const optionsSet = new Set([correct, ...distractors]);
+  //   return [...optionsSet].sort(() => Math.random() - 0.5);
+  // };
 
+  const makeOptionsForMissing = (missing) => {
+    return [missing, missing - 1 > 0 ? missing - 1 : missing + 1, missing + 1, missing + 2].sort(
+      () => Math.random() - 0.5
+    );
+  };
   const makeOptionsForMul = (mul) => {
     return [mul, mul - 1 > 0 ? mul - 1 : mul + 1, mul + 1, mul + 2].sort(
       () => Math.random() - 0.5
@@ -50,6 +55,7 @@ const [loadingExplanation, setLoadingExplanation] = useState(false);
   };
 
   const makeOptionsForSkip = (skip) => {
+    console.log(skip)
     return [skip, skip - 1 > 0 ? skip - 1 : skip + 1, skip + 1, skip + 2].sort(
       () => Math.random() - 0.5
     );
@@ -72,11 +78,12 @@ const [loadingExplanation, setLoadingExplanation] = useState(false);
       setMeta({
         id: qObj.id,
         qArray: qObj.q,
+        missing:qObj.answer,
         mul: qObj.mul,
         skip: qObj.skip
       });
 
-      setOptions(makeOptionsForMissing(qObj.q, qObj.mul, qObj.skip));
+      setOptions(makeOptionsForMissing(qObj.answer));
       setStep(1);
       setAiExplanation(null);
 setLoadingExplanation(false);

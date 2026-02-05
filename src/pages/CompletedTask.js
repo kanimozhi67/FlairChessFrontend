@@ -81,7 +81,7 @@ const CompletedTask = ({ user }) => {
      const dataSource  = completedData?.completedLevel?.map((_, i) => ({
   key: i,
   completedLevel: completedData.completedLevel[i],
-  completedCategory: completedData.completedCategory[i],
+  completedCategory: completedData.completedCategory[i]==="math"? "Addtion & Subtraction" : completedData.completedCategory[i] ,
   completedSelectedLevel: completedData.completedSelectedLevel[i],
 time: completedData.time[i],
   completedPoints: completedData.completedPoints[i],
