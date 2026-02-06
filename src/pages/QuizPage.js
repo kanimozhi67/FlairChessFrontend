@@ -544,8 +544,9 @@ handleComplete(points);}
 
   // Submit quiz and handle results
   const submitQuiz = async () => {
+     setSubmitted(true);
     if (!questions || questions.length === 0) return;
-    console.log("submitquiz");
+   
     // Sorting quiz
     if (category === "sorting") {
       const allAnswered = questions.every((q) =>
@@ -573,7 +574,7 @@ handleComplete(points);}
 
         const score = res?.data?.score ?? 0;
         setFinalScore(score);
-        setSubmitted(true);
+        // setSubmitted(true);
 
         await addPointsToBackend(score);
         const resResults = {};
@@ -585,6 +586,8 @@ handleComplete(points);}
           });
         });
         setResults(resResults);
+        
+   giftmessage(score);
       } catch (err) {
         console.error("submitQuiz (sorting) error:", err);
         setFeedbackMessage("❌ Submit failed.");
@@ -615,7 +618,7 @@ handleComplete(points);}
     console.log("Correct ANSWERS:", res.data?.correctAnswers);
     const score = res?.data?.score ?? 0;
     setFinalScore(score);
-    setSubmitted(true);
+   
 
     await addPointsToBackend(score);
 
@@ -629,7 +632,7 @@ handleComplete(points);}
     });
     setResults(resResults);
 
-   // giftmessage(score);
+   giftmessage(score);
   };
 
   const giftmessage = (score) => {
