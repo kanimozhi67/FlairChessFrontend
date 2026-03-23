@@ -3,7 +3,7 @@ import { Button } from "antd";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 
-const LevelSelection = ({ onSelectLevel }) => {
+const LevelSelection = ({ category,onSelectLevel }) => {
   const { width, height } = useWindowSize();
   const motivationList = ["Sharp-witted","Smart","Bright","Awesome","Amazing","Brilliant","Fantastic"];
   
@@ -39,7 +39,11 @@ const LevelSelection = ({ onSelectLevel }) => {
         gap: "20px",
         justifyContent: "center",
       }}>
-        {[1, 2, 3].map(level => (
+
+
+{
+  (category=="fraction") &&
+      [1, 2, 3,4].map(level => (
           <Button
             key={level}
             type="primary"
@@ -62,6 +66,32 @@ const LevelSelection = ({ onSelectLevel }) => {
             Level {level}
           </Button>
         ))}
+
+{  !(category=="fraction") &&
+        [1, 2, 3].map(level => (
+          <Button
+            key={level}
+            type="primary"
+            size="large"
+            style={{
+              fontSize: "clamp(1rem, 2vw, 1.75rem)",
+              padding: "15px 30px",
+              borderRadius: "20px",
+              fontWeight: "bold",
+              background: "linear-gradient(135deg, #ff9d2f, #ff6126)",
+              color: "#fff",
+              boxShadow: "0 6px 15px rgba(0,0,0,0.2)",
+              flex: "1 1 150px",
+              minWidth: "150px",
+              maxWidth: "250px",
+              textAlign: "center",
+            }}
+            onClick={() => onSelectLevel(level, motivationList[Math.floor(Math.random()*motivationList.length)])}
+          >
+            Level {level}
+          </Button>
+        ))}
+
       </div>
     </div>
   );

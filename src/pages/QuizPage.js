@@ -30,6 +30,7 @@ import TimeQuiz from "./TimeQuiz.js";
 import TimeOption from "./TimeOption.js";
 import Robot from "./Robot.js";
 import AngleQuiz from "./AngleQuiz.js";
+import FractionTopics from "./FractionTopics.js";
 
 const QuizPage = ({ user, setUser,setCompletedLevel,setCompletedCategory,setCompletedSelectedLevel,
   completedLevel,completedCategory,completedSelectedLevel,  setCompletedPoints }) => {
@@ -705,6 +706,7 @@ useEffect(() => {
   if (!selectedLevel &&  category!=="robot") {
     return (
       <LevelSelection
+      category={category}
         onSelectLevel={(lvl, msg) => {
           setSelectedLevel(lvl);
           setMotivationMessage(msg);
@@ -878,7 +880,18 @@ user={user}
             addPointsToBackend={addPointsToBackend}
             setResults={setResults}
 />
-        ):category==="fraction" || (category === "puzzles" && selectedLevel !==1 ) ||
+        ):(level==="primary" && selectedLevel===4 && category==="fraction") ? (
+  <FractionTopics 
+  category ={category}
+ level={level}
+     selectedLevel={selectedLevel}
+            addPointsToBackend={addPointsToBackend}
+            setResults={setResults}
+  />
+
+
+
+        ):(category==="fraction"  && selectedLevel !==4 ) || (category === "puzzles" && selectedLevel !==1 ) ||
         (category==="logic" && selectedLevel!==1)?(
 <Fraction  
 category ={category}
