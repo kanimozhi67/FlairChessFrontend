@@ -42,7 +42,7 @@ const LevelSelection = ({ category,onSelectLevel }) => {
 
 
 {
-  (category=="fraction") &&
+  (category=="fraction" || category==="money") &&
       [1, 2, 3,4].map(level => (
           <Button
             key={level}
@@ -67,7 +67,7 @@ const LevelSelection = ({ category,onSelectLevel }) => {
           </Button>
         ))}
 
-{  !(category=="fraction") &&
+{  (!category=="fraction" || !category==="money") &&
         [1, 2, 3].map(level => (
           <Button
             key={level}

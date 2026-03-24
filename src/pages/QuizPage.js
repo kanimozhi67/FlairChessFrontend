@@ -31,6 +31,7 @@ import TimeOption from "./TimeOption.js";
 import Robot from "./Robot.js";
 import AngleQuiz from "./AngleQuiz.js";
 import FractionTopics from "./FractionTopics.js";
+import FractionTopicsQuiz from "./FractionTopicsQuiz.js";
 
 const QuizPage = ({ user, setUser,setCompletedLevel,setCompletedCategory,setCompletedSelectedLevel,
   completedLevel,completedCategory,completedSelectedLevel,  setCompletedPoints }) => {
@@ -305,7 +306,8 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",
       break;
 
     case "money":
-      len = 6;
+   
+      len = selectedLevel=== 4 ? 5 : 6;
       break;
 
       case "measure":
@@ -847,7 +849,7 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",}}>
             
             />
 
-        ): category=== "money" ? (
+        ): category=== "money" && selectedLevel !== 4 ? (
 <MoneyQuiz
      level={level}
      selectedLevel={selectedLevel}
@@ -880,8 +882,18 @@ user={user}
             addPointsToBackend={addPointsToBackend}
             setResults={setResults}
 />
-        ):(level==="primary" && selectedLevel===4 && category==="fraction") ? (
+        ):(level==="primary" && (selectedLevel===4 && category==="fraction") 
+        )? (
   <FractionTopics 
+  category ={category}
+ level={level}
+     selectedLevel={selectedLevel}
+            addPointsToBackend={addPointsToBackend}
+            setResults={setResults}
+  />
+        ):
+         (selectedLevel===4 && category==="money")? (
+  <FractionTopicsQuiz
   category ={category}
  level={level}
      selectedLevel={selectedLevel}

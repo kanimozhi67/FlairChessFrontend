@@ -19,18 +19,32 @@ export default function FractionTopicsQuiz({ category, level, selectedLevel, use
     setSelected("");
     setStep(0);
 
-    const endpoint =
+//     const endpoint =
 
+// category==="money" ?
+// "/quiz/moneylevel4"
+//   :  (
+//           topics === 'equivalentFraction'
+//           ? "/quiz/fractioneq4"
+//           : topics === 'hcf'
+//           ? "/quiz/fractionhcf4"
+//           : topics === 'lcm'
+//           ? "/quiz/fractionlcm4"
+//           : topics === 'mixedfraction'
+//           ? "/quiz/fractionmixed4"
+//           : "/quiz/fractionword4"
+//       )
 
-    (
-          topics === 'equivalentFraction'
-          ? "/quiz/fractioneq4"
-          : topics === 'hcf'
-          ? "/quiz/fraction2"
-          : "/quiz/fraction3"
-      )
-
-      
+//     }
+const endpoint = category === "money"
+  ? "/quiz/moneylevel4"
+  : {
+      equivalentFraction: "/quiz/fractioneq4",
+      hcf: "/quiz/fractionhcf4",
+      lcm: "/quiz/fractionlcm4",
+      mixedfraction: "/quiz/fractionmixed4",
+     wordproblems: "/quiz/fractionword4"
+    }[topics] || "/quiz/fractionword4";
     const res = await api.get(endpoint);
     setQuestions(res.data.questions);
     setLoading(false);
@@ -195,7 +209,13 @@ aiExplanations[item.id] && (
 
 
 
-{/* <p style={{fontSize: "clamp(18px, 3vw, 26px)"}}>What fraction is represented ?</p> */}
+ <p style={{fontSize: "clamp(18px, 3vw, 26px)"}}>
+  {topics==="equivalentFraction" && <p>  Find the equivalent fraction </p>}
+  {topics==="hcf" && <p> Reduce the following fraction into their lower terms </p>}
+  {topics==="lcm" && <p> Convert following fraction into like fraction </p>}
+  {topics==="mixedfraction" && <p> Convert improper fraction into mixed fraction and viceversa. </p>}
+
+  </p> 
 <p style={styles.mainQuestion}>{current.question}</p> 
 {/* {level==="primary" && selectedLevel ===1 || (category!=="fraction" && selectedLevel ===3 ) &&
 ( category!=="logic"  && selectedLevel ===2 )? (
@@ -289,7 +309,7 @@ const styles = {
   },
 
   mainQuestion: {
-    fontSize: "clamp(25px, 3.5vw, 35px)",
+    fontSize: "clamp(25px, 3.5vw, 30px)",
     marginBottom: 20,
     border:"2px solid  #f01758ff",
     padding:10
