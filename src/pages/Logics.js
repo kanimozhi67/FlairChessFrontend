@@ -4,6 +4,7 @@ import { UndoOutlined } from "@ant-design/icons";
 import api from "../api/axiosClient";
 
 const Logics = ({level, selectedLevel, user, addPointsToBackend }) => {
+  console.log("In logics")
 let shapes=[];
 
 if( level==="primary"){

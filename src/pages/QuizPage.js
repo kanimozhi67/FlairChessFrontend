@@ -38,7 +38,7 @@ const QuizPage = ({ user, setUser,setCompletedLevel,setCompletedCategory,setComp
     const navigate = useNavigate();
    const { search } = useLocation();
   const [searchParams] = useSearchParams();
-  const level = searchParams.get("level"); // kindergarten | primary
+  var level = searchParams.get("level"); // kindergarten | primary
   const { category } = useParams();
   const { width } = useWindowSize();
   const firstInputRef = useRef(null);
@@ -499,7 +499,8 @@ const categoryName = searchParams.get("category");
 
   // Helper: send points to backend and update UI
 const addPointsToBackend = async (points = 0) => {
- console.log(user.role);
+ console.log(user.level);
+
 await api.post("/users/completed", {
   Id: user._id,
   level:!level  ? "Task" : level,
@@ -701,6 +702,8 @@ handleComplete(points);}
 useEffect(() => {
   if (urlSelectedLevel) {
     setMotivationMessage("🔥.  Great choice! Let’s start your challenge!");
+    level=user.level;
+    console.log(level)
     setShowMotivation(true);
   }
 }, [urlSelectedLevel]);
@@ -709,6 +712,7 @@ useEffect(() => {
     return (
       <LevelSelection
       category={category}
+      level={level}
         onSelectLevel={(lvl, msg) => {
           setSelectedLevel(lvl);
           setMotivationMessage(msg);
@@ -759,7 +763,8 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",}}>
       <div style={innerStyle}>
       
         <div style={quizCardStyle}>
-          
+          {console.log(level?level:user.level)}
+          {level=level?level:user.level}
           {category === "sorting" ? (
             <SortingQuizCard
               level={level}
@@ -904,7 +909,7 @@ user={user}
 
 
         ):(category==="fraction"  && selectedLevel !==4 ) || (category === "puzzles" && selectedLevel !==1 ) ||
-        (category==="logic" && selectedLevel!==1)?(
+        (category==="logic" && selectedLevel!==1 && level==="primary")?(
 <Fraction  
 category ={category}
  level={level}

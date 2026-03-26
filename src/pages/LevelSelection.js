@@ -3,10 +3,15 @@ import { Button } from "antd";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 
-const LevelSelection = ({ category,onSelectLevel }) => {
+const LevelSelection = ({ category,level,onSelectLevel }) => {
   const { width, height } = useWindowSize();
   const motivationList = ["Sharp-witted","Smart","Bright","Awesome","Amazing","Brilliant","Fantastic"];
-  
+  const levels =
+  (category === "fraction" ||
+  category === "money" ||
+  category === "measure" ) && level==="primary"
+    ? [1, 2, 3, 4]
+    : [1, 2, 3];
   return (
     <div style={{
       margin: 0,
@@ -39,10 +44,37 @@ const LevelSelection = ({ category,onSelectLevel }) => {
         gap: "20px",
         justifyContent: "center",
       }}>
-
-
+{levels.map(level => (
+  <Button
+    key={level}
+    type="primary"
+    size="large"
+    style={{
+      fontSize: "clamp(1rem, 2vw, 1.75rem)",
+      padding: "15px 30px",
+      borderRadius: "20px",
+      fontWeight: "bold",
+      background: "linear-gradient(135deg, #ff9d2f, #ff6126)",
+      color: "#fff",
+      boxShadow: "0 6px 15px rgba(0,0,0,0.2)",
+      flex: "1 1 150px",
+      minWidth: "150px",
+      maxWidth: "250px",
+      textAlign: "center",
+    }}
+    onClick={() =>
+      onSelectLevel(
+        level,
+        motivationList[Math.floor(Math.random() * motivationList.length)]
+      )
+    }
+  >
+    Level {level}
+  </Button>
+))}
+{/* 
 {
-  (category=="fraction" || category==="money") &&
+  ((category=="fraction") || (category==="money") || (category==="measurement")) &&
       [1, 2, 3,4].map(level => (
           <Button
             key={level}
@@ -67,7 +99,7 @@ const LevelSelection = ({ category,onSelectLevel }) => {
           </Button>
         ))}
 
-{  (!category=="fraction" || !category==="money") &&
+{  ((category!=="fraction") || (category!=="money") || (category!=="measurement")) &&
         [1, 2, 3].map(level => (
           <Button
             key={level}
@@ -90,7 +122,7 @@ const LevelSelection = ({ category,onSelectLevel }) => {
           >
             Level {level}
           </Button>
-        ))}
+        ))} */}
 
       </div>
     </div>
