@@ -704,7 +704,7 @@ transform: "translateX(-50%)",        // ✅ FORCE full width
               boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
             }}
           >
-            <h2 style={{ fontSize: isMobile ? 22 : 28, fontWeight: "bold" }}>Join FLAIR OLYMPIAD</h2>
+            <h2 style={{ fontSize: isMobile ? 22 : 28, fontWeight: "bold" }}>Join FLAIR OLYMPIAD ONLINE COURSE</h2>
           
             <p style={{ fontSize: isMobile ? 12 : 16, marginBottom: 20 }}>Enter your details to get started:</p>
          <form style={{ display: "flex", flexDirection: "column", gap: 12 }}>
