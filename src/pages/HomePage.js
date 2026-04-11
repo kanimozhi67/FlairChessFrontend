@@ -390,7 +390,7 @@ const btnheaderStyle= {
     </>
   ) : (
     <>
-      {/* <Button onClick={() => { setIsLogin(false); setModalOpen(true); }}
+      <Button onClick={() => { setIsLogin(false); setModalOpen(true); }}
              style={{
           backgroundColor: "#2600ff",
           fontWeight: "bold",
@@ -410,7 +410,7 @@ const btnheaderStyle= {
           e.currentTarget.style.transform = "scale(1)";
           e.currentTarget.style.backgroundColor = "#3700ff";
         }}
-        >Sign Up</Button> */}
+        >Sign Up</Button>
       <Button type="primary" onClick={() => { setIsLogin(true); setModalOpen(true); }}
       style={{
           backgroundColor: "#2600ff",
