@@ -37,6 +37,7 @@ const HomePage = ({ user, setUser }) => {
 const [formData, setFormData] = useState({
   name: "",
   email: "",
+  password:"",
   mobile: "",
   grade: "",
   country: "",
@@ -107,6 +108,34 @@ const btnheaderStyle= {
   try {
     await api.post("/admin/joinform", formData);
     alert("Details sent successfully!");
+    try{
+   // Signup request
+   const  formval={
+    email:formData.email,
+    username:formData.name,
+    password:formData.password
+   }
+      const res = await api.post("/auth/signup",formval);
+      message.success("Account created!");
+
+      // After signup, automatically login the user
+      const loginRes = await api.post("/auth/login", {
+        username: formData.name,
+        password: formData.password,
+      });
+
+      const userData = loginRes.data.user;
+      localStorage.setItem("token", loginRes.data.token);
+      localStorage.setItem("userId", userData.id);
+
+      if (setUser) setUser(userData); // update app state
+
+      // if (onSuccess) onSuccess(); // close modal
+      navigate("/categories"); // redirect after signup+login
+
+    }catch(err){
+      console.log(err)
+    }
     setFormData({ name: "",
   email: "",
   mobile: "",
@@ -721,6 +750,12 @@ transform: "translateX(-50%)",        // ✅ FORCE full width
   style={inputStyle}
   value={formData.email}
   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+/>
+<input
+  placeholder="Enter Password"
+  style={inputStyle}
+  value={formData.password}
+  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
 />
 
 <input

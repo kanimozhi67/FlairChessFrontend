@@ -1,15 +1,19 @@
 
 import React, { useEffect, useState } from "react";
-import { Card, Progress, message, Spin } from "antd";
+import { Card, Progress, message, Spin ,Button,Modal} from "antd";
 import api from "../api/axiosClient";
+import Signup from "./Signup";
 
-const Dashboard = ({ userId }) => {
+const Dashboard = ({ userId,me,setUser }) => {
   const [todayPoints, setTodayPoints] = useState(0);
   const [leaderboard, setLeaderboard] = useState([]);
   const [schoolLeaderboard, setSchoolLeaderboard] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+const [winner,setWinner]=useState(null)
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
   const loadData = async () => {
     if (!userId) return;
@@ -34,6 +38,21 @@ const Dashboard = ({ userId }) => {
 );
 console.log(resLeaderboard.data.top5)
       setLeaderboard(top5);
+// setWinner(top5?.[0] || null);
+//student of the month
+const now = new Date();
+
+// Last day of current month
+const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+// Check if today is last day (or past)
+const isMonthEnded = now.getDate() === lastDay.getDate();
+if (isMonthEnded && top5.length > 0) {
+  setWinner(top5[0]);
+} else {
+  setWinner(null); // or keep previous winner if stored
+}
+
 
       // 3️⃣ Setup current user object
       const backendCurrentUser = resLeaderboard.data.currentUser;
@@ -51,6 +70,7 @@ const schoolTop5 = (resSchoolLeaderboard.data.top5 || []).filter(
   (u) => u.studentId && u.username !== "Unknown"
 );
 setSchoolLeaderboard(schoolTop5);
+
     } catch (err) {
       console.error("Dashboard load error:", err);
       setError("Failed to load dashboard data");
@@ -79,19 +99,70 @@ setSchoolLeaderboard(schoolTop5);
       </p>
     );
   }
+  const now = new Date();
+
+// Current month
+// const currentMonth = now.toLocaleString("default", { month: "long" });
+
+// Previous month
+const prevDate = new Date(now.getFullYear(), now.getMonth() - 1);
+const previousMonth = prevDate.toLocaleString("default", { month: "long" });
+
+
 
   return (
+    <>
+    
+     <div style={{  alignItems: "center" }}>
+          <div style={{ background: "linear-gradient(135deg, #FF9D2F, #FF6B6B)", 
+            color: "#fff", fontSize: 24, fontWeight: "bold", textAlign: "center", padding: 12,
+             width: "100%", borderRadius: "20px 20px 0 0", boxShadow: "0 6px 15px rgba(0,0,0,0.15)" }}>
+          🛡 Student of the Month {previousMonth}✨ <p>🏆 {winner?.username || "Aadhira"} 🥇</p>
+          </div>
+    
+</div>
+    
+    
     <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #FFEEA9, #FFC9C9)", padding: 20 }}>
       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 30, maxWidth: 1100, margin: "0 auto" }}>
 
+
+
+
         {/* ================= LEFT : TODAY'S PROGRESS ================= */}
         <div style={{ flex: "1 1 320px", maxWidth: 360, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div style={{ background: "linear-gradient(135deg, #FF9D2F, #FF6B6B)", color: "#fff", fontSize: 24, fontWeight: "bold", textAlign: "center", padding: 12, width: "100%", borderRadius: "20px 20px 0 0", boxShadow: "0 6px 15px rgba(0,0,0,0.15)" }}>
+          <div style={{ background: "linear-gradient(135deg, #FF9D2F, #FF6B6B)", 
+            color: "#fff", fontSize: 24, fontWeight: "bold", textAlign: "center", padding: 12,
+             width: "100%", borderRadius: "20px 20px 0 0", boxShadow: "0 6px 15px rgba(0,0,0,0.15)" }}>
             🏫 Daily Progress ✨
           </div>
           <Card style={{ width: "100%", borderRadius: "0 0 20px 20px", boxShadow: "0 8px 25px rgba(0,0,0,0.15)" }}>
             <div style={{ textAlign: "center" }}>
               <p style={{ fontSize: 18, fontWeight: 600 }}>⭐ Today's Points ⭐</p>
+
+
+              {me=="Guest" && <h1>   <Button type="primary" onClick={() => { setIsLogin(true); setModalOpen(true); }}
+                    style={{
+                        backgroundColor: "#2600ff",
+                        fontWeight: "bold",
+                        padding: "8px 18px",
+                        color: "white",
+                        fontSize: 16,
+                        borderRadius: 20,
+                        border: "none",
+                        boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+                        transition: "all 0.3s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "scale(1.05)";
+                        e.currentTarget.style.backgroundColor = "#fb8c00";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "scale(1)";
+                        e.currentTarget.style.backgroundColor = "#3700ff";
+                      }}
+                    >Enter your name</Button>  to see your dashboard rank</h1>}
+              {console.log(currentUser.username)}
               <Progress
                 type="circle"
                 percent={Math.min((todayPoints / 100) * 100, 100)}
@@ -172,6 +243,23 @@ setSchoolLeaderboard(schoolTop5);
        
       </div>
     </div>
+          <Modal open={modalOpen} onCancel={() => setModalOpen(false)} footer={null} centered width={380}>
+            <div style={{ textAlign: "center", marginBottom: 18 }}>
+              <h2 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: "#7b2ff7" }}>
+                {isLogin ? "Welcome Back" : "Create Account"}
+              </h2>
+              <p style={{ color: "#666", marginTop: 4 }}>
+                {isLogin ? "Login to continue" : "Sign up to get started"}
+              </p>
+            </div>
+    
+          
+              <Signup onSuccess={() => setModalOpen(false)} setUser={setUser} />
+          
+    
+          
+          </Modal>
+    </>
   );
 };
 
