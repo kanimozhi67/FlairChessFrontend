@@ -17,19 +17,20 @@ const categories = [
   
 ];
 const categories2 = [
-     { id: 13, name: "Flair AI Robot", path: "/quiz/robot" },
+     { id: 14, name: "Flair AI Robot", path: "/quiz/robot" },
   { id: 1, name: "Addition & Subtraction", path: "/quiz/math" },
-  { id: 2, name: "Sorting", path: "/quiz/sorting" },
-  { id: 3, name: "Multiplication", path: "/quiz/multiplication" },
-  { id: 4, name: "Division", path: "/quiz/division" },
-  { id: 5, name: "Logical Questions", path: "/quiz/logic" },
-  { id: 6, name: "Sudoku", path: "/quiz/sudoku" },
-  { id: 7, name: "Puzzles", path: "/quiz/puzzles" },
-  { id: 8, name: "Money", path: "/quiz/money" },
-  { id: 9, name: "Shapes", path: "/quiz/shapes" },
-  { id: 10, name: "Measurement", path: "/quiz/measure" },
-  { id: 11, name: "Time", path: "/quiz/time" },
-  { id: 12, name: "Fraction", path: "/quiz/fraction" },
+  { id: 2, name: "Large Numbers", path: "/quiz/placevalue" },
+  { id: 3, name: "Sorting", path: "/quiz/sorting" },
+  { id: 4, name: "Multiplication", path: "/quiz/multiplication" },
+  { id: 5, name: "Division", path: "/quiz/division" },
+  { id: 6, name: "Logical Questions", path: "/quiz/logic" },
+  { id: 7, name: "Sudoku", path: "/quiz/sudoku" },
+  { id: 8, name: "Puzzles", path: "/quiz/puzzles" },
+  { id: 9, name: "Money", path: "/quiz/money" },
+  { id: 10, name: "Shapes", path: "/quiz/shapes" },
+  { id: 11, name: "Measurement", path: "/quiz/measure" },
+  { id: 12, name: "Time", path: "/quiz/time" },
+  { id: 13, name: "Fraction", path: "/quiz/fraction" },
 
   
 ];

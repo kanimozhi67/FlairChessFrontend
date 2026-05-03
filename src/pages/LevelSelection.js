@@ -2,6 +2,7 @@
 import { Button } from "antd";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
+import Placevalue from "./Placevalue";
 
 const LevelSelection = ({ category,level,onSelectLevel }) => {
   const { width, height } = useWindowSize();
@@ -11,13 +12,15 @@ const LevelSelection = ({ category,level,onSelectLevel }) => {
   category === "money" ||
   category === "measure" ) && level==="primary"
     ? [1, 2, 3, 4]
+    :( category=== "placevalue" ) && level==="primary" 
+     ? ["Indian Place Value", "Number Formation", "Expanded Form" , "Standard Form" , "Rounding Off", "International Place Value", "Roman Numerals"]
     : [1, 2, 3];
   return (
     <div style={{
       margin: 0,
       display: "flex",
       flexDirection: "column",
-      alignItems: "center",
+           alignItems: "center",
       justifyContent: "center",
       minHeight: "100vh",
       background: "linear-gradient(135deg, #ffd54f, #ff7043)",
@@ -58,9 +61,11 @@ const LevelSelection = ({ category,level,onSelectLevel }) => {
       color: "#fff",
       boxShadow: "0 6px 15px rgba(0,0,0,0.2)",
       flex: "1 1 150px",
-      minWidth: "150px",
-      maxWidth: "250px",
+      minWidth: "170px",
+      maxWidth: "290px",
       textAlign: "center",
+        whiteSpace: "normal",   // ✅ allow wrapping
+  height: "auto",         // ✅ allow multi-line height
     }}
     onClick={() =>
       onSelectLevel(
@@ -69,60 +74,13 @@ const LevelSelection = ({ category,level,onSelectLevel }) => {
       )
     }
   >
-    Level {level}
+    
+    {category==="placevalue" ?   level : "Level"+ level }
+  
   </Button>
 ))}
-{/* 
-{
-  ((category=="fraction") || (category==="money") || (category==="measurement")) &&
-      [1, 2, 3,4].map(level => (
-          <Button
-            key={level}
-            type="primary"
-            size="large"
-            style={{
-              fontSize: "clamp(1rem, 2vw, 1.75rem)",
-              padding: "15px 30px",
-              borderRadius: "20px",
-              fontWeight: "bold",
-              background: "linear-gradient(135deg, #ff9d2f, #ff6126)",
-              color: "#fff",
-              boxShadow: "0 6px 15px rgba(0,0,0,0.2)",
-              flex: "1 1 150px",
-              minWidth: "150px",
-              maxWidth: "250px",
-              textAlign: "center",
-            }}
-            onClick={() => onSelectLevel(level, motivationList[Math.floor(Math.random()*motivationList.length)])}
-          >
-            Level {level}
-          </Button>
-        ))}
 
-{  ((category!=="fraction") || (category!=="money") || (category!=="measurement")) &&
-        [1, 2, 3].map(level => (
-          <Button
-            key={level}
-            type="primary"
-            size="large"
-            style={{
-              fontSize: "clamp(1rem, 2vw, 1.75rem)",
-              padding: "15px 30px",
-              borderRadius: "20px",
-              fontWeight: "bold",
-              background: "linear-gradient(135deg, #ff9d2f, #ff6126)",
-              color: "#fff",
-              boxShadow: "0 6px 15px rgba(0,0,0,0.2)",
-              flex: "1 1 150px",
-              minWidth: "150px",
-              maxWidth: "250px",
-              textAlign: "center",
-            }}
-            onClick={() => onSelectLevel(level, motivationList[Math.floor(Math.random()*motivationList.length)])}
-          >
-            Level {level}
-          </Button>
-        ))} */}
+
 
       </div>
     </div>

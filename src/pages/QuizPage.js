@@ -32,6 +32,8 @@ import Robot from "./Robot.js";
 import AngleQuiz from "./AngleQuiz.js";
 import FractionTopics from "./FractionTopics.js";
 import FractionTopicsQuiz from "./FractionTopicsQuiz.js";
+import Placevalue from "./Placevalue.js"
+
 
 const QuizPage = ({ user, setUser,setCompletedLevel,setCompletedCategory,setCompletedSelectedLevel,
   completedLevel,completedCategory,completedSelectedLevel,  setCompletedPoints }) => {
@@ -305,6 +307,10 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",
        }
       break;
 
+    case "placevalue":
+len=6;
+break;
+
     case "money":
    
       len = selectedLevel=== 4 ? 5 : 6;
@@ -383,7 +389,7 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",
      
         if (level === "primary") {
           if (selectedLevel === 1) res = await api.get("/quiz/mathp");
-           if (selectedLevel === 2) res = await api.get("/quiz/mathp");
+           if (selectedLevel === 2) res = await api.get("/quiz/mathp2");
         //  else res = await api.get("/quiz/mathplevel3");
           setQuestions(res.data.questions || []);
           setAnswers({});
@@ -763,8 +769,10 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",}}>
       <div style={innerStyle}>
       
         <div style={quizCardStyle}>
-          {console.log(level?level:user.level)}
-          {level=level?level:user.level}
+        
+        <div style={{ display: "none" }}>
+  {level ? level : user.level}
+</div>
           {category === "sorting" ? (
             <SortingQuizCard
               level={level}
@@ -854,6 +862,14 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",}}>
             
             />
 
+        ): category=== "placevalue" && selectedLevel !== 4 ? (
+<Placevalue
+     level={level}
+     selectedLevel={selectedLevel}
+            addPointsToBackend={addPointsToBackend}
+            setResults={setResults}
+/>
+       
         ): category=== "money" && selectedLevel !== 4 ? (
 <MoneyQuiz
      level={level}
