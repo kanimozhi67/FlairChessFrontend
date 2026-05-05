@@ -13,8 +13,13 @@ const LevelSelection = ({ category,level,onSelectLevel }) => {
   category === "measure" ) && level==="primary"
     ? [1, 2, 3, 4]
     :( category=== "placevalue" ) && level==="primary" 
-     ? ["Indian Place Value", "Number Formation", "Expanded Form" , "Standard Form" , "Rounding Off", "International Place Value", "Roman Numerals"]
-    : [1, 2, 3];
+     ? ["Indian Place Value", "Number Formation", "Expanded Form" , "Standard Form" , 
+      "Rounding Off", "International Place Value", "Roman Numerals"]
+   : level ==="olympiad"
+   ? ["Large Numbers","Addition","Subtraction","Multiplication","Division","Factors",
+    "Geometry","Measurement","Time","Money","Symmetry and Patterns"
+   ]
+     : [1, 2, 3];
   return (
     <div style={{
       margin: 0,
@@ -75,7 +80,9 @@ const LevelSelection = ({ category,level,onSelectLevel }) => {
     }
   >
     
-    {category==="placevalue" ?   level : "Level"+ level }
+  {(category === "placevalue" || category === "grade4")
+  ? level
+  : "Level " + level}
   
   </Button>
 ))}

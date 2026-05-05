@@ -33,6 +33,9 @@ import AngleQuiz from "./AngleQuiz.js";
 import FractionTopics from "./FractionTopics.js";
 import FractionTopicsQuiz from "./FractionTopicsQuiz.js";
 import Placevalue from "./Placevalue.js"
+import Grade4ws1 from "./Grade4ws1.js";
+import Grade4ws2 from "./Grade4ws2.js";
+import Grade4ws3 from "./Grade4ws3.js";
 
 
 const QuizPage = ({ user, setUser,setCompletedLevel,setCompletedCategory,setCompletedSelectedLevel,
@@ -262,6 +265,9 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",
 
   // Category-based length
   switch (category) {
+    case "grade4":
+       len = 10;
+         break;
     case "math":
     case "multiplication":
     case "division":
@@ -952,6 +958,33 @@ category ={category}
         ): category==="robot" ?(
           <Robot 
           user={user}
+          />
+ ): category==="grade4" && (selectedLevel ==="Fraction" )?(
+          <Grade4ws3 
+          user={user}
+         category ={category}
+ level={level}
+     selectedLevel={selectedLevel}
+            addPointsToBackend={addPointsToBackend}
+            setResults={setResults}
+          />
+ ): category==="grade4" && (selectedLevel==="Factors" || selectedLevel ==="Measurement" )?(
+          <Grade4ws2
+          user={user}
+         category ={category}
+ level={level}
+     selectedLevel={selectedLevel}
+            addPointsToBackend={addPointsToBackend}
+            setResults={setResults}
+          />
+ ): category==="grade4"   && selectedLevel !=="Factors" && selectedLevel !=="Measurement" && selectedLevel !=="Fraction" ?(
+          <Grade4ws1 
+          user={user}
+         category ={category}
+ level={level}
+     selectedLevel={selectedLevel}
+            addPointsToBackend={addPointsToBackend}
+            setResults={setResults}
           />
  ):(
             <QuizCard

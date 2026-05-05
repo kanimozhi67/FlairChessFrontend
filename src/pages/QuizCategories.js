@@ -32,8 +32,12 @@ const categories2 = [
   { id: 12, name: "Time", path: "/quiz/time" },
   { id: 13, name: "Fraction", path: "/quiz/fraction" },
 
-  
 ];
+const categories3 = [
+  
+    { id: 4, name: "Grade 4", path: "/quiz/grade4" }
+  
+]
 
 const QuizCategories = ({ setUser }) => {
   const navigate = useNavigate();
@@ -91,7 +95,7 @@ const QuizCategories = ({ setUser }) => {
         {/* STEP 1 — Choose Level */}
         {!level && (
           <Row gutter={[16, 16]} justify="center">
-            {["kindergarten", "primary"].map((lvl) => (
+            {["kindergarten", "primary","olympiad"].map((lvl) => (
               <Col key={lvl} xs={24} sm={12}>
                 <Button
                   type="primary"
@@ -107,7 +111,11 @@ const QuizCategories = ({ setUser }) => {
                   }}
                   onClick={() => setLevel(lvl)}
                 >
-                  {lvl === "kindergarten" ? "Kindergarten" : "Primary Level"}
+                 {lvl === "kindergarten"
+  ? "Kindergarten"
+  : lvl === "primary"
+  ? "Primary Level"
+  : "Olympiad Worksheets"}
                 </Button>
               </Col>
             ))}
@@ -178,6 +186,52 @@ const QuizCategories = ({ setUser }) => {
 { level==="kindergarten" && (
             <Row gutter={[16, 16]} justify="center">
               {categories.map((cat) => (
+                <Col key={cat.id} xs={24} sm={12} md={8}>
+                  {cat.name!=="Flair AI Robot" &&
+                  <Button
+                    type="primary"
+                    block
+                    size="large"
+                    style={{
+                      fontSize: "1rem",
+                      height: 100,
+                      borderRadius: 15,
+                      background: "#ffbf00",
+                      color: "#4d3300",
+                      fontWeight: "bold",
+                    }}
+                    onClick={() =>
+                      navigate(`${cat.path}?level=${level}`)
+                    }
+                  >
+                    {cat.name}
+                  </Button>}
+                  {cat.name==="Flair AI Robot" && <>
+                  <Button
+                    type="primary"
+                    block
+                    size="large"
+                    style={{
+                      fontSize: "1.5rem",
+                      height: 100,
+                      borderRadius: 15,
+                       background: "linear-gradient(135deg, #f16795, #f0087c",
+                      color: "#27f5ea",
+                      fontWeight: "bold",
+                    }}
+                    onClick={() =>
+                      navigate(`${cat.path}?level=${level}`)
+                    }
+                  >
+                {cat.name}
+                  </Button> <br></br>
+                  </> }
+                </Col>
+              ))}
+            </Row>)}
+{ level==="olympiad" && (
+            <Row gutter={[16, 16]} justify="center">
+              {categories3.map((cat) => (
                 <Col key={cat.id} xs={24} sm={12} md={8}>
                   {cat.name!=="Flair AI Robot" &&
                   <Button
