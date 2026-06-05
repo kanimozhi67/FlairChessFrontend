@@ -1,0 +1,416 @@
+import React, { useEffect, useState } from "react";
+import api from "../api/axiosClient";
+
+export default function  MeasurementTopicsQuiz({ category, level, selectedLevel, user, addPointsToBackend, topics }) {
+  const [questions, setQuestions] = useState([]);
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [selected, setSelected] = useState("");
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(true);
+    const [aiExplanations, setAiExplanations] = useState({});
+  const [loadingExplanation, setLoadingExplanation] = useState(false);
+
+  const fetchFractionQuiz = async () => {
+    setLoading(true);
+    setResult(null);
+    setAnswers([]);
+    setSelected("");
+    setStep(0);
+
+//     const endpoint =
+
+// category==="money" ?
+// "/quiz/moneylevel4"
+//   :  (
+//           topics === 'equivalentFraction'
+//           ? "/quiz/fractioneq4"
+//           : topics === 'hcf'
+//           ? "/quiz/fractionhcf4"
+//           : topics === 'lcm'
+//           ? "/quiz/fractionlcm4"
+//           : topics === 'mixedfraction'
+//           ? "/quiz/fractionmixed4"
+//           : "/quiz/fractionword4"
+//       )
+
+//     }
+const endpoint = category === "money"
+  ? "/quiz/moneylevel4"
+  : {
+      equivalentFraction: "/quiz/fractioneq4",
+      hcf: "/quiz/fractionhcf4",
+      lcm: "/quiz/fractionlcm4",
+      mixedfraction: "/quiz/fractionmixed4",
+     wordproblems: "/quiz/fractionword4"
+    }[topics] || "/quiz/fractionword4";
+    const res = await api.get(endpoint);
+    setQuestions(res.data.questions);
+    setLoading(false);
+    
+  };
+
+  useEffect(() => {
+    fetchFractionQuiz();
+  }, []);
+
+  if (loading) {
+    return <p style={styles.loading}>Loading quiz... 🧠</p>;
+  }
+
+  const current = questions[step];
+
+  const handleNext = () => {
+    if (!selected) return alert("Please select an answer 😊");
+
+    setAnswers((prev) => [
+      ...prev,
+      {
+        id: current.id,
+        question: current.question,
+        answer: selected
+      }
+    ]);
+
+    setSelected("");
+
+    if (step < questions.length - 1) {
+      setStep(step + 1);
+    } else {
+      finishQuiz();
+    }
+  };
+
+  const renderQuestion = (question) => {
+  // If question contains 🧩, split and show each on new line
+  if (question.includes("🧩")) {
+    return question.split("🧩").map((part, index) =>
+      part.trim() ? (
+        <div key={index}>🧩 {part.trim()} <br></br>
+        </div>
+      ) : null
+    );
+  }
+
+  // Default rendering
+  return question;
+};
+
+
+ 
+const finishQuiz = async () => {
+
+  const endpoint=  "/quiz/checkfraction2";
+  const response = await api.post(endpoint, {
+    userId: user?._id || "demo-user",
+    answers: [...answers, { id: current.id, question: current.question, answer: selected }]
+  });
+
+  setResult(response.data);
+
+  if (addPointsToBackend) {
+    addPointsToBackend(response.data.score);
+  }
+
+  const explanations = {};
+
+  for (const item of [...answers, { id: current.id, question: current.question, answer: selected }]) {
+    const correct = response.data.correctAnswers?.[item.id];
+
+    if (String(item.answer) !== String(correct)) {
+      const explainRes = await api.post("/quiz/explain2", {
+        question: item.question,
+        correctAnswer: correct,
+        userAnswer: item.answer
+      });
+
+      explanations[item.id] = explainRes.data.explanation;
+    }
+  }
+
+  setAiExplanations(explanations);
+};
+
+
+  // 🌈 RESULT SCREEN
+  if (result) {
+    return (
+      <div style={styles.resultCard}>
+        <h2 style={styles.title}>🎉 Great Job! 🎉</h2> <hr></hr>
+
+        <p style={styles.score}>
+          You scored <strong>{result.score}</strong> out of {result.total} ⭐
+        </p>
+       
+
+  
+        {answers.map((item, index) => {
+          const correct = result.correctAnswers?.[item.id];
+          const isCorrect = item.answer === correct;
+
+          return (
+            <div
+              key={item.id}
+              style={{
+                ...styles.reviewBox,
+                borderColor: isCorrect ? "#22c55e" : "#ef4444"
+              }}
+            >
+  <hr style={{ marginBottom: 12 }} />
+{level==="primary" && selectedLevel!==1 &&
+aiExplanations[item.id] && (
+  <div style={{ marginTop: 10 }}>
+    <strong>🤖 Explanation</strong><br></br>
+    <pre>{aiExplanations[item.id]}</pre>
+  </div>
+)}
+
+
+              <p style={styles.question}>
+                {index + 1}. {item.question}
+              </p>
+
+              <p style={styles.answerText}>
+                🧒 Your Answer:{" "}
+                <span style={{ color: isCorrect ? "#16a34a" : "#dc2626" }}>
+                  {item.answer}
+                </span>
+              </p>
+
+              {!isCorrect && (
+                <p style={styles.answerText}>
+                  ✅ Correct Answer:{" "}
+                  <span style={{ color: "#16a34a" }}>{correct}</span>
+                </p>
+              )}
+
+              <p style={isCorrect ? styles.correct : styles.wrong}>
+                {isCorrect ? "🎈 Correct!" : "💡 Try again next time!"}
+              </p>
+            </div>
+          );
+        })}
+
+        <button style={styles.playAgainBtn} onClick={fetchFractionQuiz}>
+        New Game
+        </button>
+      </div>
+    );
+  }
+
+  // ❓ QUESTION SCREEN
+  return (
+    <div style={styles.card}>
+      <h3 style={styles.step}>
+     🌈   Question   {step + 1} / {questions.length}
+      </h3>
+<hr></hr><br></br>
+
+
+
+ <p style={{fontSize: "clamp(18px, 3vw, 26px)"}}>
+  {topics==="equivalentFraction" && <p>  Find the equivalent fraction </p>}
+  {topics==="hcf" && <p> Reduce the following fraction into their lower terms </p>}
+  {topics==="lcm" && <p> Convert following fraction into like fraction </p>}
+  {topics==="mixedfraction" && <p> Convert improper fraction into mixed fraction and viceversa. </p>}
+
+  </p> 
+<p style={styles.mainQuestion}>{current.question}</p> 
+{/* {level==="primary" && selectedLevel ===1 || (category!=="fraction" && selectedLevel ===3 ) &&
+( category!=="logic"  && selectedLevel ===2 )? (
+
+) : (category==="logic" && selectedLevel ===3)?(
+<div style={styles.mainQuestion}>
+  {renderQuestion(current.question)}
+</div>
+
+
+
+): (
+    <p style={styles.mainQuestion1}>   {current.question}</p> )} */}
+
+{ level!=="primary"   ? (
+      current.options.map((opt) => (
+       // <label key={opt} style={styles.option1}>
+      <label
+  key={opt}
+  style={{
+    ...styles.option1,
+    color: levelColors[selectedLevel] || "#4af017ff",
+  }}
+>
+
+          <input
+            type="radio"
+            name="option"
+            value={opt}
+            checked={selected === opt}
+            onChange={() => setSelected(opt)}
+          />
+          <span style={{ marginLeft: 10 }}>{opt}</span>
+        </label>
+      ))
+    ): 
+    (
+      current.options.map((opt) => (
+        <label key={opt} style={styles.option}>
+          <input
+            type="radio"
+            name="option"
+            value={opt}
+            checked={selected === opt}
+            onChange={() => setSelected(opt)}
+          />
+          <span style={{ marginLeft: 10 }}>{opt}</span>
+        </label>
+      )))
+    }
+
+      <button style={styles.button} onClick={handleNext}>
+        {step === questions.length - 1 ? "🎯 Submit" : "➡ Next"}
+      </button>
+    </div>
+  );
+}
+
+//
+// 🎨 RESPONSIVE + KIDS FRIENDLY STYLES
+//
+const levelColors = {
+  1: "#f01758ff",
+  2: "#f09217ff",
+  3: "#4af017ff",
+};
+const styles = {
+  loading: {
+    textAlign: "center",
+    fontSize: "clamp(14px, 2vw, 20px)",
+   // marginTop: 60,
+   // fontFamily: "'Comic Sans MS', 'Poppins', sans-serif"
+  },
+
+  card: {
+    maxWidth: "min(100%, 1000px)",
+    margin: "0px auto",
+    padding: "clamp(20px, 4vw, 40px)",
+    borderRadius: 24,
+     background: "#f0fdf4",
+//    color: "#ffffffef",
+//      background: "linear-gradient(90deg, #f01758ff, #f7555dff)",
+//   boxShadow: "0 0 25px rgba(228, 217, 71, 0.6)",
+    boxShadow: "0 10px 25px rgba(0,0,0,0.18)",
+    fontFamily: "'Comic Sans MS', 'Poppins', sans-serif"
+  },
+
+  step: {
+    fontSize: "clamp(20px, 4vw, 28px)",
+    marginBottom: 15
+  },
+
+  mainQuestion: {
+    fontSize: "clamp(25px, 3.5vw, 30px)",
+    marginBottom: 20,
+    border:"2px solid  #f01758ff",
+    padding:10
+  },
+  mainQuestion1: {
+    fontSize: "clamp(18px, 2vw, 28px)",
+    marginBottom: 20,
+    //border:"2px solid  #f01758ff",
+   // padding:10
+  },
+
+  option: {
+    display: "flex",
+    alignItems: "center",
+    margin: "12px 0",
+    fontSize: "clamp(18px, 4vw, 26px)",
+    cursor: "pointer"
+  },
+option1: {
+  display: "flex",
+  alignItems: "center",
+  margin: "12px 0",
+  fontSize: "clamp(68px, 44vw, 76px)",
+  cursor: "pointer",
+
+},
+  button: {
+    marginTop: 25,
+    padding: "clamp(10px, 2vw, 16px) clamp(22px, 4vw, 38px)",
+    borderRadius: 14,
+    border: "none",
+    background: "#e59b46ff",
+    color: "#fff",
+    fontSize: "clamp(16px, 4vw, 26px)",
+    cursor: "pointer"
+  },
+
+  // RESULT
+ resultCard: {
+  maxWidth: "min(100%, 1100px)",
+  margin: "40px auto",
+  padding: "clamp(25px, 5vw, 45px)",
+  borderRadius: 28,
+ background: "linear-gradient(90deg, #f01758ff, #f7656cff)",
+  boxShadow: "0 0 25px rgba(228, 217, 71, 0.6)",
+  fontFamily: "'Comic Sans MS', 'Poppins', sans-serif"
+},
+
+
+  title: {
+    fontSize: "clamp(26px, 5vw, 36px)",
+    textAlign: "center",
+    color: "#eff8f2ff"
+  },
+
+  score: {
+    fontSize: "clamp(20px, 4vw, 28px)",
+    textAlign: "center",
+    marginBottom: 25
+  },
+
+  reviewBox: {
+    background: "#ffffff",
+    border: "4px solid",
+    borderRadius: 20,
+    padding: "clamp(15px, 4vw, 25px)",
+    marginBottom: 20
+  },
+
+  question: {
+    fontSize: "clamp(18px, 4vw, 26px)",
+    fontWeight: "bold",
+    marginBottom: 10
+  },
+
+  answerText: {
+    fontSize: "clamp(16px, 3.5vw, 24px)"
+  },
+
+  correct: {
+    color: "#16a34a",
+    fontWeight: "bold",
+    fontSize: "clamp(16px, 3.5vw, 22px)"
+  },
+
+  wrong: {
+    color: "#ea580c",
+    fontWeight: "bold",
+    fontSize: "clamp(16px, 3.5vw, 22px)"
+  },
+
+  playAgainBtn: {
+    marginTop: 30,
+    padding: "clamp(12px, 2vw, 18px) clamp(24px, 4vw, 44px)",
+    borderRadius: 16,
+    border: "0px",
+    background: "#22c55e",
+    color: "#fff",
+    fontSize: "clamp(20px, 4vw, 28px)",
+    cursor: "pointer",
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto"
+  }
+};

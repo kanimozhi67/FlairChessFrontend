@@ -25,33 +25,36 @@ const Grade4ws1 = ({ userId,level,selectedLevel, addPointsToBackend }) => {
   const fetchQuiz = async () => {
     try {
       setLoading(true);
-//        ["Large Numbers","Addition","Subtraction","Multiplication","Division","Factors",
-//     "Geometry","Measurement","Time","Money","Symmetry and Patterns", "Data Handling"
-//    ]
+
       const endpoint =
-      selectedLevel === "Large Numbers"
-        ? "/quiz/grade4ws1"
-        : selectedLevel === "Addition"
-        ? "/quiz/grade4ws2"
-        : selectedLevel === "Subtraction"
-        ? "/quiz/grade4ws3"
-        : selectedLevel === "Multiplication"
-        ? "/quiz/grade4ws4"
-        : selectedLevel === "Division"
-        ? "/quiz/grade4ws5"
-        // : selectedLevel === "Factors"
-        // ? "/quiz/grade4ws6"
-        : selectedLevel === "Geometry"
-        ? "/quiz/grade4ws7"
-        : selectedLevel === "Measurement"
-        ? "/quiz/grade4ws8"
-        : selectedLevel === "Time"
-        ? "/quiz/grade4ws9"
-        : selectedLevel === "Money"
-        ? "/quiz/grade4ws10"
-        : selectedLevel === "Symmetry and Patterns"
-        ? "/quiz/grade4ws11"
-        : "/quiz/grade4ws1";
+      selectedLevel === "Green Plants"
+        ? "/quiz/grade4gpwsquiz"
+        : selectedLevel === "Plant Adaptation"
+        ? "/quiz/grade4gpwsquiz2"
+        : selectedLevel === "Animals and their Young ones"
+        ? "/quiz/grade4gpwsquiz3"
+        : selectedLevel === "Animal Adaptations"
+        ? "/quiz/grade4gpwsquiz4"
+        : selectedLevel === "Circulatory & Excretory System"
+        ? "/quiz/grade4gpwsquiz5"
+        : selectedLevel === "Food our basic need"
+        ? "/quiz/grade4gpwsquiz6"
+        : selectedLevel === "Digestion of Food"
+        ? "/quiz/grade4gpwsquiz7"
+        : selectedLevel === "Clothes"
+        ? "/quiz/grade4gpwsquiz8"
+        : selectedLevel === "Air Water Weather"
+        ? "/quiz/grade4gpwsquiz9"
+        : selectedLevel === "The Solar System"
+        ? "/quiz/grade4gpwsquiz10"
+        : selectedLevel === "Keeping the Earth Clean"
+        ? "/quiz/grade4gpwsquiz11"
+        
+        : selectedLevel === "Soil"
+        ? "/quiz/grade4gpwsquiz11"
+        : selectedLevel === "Solids Liquids & Gases"
+        ? "/quiz/grade4gpwsquiz11"
+        : "/quiz/grade4gpwsquiz1";
       const res = await api.get(endpoint);
       setQuestions(res.data.questions);
       setAnswers({});
@@ -117,31 +120,9 @@ const downloadPDF = () => {
           answer: answers[q.id]
         }))
       };
-   const endpoint =
-      selectedLevel === "Large Numbers"
-        ? "/quiz/checkgrade4ws1"
-        : selectedLevel === "Addition"
-        ? "/quiz/checkgrade4ws2"
-        : selectedLevel === "Subtraction"
-        ? "/quiz/checkgrade4ws3"
-        : selectedLevel === "Multiplication"
-        ? "/quiz/checkgrade4ws4"
-        : selectedLevel === "Division"
-        ? "/quiz/checkgrade4ws5"
-        // : selectedLevel === "Factors"
-        // ? "/quiz/checkgrade4ws6"
-        : selectedLevel === "Geometry"
-        ? "/quiz/checkgrade4ws7"
-        : selectedLevel === "Measurement"
-        ? "/quiz/checkgrade4ws8"
-        : selectedLevel === "Time"
-        ? "/quiz/checkgrade4ws9"
-        : selectedLevel === "Money"
-        ? "/quiz/checkgrade4ws10"
-        : selectedLevel === "Symmetry and Patterns"
-        ? "/quiz/checkgrade4ws11"
-        : "/quiz/checkgrade4ws1";
-      const res = await api.post(endpoint, payload);
+ 
+
+      const res = await api.post("/quiz/checkgrade4gpwsquiz", payload);
       setResult(res.data);
       message.success("Great job! 🎉");
     //    setResults(res.data.results);
@@ -185,140 +166,6 @@ const downloadPDF = () => {
       </div>
     );
   }
-
-//   return (
-//     <div style={{ maxWidth: 950, margin: "auto", padding: 20 ,  borderRadius: 20,
-//         background: "linear-gradient(135deg,#a9b1f3,#8a1043)",
-//         boxShadow: "0 8px 20px rgba(100,7,46,0.25)",}}>
-//       {result && <Confetti width={width} height={height} />}
-
-//       <Title style={{ textAlign: "center", color: "#4e0436" }}>
-//         🎯 {selectedLevel} Quiz
-//       </Title>
-// <Button
-//   type="default"
-//   block
-//   size="large"
-//   onClick={downloadPDF}
-//   style={{
-//     marginBottom: 15,
-//     height: 45,
-//     borderRadius: 10
-//   }}
-// >
-//   Download Questions as PDF 📄
-// </Button>
-//       <Progress
-//         percent={(Object.keys(answers).length / questions.length) * 100}
-//         showInfo={false}
-//         strokeWidth={10}
-//         style={{ marginBottom: 20 }}
-//       />
-
-//       {questions.map((q, index) => {
-//         const userAnswer = answers[q.id];
-//         const correctAnswer = result?.correctAnswers?.[q.id];
-
-//         return (
-//           <Card
-//             key={q.id}
-//             style={{
-//               marginBottom: 20,
-//               borderRadius: 16,
-//               boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-//               background: "#fdfcff"
-//             }}
-//           >
-//             <Text strong style={{ fontSize: 16 }}>
-//               Q{index + 1}. {q.question}
-//             </Text>
-
-//             <Radio.Group
-//               onChange={(e) => handleSelect(q.id, e.target.value)}
-//               value={userAnswer}
-//               style={{ display: "block", marginTop: 15 }}
-//             >
-//               {q.options.map((opt, i) => {
-//                 let bg = "#fff";
-
-//                   <hr style={{ marginBottom: 12 }} />
-// {result && aiExplanations[q.id] && (
-//   <div style={{ marginTop: 12, background: "#eef6ff", padding: 10, borderRadius: 8 }}>
-//     <strong>🤖 Explanation:</strong>
-//     <div>{aiExplanations[q.id]}</div>
-//   </div>
-// )}
-//                 if (result) {
-//                   if (String(opt) === String(correctAnswer)) bg = "#d4edda";
-//                   else if (String(opt) === String(userAnswer)) bg = "#f8d7da";
-//                 }
-
-//                 return (
-//                   <Radio
-//                     key={i}
-//                     value={opt}
-//                     style={{
-//                       display: "block",
-//                       padding: "10px 15px",
-//                       margin: "8px 0",
-//                       borderRadius: 10,
-//                       background: bg,
-//                       border: "1px solid #eee"
-//                     }}
-//                   >
-//                     {opt}
-//                   </Radio>
-//                 );
-//               })}
-//             </Radio.Group>
-//           </Card>
-//         );
-//       })}
-
-//       {!result && (
-//         <Button
-//           type="primary"
-//           icon={<RocketOutlined />}
-//           block
-//           size="large"
-//           loading={submitting}
-//           onClick={handleSubmit}
-//           style={{
-//             height: 50,
-//             fontSize: 18,
-//             borderRadius: 12
-//           }}
-//         >
-//           Submit Answers 🚀
-//         </Button>
-//       )}
-
-//       {result && (
-//         <Card
-//           style={{
-//             marginTop: 20,
-//             textAlign: "center",
-//             borderRadius: 16,
-//             background: "#fffbe6"
-//           }}
-//         >
-//           <Title level={2}>
-//             <SmileOutlined /> Score: {result.score} / {result.total} 🌟
-//           </Title>
-
-//           <Button
-//             type="primary"
-//             size="large"
-//             onClick={fetchQuiz}
-//             style={{ borderRadius: 10 }}
-//           >
-//             Try Again 🔄
-//           </Button>
-//         </Card>
-//       )}
-//     </div>
-//   );
-
 
 return (
   <div
@@ -382,7 +229,7 @@ return (
             Q{index + 1}. {q.question}
           </Text>
    {/* 👇 ADD THIS BLOCK */}
-    {q.type === "measurement_line" && (
+    {q.type === "fill" && (
       <div
         style={{
           width: `${q.meta.length * 10}px`,

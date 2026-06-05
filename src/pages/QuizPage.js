@@ -36,6 +36,10 @@ import Placevalue from "./Placevalue.js"
 import Grade4ws1 from "./Grade4ws1.js";
 import Grade4ws2 from "./Grade4ws2.js";
 import Grade4ws3 from "./Grade4ws3.js";
+import Lgreenplants from "./Lgreenplants.js";
+import Grade4quiz from "./Grade4quiz.js";
+import ImageTextReader from "./Imagetextreader.js";
+import LearnByVideo from "./LearnByVideo.js";
 
 
 const QuizPage = ({ user, setUser,setCompletedLevel,setCompletedCategory,setCompletedSelectedLevel,
@@ -262,72 +266,25 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",
  
   const feedmsg = (score) => {
   let len = questions.length; // default
-
+console.log(level)
   // Category-based length
-  switch (category) {
-    case "grade4":
+  switch (level) {
+    case "primary":
+      if(selectedLevel ==="Quiz📝")
+      {
        len = 10;
+      console.log(len)}
+     
          break;
-    case "math":
-    case "multiplication":
-    case "division":
-    case "shapes":
-      if (level === "primary" && category === "multiplication" && selectedLevel === 3) {
-        len = 9;
-      } else if (category === "math" && selectedLevel === 3) {
-        len = 3;
-      }else if (level === "primary" && category === "shapes" && selectedLevel === 3) {
-      len=6;
-      }
-      else {
-        len = 5;
-      }
-      break;
-
-    case "sorting":
-      len = 1;
-      break;
-
-    case "sudoku":
-      if (level === "primary") {
-        len = selectedLevel === 1 ? 15 : selectedLevel === 2 ? 20 : 25;
-      } else {
-        len = selectedLevel === 1 ? 5 : selectedLevel === 2 ? 6 : 7;
-      }
-      break;
-
-    case "puzzles":
-       len = selectedLevel === 1 ? 3 : 5;
-        break;
-
-    case "time" :
-       len = 4;
-      break;
-
-    case "logic":
-       if (level === "primary") {
-      len = selectedLevel === 1 ? 3 : 5;
-       }
-       else{
-         len = 3;
-       }
-      break;
-
-    case "placevalue":
-len=6;
-break;
-
-    case "money":
-   
-      len = selectedLevel=== 4 ? 5 : 6;
-      break;
-
-      case "measure":
-          len = selectedLevel === 1 ? 6 : 5;
-          break;
-
+    case "olympiad":
+     
+        len=15;
+       console.log(len)
+         break;
+    
     default:
       len = questions.length;
+      console.log(len)
   }
 
  
@@ -779,26 +736,7 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",}}>
         <div style={{ display: "none" }}>
   {level ? level : user.level}
 </div>
-          {category === "sorting" ? (
-            <SortingQuizCard
-              level={level}
-              questions={questions}
-              setQuestions={setQuestions}
-              answers={answers}
-              setAnswers={setAnswers}
-              results={results}
-              submitted={submitted}
-              handleSubmit={submitQuiz}
-              fetchQuiz={fetchQuiz}
-              loading={loading}
-              speakLine={speakLine}
-              shape="star"
-              titleStyle={titleStyle}
-              numberStyle={numberStyle}
-              buttonStyle={buttonStyle}
-              playAgainButtonStyle={playAgainButtonStyle}
-            />
-          ) : category === "math" && selectedLevel === 2 ? (
+        { category === "math" && selectedLevel === 2 ? (
             <QuizWithTimer
               questions={questions}
               answers={answers}
@@ -815,152 +753,15 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",}}>
               fetchQuiz={fetchQuiz}
               speakLine={speakLine}
             />
-          ) : category === "sudoku" ? (
-            <SudokuBoard
-              level={level}
-              selectedLevel={selectedLevel}
-              addPointsToBackend={addPointsToBackend}
-            />
-          ) : category === "puzzles" && selectedLevel===1 ? (
-            <div style={{ fontSize: "28px", fontWeight: "bold" }}>
-              <Puzzle
-              level={level}
-                selectedLevel={selectedLevel}
-                user={user}
-                puzzleId={puzzleId}
-                answers={answers}
-                setAnswers={setAnswers}
-                submitted={submitted}
-                setSubmitted={setSubmitted}
-                results={results}
-                setResults={setResults}
-                addPointsToBackend={addPointsToBackend}
-              />
-            </div>
-          ) : category === "logic" && (level==="kindergarten" || (level==="primary" && selectedLevel===1) )? (
-            <Logics
-            level={level}
-              selectedLevel={selectedLevel}
-              user={user}
-              puzzleId={puzzleId}
-              answers={answers}
-              setAnswers={setAnswers}
-              submitted={submitted}
-              setSubmitted={setSubmitted}
-              results={results}
-              setResults={setResults}
-              addPointsToBackend={addPointsToBackend}
-            />
-          ) : level === "primary" && category === "multiplication" && selectedLevel === 3 ? ( 
-
-            <PuzzleWheel
-            
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-            
-            />
-          ) : category === "math" && selectedLevel === 3 ? ( 
-
-<PuzzleWheelKinder
-            level={level}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-            
-            />
-
-        ): category=== "placevalue" && selectedLevel !== 4 ? (
-<Placevalue
-     level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-/>
-       
-        ): category=== "money" && selectedLevel !== 4 ? (
-<MoneyQuiz
-     level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-/>
-        ): category=== "shapes"   && ((level === "kindergarten" ) || (level==="primary"  && selectedLevel !== 3 ) )?  (
-<ShapesQuiz
-user={user}
-     level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-/>
-
-        ):
-       category=== "shapes" && level==="primary"  && selectedLevel === 3 ?  (
-<AngleQuiz
-user={user}
-     level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-/>
-
-        ):category==="measure" ?(
-<Measurement  
- level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-/>
-        ):(level==="primary" && (selectedLevel===4 && category==="fraction") 
-        )? (
-  <FractionTopics 
-  category ={category}
- level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-  />
-        ):
-         (selectedLevel===4 && category==="money")? (
-  <FractionTopicsQuiz
-  category ={category}
- level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-  />
-
-
-
-        ):(category==="fraction"  && selectedLevel !==4 ) || (category === "puzzles" && selectedLevel !==1 ) ||
-        (category==="logic" && selectedLevel!==1 && level==="primary")?(
-<Fraction  
-category ={category}
- level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-/>
-        ):category==="time" && level==="primary" && selectedLevel ===1? (
-<TimeQuiz
-category ={category}
- level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-/>
-        ):(category==="time" && (( level!=="primary") || (level==="primary" && selectedLevel !==1))) ? (
-<TimeOption
-category ={category}
- level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-/>
+   
         ): category==="robot" ?(
           <Robot 
           user={user}
           />
- ): category==="grade4" && (selectedLevel ==="Fraction" )?(
-          <Grade4ws3 
+       
+ ): level ==="primary"  && (selectedLevel ==="Quiz📝" ) ?(<>
+ 
+          <Grade4quiz
           user={user}
          category ={category}
  level={level}
@@ -968,17 +769,29 @@ category ={category}
             addPointsToBackend={addPointsToBackend}
             setResults={setResults}
           />
- ): category==="grade4" && (selectedLevel==="Factors" || selectedLevel ==="Measurement" )?(
-          <Grade4ws2
-          user={user}
-         category ={category}
- level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-          />
- ): category==="grade4"   && selectedLevel !=="Factors" && selectedLevel !=="Measurement" && selectedLevel !=="Fraction" ?(
+</>
+
+ ): category==="grade4"   && (level ==="olympiad") ?(
           <Grade4ws1 
+          user={user}
+          
+         category ={category}
+ level={level}
+     selectedLevel={selectedLevel}
+            addPointsToBackend={addPointsToBackend}
+            setResults={setResults}
+          />
+ ): category==="greenplants"   && selectedLevel ==="Learn📖" ?(
+          <Lgreenplants
+          user={user}
+         category ={category}
+ level={level}
+     selectedLevel={selectedLevel}
+            addPointsToBackend={addPointsToBackend}
+            setResults={setResults}
+          />
+ ): category !=="greenplants"   && selectedLevel ==="Learn📖" ?(
+          <LearnByVideo
           user={user}
          category ={category}
  level={level}
@@ -1009,7 +822,7 @@ category ={category}
           )}
         </div>
       </div>
-
+{console.log(category,selectedLevel)}
       <GiftBox
         setSelectedStickers={setSelectedStickers}
         setShowStickerModal={setShowStickerModal}

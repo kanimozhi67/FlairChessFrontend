@@ -45,8 +45,8 @@ const SCreateTask = ({user}) => {
         title,
         description,
         level,
-        category,
-        selectedLevel,
+        // category,
+        // selectedLevel,
         date,
         active,
         className,
@@ -58,18 +58,18 @@ const SCreateTask = ({user}) => {
         title,
         description,
         level, // kindergarten | primary
-       // category,
-       // selectedLevel,
+       category:"divison",
+       selectedLevel:"1",
         className,
         section,
         date: date.format("YYYY-MM-DD"),
         active,
       };
-      console.log(`user.school in: ${JSON.stringify(user.school)}`)
+      // console.log(`user.school in: ${JSON.stringify(user.school)}`)
       await api.post("/admin/screatetask", payload);
       message.success("Task created and assigned successfully");
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       message.error(err.response?.data?.message || "Failed to create task");
     }
   };

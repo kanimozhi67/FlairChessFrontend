@@ -143,7 +143,7 @@ const previousMonth = prevDate.toLocaleString("default", { month: "long" });
 
               {me=="Guest" && <h1>   <Button type="primary" onClick={() => { setIsLogin(true); setModalOpen(true); }}
                     style={{
-                        backgroundColor: "#2600ff",
+                        backgroundColor: "#1edb37",
                         fontWeight: "bold",
                         padding: "8px 18px",
                         color: "white",
@@ -159,7 +159,7 @@ const previousMonth = prevDate.toLocaleString("default", { month: "long" });
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.transform = "scale(1)";
-                        e.currentTarget.style.backgroundColor = "#3700ff";
+                        e.currentTarget.style.backgroundColor = "#17d627";
                       }}
                     >Enter your name</Button>  to see your dashboard rank</h1>}
               {console.log(currentUser.username)}

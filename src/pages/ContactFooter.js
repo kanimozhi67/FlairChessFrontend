@@ -2,6 +2,7 @@ import React ,{useState} from "react";
 import api from "../api/axiosClient";
 import { Typography, Input, Button, Row, Col, Space } from "antd";
 import {
+   InstagramOutlined ,
   MailOutlined,
   PhoneOutlined,
   EnvironmentOutlined,
@@ -58,19 +59,35 @@ const ContactFooter = ({scrollToOnline3 }) => {
               <EnvironmentOutlined /> Al Rasidhiya2, Ajman, UAE.
             </Paragraph>
             <Paragraph style={{ color: "white" }}>
-              <PhoneOutlined /> +971-XX-XXXXXXX
+              <PhoneOutlined /> +971-56-3512691
             </Paragraph>
             <Paragraph style={{ color: "white" }}>
-              <MailOutlined /> support@flairolympiad.com
+              <MailOutlined />flairolympiad@gmail.com 
+              {/* support@flairolympiad.com */}
             </Paragraph>
             <Space size="middle">
-              <a href="#" style={{ color: "white", fontSize: 20 }}>
+
+
+<a
+  href="https://www.instagram.com/flairolympiad?igsh=MWFmd2pqdWxkNG00NA=="
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{ color: "white", fontSize: 20 }}
+>
+  <InstagramOutlined />
+</a>
+
+              {/* <a href="#" style={{ color: "white", fontSize: 20 }}>
                 <LinkedinOutlined />
-              </a>
+              </a> */}
               <a href="#" style={{ color: "white", fontSize: 20 }}>
                 <TwitterOutlined />
               </a>
-              <a href="#" style={{ color: "white", fontSize: 20 }}>
+              <a href="https://www.facebook.com/profile.php?id=61588706144726"
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{ color: "white", fontSize: 20 }}
+>
                 <FacebookOutlined />
               </a>
             </Space>
@@ -117,7 +134,7 @@ const ContactFooter = ({scrollToOnline3 }) => {
           fontSize: 14,
         }}
       >
-        © 2025 Flair Olympiad. All rights reserved.
+        © 2026 Flair Olympiad. All rights reserved.
       </Paragraph>
       <button style={{ float:"left", color:"blueviolet", fontWeight:"bold",cursor:"pointer"}}
        onClick={scrollToOnline3}>GO TO TOP</button>

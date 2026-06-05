@@ -18,23 +18,25 @@ const categories = [
 ];
 const categories2 = [
      { id: 14, name: "Flair AI Robot", path: "/quiz/robot" },
-  { id: 1, name: "Addition & Subtraction", path: "/quiz/math" },
-  { id: 2, name: "Large Numbers", path: "/quiz/placevalue" },
-  { id: 3, name: "Sorting", path: "/quiz/sorting" },
-  { id: 4, name: "Multiplication", path: "/quiz/multiplication" },
-  { id: 5, name: "Division", path: "/quiz/division" },
-  { id: 6, name: "Logical Questions", path: "/quiz/logic" },
-  { id: 7, name: "Sudoku", path: "/quiz/sudoku" },
-  { id: 8, name: "Puzzles", path: "/quiz/puzzles" },
-  { id: 9, name: "Money", path: "/quiz/money" },
-  { id: 10, name: "Shapes", path: "/quiz/shapes" },
-  { id: 11, name: "Measurement", path: "/quiz/measure" },
-  { id: 12, name: "Time", path: "/quiz/time" },
-  { id: 13, name: "Fraction", path: "/quiz/fraction" },
+  
+  { id: 1, name: "Green Plants", path: "/quiz/greenplants" },
+  { id: 2, name: "Plant Adaptation", path: "/quiz/plantadaptations" },
+  { id: 3, name: "Animals and their Young ones", path: "/quiz/animalbaby" },
+  { id: 4, name: "Animal Adaptations", path: "/quiz/animaladaptations" },
+  { id: 5, name: "Circulatory & Excretory System", path: "/quiz/cesystem" },
+  { id: 6, name: "Food our basic need", path: "/quiz/food" },
+  { id: 7, name: "Digestion of Food", path: "/quiz/digestion" },
+  { id: 8, name: "Clothes", path: "/quiz/clothes" },
+  { id: 9, name: "Air Water Weather", path: "/quiz/airwaterweather" },
+  { id: 10, name: "The Solar System", path: "/quiz/solarsystem" },
+  { id: 11, name: "Keeping the Earth Clean", path: "/quiz/earthclean" },
+  { id: 12, name: "Soil", path: "/quiz/soil" },
+  { id: 13, name: "Solids Liquids & Gases", path: "/quiz/matter" },
 
 ];
 const categories3 = [
   
+    // { id: 3, name: "Grade 3", path: "/quiz/grade3" },
     { id: 4, name: "Grade 4", path: "/quiz/grade4" }
   
 ]
@@ -95,7 +97,7 @@ const QuizCategories = ({ setUser }) => {
         {/* STEP 1 — Choose Level */}
         {!level && (
           <Row gutter={[16, 16]} justify="center">
-            {["kindergarten", "primary","olympiad"].map((lvl) => (
+            {[ "primary","olympiad"].map((lvl) => (
               <Col key={lvl} xs={24} sm={12}>
                 <Button
                   type="primary"
@@ -114,7 +116,7 @@ const QuizCategories = ({ setUser }) => {
                  {lvl === "kindergarten"
   ? "Kindergarten"
   : lvl === "primary"
-  ? "Primary Level"
+  ? "Grade4"
   : "Olympiad Worksheets"}
                 </Button>
               </Col>
