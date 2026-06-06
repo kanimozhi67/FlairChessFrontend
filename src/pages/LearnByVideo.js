@@ -10,7 +10,16 @@ import {
 
 const { Title, Paragraph } = Typography;
 
-const topics = [
+
+
+const LearnByVideo = ({level,category,selectedLevel}) => {
+  const [open, setOpen] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState("");
+
+const topics =
+category==="plantadaptations"
+   ?
+[
   {
     title: "Aquatic Plants",
     description: "Plants that live and grow in water.",
@@ -74,12 +83,141 @@ const topics = [
   //   color: "#7986CB",
   //   videoId: "",
   // },
-];
+] :
+category==="solarsystem" ?
+    [{
+    title: "Solar System",
+    description: "",
+    icon: <BugOutlined />,
+    color: "#FF8A65",
+    videoId: "1EDlLBSTFzg",
+  },
+//  {
+//     title: "Excretory System",
+//     description: "",
+//     icon: <ExperimentOutlined />,
+//     color: "#BA68C8",
+//     videoId: "bQcmvO0a8Mg",
+//   },
 
-const LearnByVideo = () => {
-  const [open, setOpen] = useState(false);
-  const [selectedVideo, setSelectedVideo] = useState("");
+] :
+category==="soil" ?
+    [{
+    title: "Soil",
+    description: "",
+    icon: <BugOutlined />,
+    color: "#FF8A65",
+    videoId: "dak4t5fAfAo",
+  },
+//  {
+//     title: "Excretory System",
+//     description: "",
+//     icon: <ExperimentOutlined />,
+//     color: "#BA68C8",
+//     videoId: "bQcmvO0a8Mg",
+//   },
 
+] :
+category==="cesystem" ?
+    [{
+    title: "Circulatory System",
+    description: "The system that transports blood, oxygen, nutrients, and hormones throughout the body.",
+    icon: <BugOutlined />,
+    color: "#FF8A65",
+    videoId: "5RiB50fksJc",
+  },
+ {
+    title: "Excretory System",
+    description: "The system that removes waste products and maintains the body's fluid balance.",
+    icon: <ExperimentOutlined />,
+    color: "#BA68C8",
+    videoId: "bQcmvO0a8Mg",
+  },
+
+] :
+category==="food" ?
+    [{
+    title: "Food",
+    description: "",
+    icon: <BugOutlined />,
+    color: "#FF8A65",
+    videoId: "kM5qKtdvwJU",
+  },
+ {
+    title: "Food Groups",
+    description: "",
+    icon: <ExperimentOutlined />,
+    color: "#BA68C8",
+    videoId: "LtLQYuWDBPE",
+  },
+    {
+    title: "Balanced Diet",
+    description: "",
+    icon: <CloudOutlined />,
+    color: "#64B5F6",
+    videoId: "pjpOTzpd16A",
+  },
+  {
+    title: "Food Preservation",
+    description: "",
+    icon: <ExperimentOutlined />,
+    color: "#BA68C8",
+    videoId: "1ZDygqaCVtg",
+  },
+  // {
+  //   title: "Forest Plants",
+  //   description: "",
+  //   icon: <PlayCircleFilled />,
+  //   color: "#E57373",
+  //   videoId: "0OyEEn9q9HU",
+  // },
+
+] :
+category==="airwaterweather" ?
+    [{
+    title: "Weather",
+    description: "",
+    icon: <BugOutlined />,
+    color: "#FF8A65",
+    videoId: "i31jgdS-sMIr",
+  },
+ {
+    title: "Water",
+    description: "",
+    icon: <ExperimentOutlined />,
+    color: "#BA68C8",
+    videoId: "FscR0q1M4HQ",
+  },
+    {
+    title: "Water Cycle",
+    description: "",
+    icon: <CloudOutlined />,
+    color: "#64B5F6",
+    videoId: "4n364bTp4V4",
+  },
+  {
+    title:"Save Water",
+    description: "",
+    icon: <ExperimentOutlined />,
+    color: "#BA68C8",
+    videoId: "DFbfoYkjxMI",
+  },
+  // {
+  //   title: "Forest Plants",
+  //   description: "",
+  //   icon: <PlayCircleFilled />,
+  //   color: "#E57373",
+  //   videoId: "0OyEEn9q9HU",
+  // },
+]
+: 
+    [{
+    title: "You are not a Premium Subscriber",
+    description: "Subscribe to learn more",
+    icon: <BugOutlined />,
+    color: "#FF8A65",
+    videoId: "",
+  },];
   const playVideo = (videoId) => {
     if (!videoId) return;
 
