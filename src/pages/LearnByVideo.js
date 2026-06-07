@@ -135,6 +135,23 @@ category==="cesystem" ?
   },
 
 ] :
+category==="greenplants" ?
+    [{
+    title: "Parts of the Plants & leaf",
+    description: "",
+    icon: <BugOutlined />,
+    color: "#FF8A65",
+    videoId: "pohRvP1DqkA",
+  },
+ {
+    title: "Photosynthesis & Interdependence",
+    description: "",
+    icon: <ExperimentOutlined />,
+    color: "#BA68C8",
+    videoId: "A7G6jAS2iKI",
+  },
+
+] :
 category==="food" ?
     [{
     title: "Food",
@@ -257,7 +274,7 @@ category==="airwaterweather" ?
             textShadow: "2px 2px 6px rgba(0,0,0,0.15)",
           }}
         >
-          🌱 Learn Plant Adaptations Through Videos 🌱
+          🌱 Learn  Through Videos 🌱
         </Title>
 
         <Paragraph
@@ -268,8 +285,10 @@ category==="airwaterweather" ?
             marginBottom: "40px",
           }}
         >
-          Explore different types of plants and their adaptations through
-          engaging educational videos.
+          Explore via engaging educational videos.
+           {/* different types of plants and their adaptations  */}
+          
+          
         </Paragraph>
 
         {/* Cards */}
@@ -278,10 +297,10 @@ category==="airwaterweather" ?
             <Col
               key={index}
               xs={24}
-              sm={12}
-              md={12}
-              lg={8}
-              xl={8}
+              sm={24}
+              md={24}
+              lg={24}
+              xl={24}
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -326,7 +345,7 @@ category==="airwaterweather" ?
                   {index + 1}. {topic.title}
                 </Title>
 
-                <Paragraph
+                {/* <Paragraph
                   style={{
                     color: "#fff",
                     fontSize: "15px",
@@ -335,7 +354,7 @@ category==="airwaterweather" ?
                   }}
                 >
                   {topic.description}
-                </Paragraph>
+                </Paragraph> */}
 
                 <Button
                   type="primary"

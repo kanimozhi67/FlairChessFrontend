@@ -781,16 +781,18 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",}}>
             addPointsToBackend={addPointsToBackend}
             setResults={setResults}
           />
- ): category==="greenplants"   && selectedLevel ==="Learn📖" ?(
-          <Lgreenplants
-          user={user}
-         category ={category}
- level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-          />
- ): category !=="greenplants"   && selectedLevel ==="Learn📖" ?(
+ ): 
+//  category==="greenplants"   && selectedLevel ==="Learn📖" ?(
+//           <Lgreenplants
+//           user={user}
+//          category ={category}
+//  level={level}
+//      selectedLevel={selectedLevel}
+//             addPointsToBackend={addPointsToBackend}
+//             setResults={setResults}
+//           />
+//  ):
+  selectedLevel ==="Learn📖" ?(
           <LearnByVideo
           user={user}
          category ={category}
