@@ -2,12 +2,22 @@ import React, { useState } from "react";
 import { Card, Typography, Row, Col, Button, Modal } from "antd";
 import {
   PlayCircleFilled,
+  CloudOutlined,
+  EnvironmentOutlined,
+  RiseOutlined,
+  ApartmentOutlined,
   ExperimentOutlined,
   BugOutlined,
-  CloudOutlined,
-  ThunderboltOutlined,
+  RocketOutlined,
+  FundOutlined,
+  HeartOutlined,
+  SafetyCertificateOutlined,
+  SunOutlined,
+  CoffeeOutlined,
+  FireOutlined,
+  BranchesOutlined,
+  ClusterOutlined,
 } from "@ant-design/icons";
-
 const { Title, Paragraph } = Typography;
 
 
@@ -18,223 +28,196 @@ const LearnByVideo = ({level,category,selectedLevel}) => {
 
 const topics =
 category==="plantadaptations"
-   ?
+?
 [
   {
     title: "Aquatic Plants",
     description: "Plants that live and grow in water.",
     icon: <CloudOutlined />,
-    color: "#4FC3F7",
+    color: "#29B6F6",
     videoId: "JTQYXy7XrhA",
   },
   {
     title: "Terrestrial Plants",
     description: "Plants that grow on land.",
-    icon: <ThunderboltOutlined />,
-    color: "#81C784",
+    icon: <EnvironmentOutlined />,
+    color: "#66BB6A",
     videoId: "YqrupjLcXcE",
   },
   {
     title: "Mountain & Hill Plants",
     description: "Plants adapted to cold and hilly regions.",
-    icon: <BugOutlined />,
-    color: "#FFB74D",
+    icon: <RiseOutlined />,
+    color: "#8D6E63",
     videoId: "PTYQ-Mn5nfE",
   },
   {
     title: "Plains Plants",
     description: "Plants commonly found in plains.",
-    icon: <CloudOutlined />,
-    color: "#64B5F6",
+    icon: <ApartmentOutlined />,
+    color: "#9CCC65",
     videoId: "hQ24AU4A574",
   },
   {
     title: "Marshy Area Plants",
     description: "Plants adapted to waterlogged soil.",
     icon: <ExperimentOutlined />,
-    color: "#BA68C8",
+    color: "#26A69A",
     videoId: "UoyWupRJRlQ",
   },
   {
     title: "Forest Plants",
     description: "Plants that thrive in dense forests.",
-    icon: <PlayCircleFilled />,
-    color: "#E57373",
+    icon: <BranchesOutlined />,
+    color: "#2E7D32",
     videoId: "0OyEEn9q9HU",
   },
   {
     title: "Insectivorous Plants",
     description: "Plants that trap and digest insects.",
     icon: <BugOutlined />,
-    color: "#FF8A65",
+    color: "#EF5350",
     videoId: "O_py1V40CYk",
   },
-  // {
-  //   title: "Desert Plants",
-  //   description: "Plants adapted to dry and hot conditions.",
-  //   icon: <ThunderboltOutlined />,
-  //   color: "#FFD54F",
-  //   videoId: "",
-  // },
-  // {
-  //   title: "Mangrove Plants",
-  //   description: "Plants that grow in coastal marshes.",
-  //   icon: <ExperimentOutlined />,
-  //   color: "#7986CB",
-  //   videoId: "",
-  // },
-] :
-category==="solarsystem" ?
-    [{
+]
+:
+category==="solarsystem"
+?
+[
+  {
     title: "Solar System",
     description: "",
-    icon: <BugOutlined />,
-    color: "#FF8A65",
+    icon: <RocketOutlined />,
+    color: "#3949AB",
     videoId: "1EDlLBSTFzg",
   },
-//  {
-//     title: "Excretory System",
-//     description: "",
-//     icon: <ExperimentOutlined />,
-//     color: "#BA68C8",
-//     videoId: "bQcmvO0a8Mg",
-//   },
-
-] :
-category==="soil" ?
-    [{
+]
+:
+category==="soil"
+?
+[
+  {
     title: "Soil",
     description: "",
-    icon: <BugOutlined />,
-    color: "#FF8A65",
+    icon: <FundOutlined />,
+    color: "#8D6E63",
     videoId: "dak4t5fAfAo",
   },
-//  {
-//     title: "Excretory System",
-//     description: "",
-//     icon: <ExperimentOutlined />,
-//     color: "#BA68C8",
-//     videoId: "bQcmvO0a8Mg",
-//   },
-
-] :
-category==="cesystem" ?
-    [{
+]
+:
+category==="cesystem"
+?
+[
+  {
     title: "Circulatory System",
     description: "The system that transports blood, oxygen, nutrients, and hormones throughout the body.",
-    icon: <BugOutlined />,
-    color: "#FF8A65",
+    icon: <HeartOutlined />,
+    color: "#E53935",
     videoId: "5RiB50fksJc",
   },
- {
+  {
     title: "Excretory System",
     description: "The system that removes waste products and maintains the body's fluid balance.",
-    icon: <ExperimentOutlined />,
-    color: "#BA68C8",
+    icon: <SafetyCertificateOutlined />,
+    color: "#8E24AA",
     videoId: "bQcmvO0a8Mg",
   },
-
-] :
-category==="greenplants" ?
-    [{
-    title: "Parts of the Plants & leaf",
+]
+:
+category==="greenplants"
+?
+[
+  {
+    title: "Parts of the Plants & Leaf",
     description: "",
-    icon: <BugOutlined />,
-    color: "#FF8A65",
+    icon: <ClusterOutlined />,
+    color: "#43A047",
     videoId: "pohRvP1DqkA",
   },
- {
+  {
     title: "Photosynthesis & Interdependence",
     description: "",
-    icon: <ExperimentOutlined />,
-    color: "#BA68C8",
+    icon: <SunOutlined />,
+    color: "#F9A825",
     videoId: "A7G6jAS2iKI",
   },
-
-] :
-category==="food" ?
-    [{
+]
+:
+category==="food"
+?
+[
+  {
     title: "Food",
     description: "",
-    icon: <BugOutlined />,
-    color: "#FF8A65",
+    icon: <CoffeeOutlined />,
+    color: "#FB8C00",
     videoId: "kM5qKtdvwJU",
   },
- {
+  {
     title: "Food Groups",
     description: "",
-    icon: <ExperimentOutlined />,
-    color: "#BA68C8",
+    icon: <ApartmentOutlined />,
+    color: "#8E24AA",
     videoId: "LtLQYuWDBPE",
   },
-    {
+  {
     title: "Balanced Diet",
     description: "",
-    icon: <CloudOutlined />,
-    color: "#64B5F6",
+    icon: <HeartOutlined />,
+    color: "#29B6F6",
     videoId: "pjpOTzpd16A",
   },
   {
     title: "Food Preservation",
     description: "",
-    icon: <ExperimentOutlined />,
-    color: "#BA68C8",
+    icon: <SafetyCertificateOutlined />,
+    color: "#26A69A",
     videoId: "1ZDygqaCVtg",
   },
-  // {
-  //   title: "Forest Plants",
-  //   description: "",
-  //   icon: <PlayCircleFilled />,
-  //   color: "#E57373",
-  //   videoId: "0OyEEn9q9HU",
-  // },
-
-] :
-category==="airwaterweather" ?
-    [{
+]
+:
+category==="airwaterweather"
+?
+[
+  {
     title: "Weather",
     description: "",
-    icon: <BugOutlined />,
-    color: "#FF8A65",
-    videoId: "i31jgdS-sMIr",
+    icon: <CloudOutlined />,
+    color: "#FFA726",
+    videoId: "i31jgdS-sMI",
   },
- {
+  {
     title: "Water",
     description: "",
     icon: <ExperimentOutlined />,
-    color: "#BA68C8",
+    color: "#29B6F6",
     videoId: "FscR0q1M4HQ",
   },
-    {
+  {
     title: "Water Cycle",
     description: "",
-    icon: <CloudOutlined />,
-    color: "#64B5F6",
+    icon: <FireOutlined />,
+    color: "#42A5F5",
     videoId: "4n364bTp4V4",
   },
   {
-    title:"Save Water",
+    title: "Save Water",
     description: "",
-    icon: <ExperimentOutlined />,
-    color: "#BA68C8",
+    icon: <SafetyCertificateOutlined />,
+    color: "#26A69A",
     videoId: "DFbfoYkjxMI",
   },
-  // {
-  //   title: "Forest Plants",
-  //   description: "",
-  //   icon: <PlayCircleFilled />,
-  //   color: "#E57373",
-  //   videoId: "0OyEEn9q9HU",
-  // },
 ]
-: 
-    [{
+:
+[
+  {
     title: "You are not a Premium Subscriber",
     description: "Subscribe to learn more",
-    icon: <BugOutlined />,
-    color: "#FF8A65",
+    icon: <SafetyCertificateOutlined />,
+    color: "#FF7043",
     videoId: "",
-  },];
+  },
+];
   const playVideo = (videoId) => {
     if (!videoId) return;
 
@@ -259,25 +242,25 @@ category==="airwaterweather" ?
     >
       <div
         style={{
-          maxWidth: "1400px",
+          maxWidth: "1800px",
           margin: "0 auto",
         }}
       >
         {/* Header */}
         <Title
-          level={1}
+          level={2}
           style={{
             textAlign: "center",
             color: "#2E7D32",
             fontWeight: "bold",
-            marginBottom: "10px",
+            marginBottom: "20px",
             textShadow: "2px 2px 6px rgba(0,0,0,0.15)",
           }}
         >
-          🌱 Learn  Through Videos 🌱
+          🌱 Explore through  engaging videos 
         </Title>
-
-        <Paragraph
+<hr></hr>
+        {/* <Paragraph
           style={{
             textAlign: "center",
             fontSize: "18px",
@@ -286,10 +269,10 @@ category==="airwaterweather" ?
           }}
         >
           Explore via engaging educational videos.
-           {/* different types of plants and their adaptations  */}
+        
           
           
-        </Paragraph>
+        </Paragraph> */}
 
         {/* Cards */}
         <Row gutter={[24, 24]} justify="center">
@@ -298,9 +281,9 @@ category==="airwaterweather" ?
               key={index}
               xs={24}
               sm={24}
-              md={24}
-              lg={24}
-              xl={24}
+              md={12}
+              lg={12}
+              xl={12}
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -310,12 +293,12 @@ category==="airwaterweather" ?
                 hoverable
                 styles={{
                   body: {
-                    padding: "30px 20px",
+                    // padding: "30px 20px",
                   },
                 }}
                 style={{
                   width: "100%",
-                  maxWidth: "350px",
+                  maxWidth: "250px",
                   borderRadius: "24px",
                   textAlign: "center",
                   background: topic.color,
@@ -328,7 +311,7 @@ category==="airwaterweather" ?
                   style={{
                     fontSize: "60px",
                     color: "#fff",
-                    marginBottom: "15px",
+                    // marginBottom: "15px",
                   }}
                 >
                   {topic.icon}
@@ -339,7 +322,7 @@ category==="airwaterweather" ?
                   style={{
                     color: "#fff",
                     minHeight: "70px",
-                    marginBottom: "10px",
+                    // marginBottom: "10px",
                   }}
                 >
                   {index + 1}. {topic.title}
@@ -360,20 +343,21 @@ category==="airwaterweather" ?
                   type="primary"
                   size="large"
                   shape="round"
-                  icon={<PlayCircleFilled />}
+                  // icon={<PlayCircleFilled />}
                   disabled={!topic.videoId}
                   onClick={() => playVideo(topic.videoId)}
                   style={{
                     background: "#fff",
-                    color: topic.color,
+                    color: "red",
                     border: "none",
                     fontWeight: "bold",
-                    height: "48px",
-                    paddingLeft: "2px",
-                    paddingRight: "2px",
+                    height: "56px",
+    fontSize: "30px",
+    // padding: "0 32px",
+    // borderRadius: "12px",
                   }}
                 >
-                  Watch Video
+                 <PlayCircleFilled />
                 </Button>
               </Card>
             </Col>
