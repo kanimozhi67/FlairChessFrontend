@@ -232,6 +232,7 @@ const Layout = ({ user, setUser,todayTaskCount }) => {
 </button>
 </div>
         </Header>
+     
       </motion.div>
 
       {/* Mobile header */}
