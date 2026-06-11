@@ -455,7 +455,7 @@ category==="airwaterweather"
         width: "86%",
         height: "30%",
         zIndex: 10,
-        background: "green",
+        background: "transparent",
       }}
     />
 
@@ -468,7 +468,7 @@ category==="airwaterweather"
         width: "90%",
         height: "25%",
         zIndex: 10,
-        background: "red",
+        background: "transparent",
       }}
     />
   </div>
