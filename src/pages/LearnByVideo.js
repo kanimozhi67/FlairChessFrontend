@@ -365,7 +365,7 @@ category==="airwaterweather"
         </Row>
 
         {/* Video Modal */}
-        <Modal
+        {/* <Modal
           open={open}
           footer={null}
           onCancel={handleClose}
@@ -373,36 +373,11 @@ category==="airwaterweather"
           centered
           destroyOnClose
         >
-          {/* <div
-            style={{
-              position: "relative",
-              paddingBottom: "56.25%",
-              height: 0,
-            }}
-          >
-            <iframe
-              title="Plant Adaptation Video"
-              // src={`https://www.youtube.com/embed/${selectedVideo}?autoplay=1`}
-            src={`https://www.youtube-nocookie.com/embed/${selectedVideo}?autoplay=1&controls=0&modestbranding=1&rel=0`}
-            maskClosable={false}
-              keyboard={false}  
-              frameBorder="0"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "80%",
-                borderRadius: "12px",
-              }}
-            />
-          </div> */}
+   
           <div style={{ position: "relative" }}>
   <iframe
   title="YouTube Video"
-  src={`https://www.youtube.com/embed/${selectedVideo}?autoplay=1&controls=0&modestbranding=1&rel=0&mute=0`}
+  src={`https://www.youtube.com/embed/${selectedVideo}?autoplay=1&controls=1&modestbranding=1&rel=0&mute=0`}
   allow="autoplay; encrypted-media"
   allowFullScreen
   style={{
@@ -416,15 +391,88 @@ category==="airwaterweather"
     style={{
       position: "absolute",
       top: 0,
-      left: 0,
+      left:0,
+      right: 200,
+      bottom: 400,
+      zIndex: 10,
+       background: "transparent",
+    
+    }}
+  />
+
+  <div
+    style={{
+      position: "absolute",
+      top: 370,
+      left:850,
       right: 0,
       bottom: 0,
       zIndex: 10,
-      background: "transparent",
+       background: "transparent",
+     
     }}
   />
 </div>
-        </Modal>
+        </Modal> */}
+        <Modal
+  open={open}
+  footer={null}
+  onCancel={handleClose}
+  width="90%"
+ 
+  centered
+  destroyOnClose
+>
+  <div
+    style={{
+      position: "relative",
+      width: "100%",
+      paddingTop: "46.25%", // 16:9 aspect ratio
+    }}
+  >
+    <iframe
+      title="YouTube Video"
+      src={`https://www.youtube.com/embed/${selectedVideo}?autoplay=1&controls=1&modestbranding=1&rel=0&mute=0`}
+      allow="autoplay; encrypted-media"
+      allowFullScreen
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        border: "none",
+        borderRadius: "12px",
+      }}
+    />
+
+    {/* Top-left transparent overlay */}
+    <div
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "86%",
+        height: "30%",
+        zIndex: 10,
+        background: "green",
+      }}
+    />
+
+    {/* Bottom-right transparent overlay */}
+    <div
+      style={{
+        position: "absolute",
+        right: 0,
+        bottom: 0,
+        width: "90%",
+        height: "25%",
+        zIndex: 10,
+        background: "red",
+      }}
+    />
+  </div>
+</Modal>
       </div>
     </div>
   );
