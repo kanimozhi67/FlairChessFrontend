@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosClient";
-
+import { RobotOutlined } from "@ant-design/icons";
 const levelCards = [
   {
     key: "grade3",
@@ -74,6 +74,13 @@ const categories = [
 //   { id: 13, name: "Solids Liquids & Gases", icon: "💧", color: "linear-gradient(135deg,#4facfe,#00f2fe)", path: "/quiz/matter" },
 // ];
 const categories2 = [
+{
+  id: 14,
+  name: "Flair AI Robot",
+  path: "/quiz/robot",
+  icon: "✨",
+  color: "#6C63FF",
+},
   {
     id: 1,
     name: "Green Plants",
@@ -106,28 +113,30 @@ const categories2 = [
     id: 5,
     name: "Circulatory & Excretory System",
     icon: "❤️",
-    color: "linear-gradient(135deg,#FF5252,#E53935)",
+     color: "linear-gradient(135deg,#FFCA28,#FFA000)",
+  
     path: "/quiz/cesystem",
   },
   {
     id: 6,
     name: "Food our basic need",
     icon: "🍎",
-    color: "linear-gradient(135deg,#FF8A00,#FF6F00)",
+    color: "linear-gradient(135deg,#26A69A,#00897B)",
+   
     path: "/quiz/food",
   },
   {
     id: 7,
     name: "Digestion of Food",
     icon: "🥗",
-    color: "linear-gradient(135deg,#26A69A,#00897B)",
+    color: "linear-gradient(135deg,#FF8A00,#FF6F00)", 
     path: "/quiz/digestion",
   },
   {
     id: 8,
     name: "Clothes",
     icon: "👕",
-    color: "linear-gradient(135deg,#FFCA28,#FFA000)",
+     color: "linear-gradient(135deg,#FF5252,#E53935)",
     path: "/quiz/clothes",
   },
   {

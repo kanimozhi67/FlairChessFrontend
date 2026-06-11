@@ -114,7 +114,7 @@ export default function Grade4quiz({
   // FINISH QUIZ
   const finishQuiz = async (finalAnswers) => {
     try {
-      setLoadingExplanation(true);
+    
 
    
 
@@ -122,32 +122,58 @@ export default function Grade4quiz({
         userId: user?._id || "demo-user",
         answers: finalAnswers
       });
+      console.log("CHECK RESPONSE", response.data);
+console.log("CORRECT ANSWERS", response.data.correctAnswers);
 
       setResult(response.data);
 
       if (addPointsToBackend) {
         addPointsToBackend(response.data.score);
       }
-
+ 
       // FETCH AI EXPLANATIONS
-      const explanationPromises = finalAnswers.map(async (item) => {
-        const correct = response.data.correctAnswers?.[item.id];
+//       const explanationPromises = finalAnswers.map(async (item) => {
+//         const correct = response.data.correctAnswers?.[item.id];
 
-        if (String(item.answer) !== String(correct)) {
-          const explainRes = await api.post("/quiz/explain2", {
-            question: item.question,
-            correctAnswer: correct,
-            userAnswer: item.answer
-          });
+//         if (String(item.answer) !== String(correct)) {
+//           const explainRes = await api.post("/quiz/explain2", {
+//             question: item.question,
+//             correctAnswer: correct,
+//             userAnswer: item.answer
+//           });
+// console.log("item.id:", item.id);
+// console.log(
+//   "correct:",
+//   response.data.correctAnswers?.[item.id]
+// );
+// console.log("user:", item.answer);
+//           return {
+//             id: item.id,
+//             explanation: explainRes.data.explanation
+//           };
+//         }
 
-          return {
-            id: item.id,
-            explanation: explainRes.data.explanation
-          };
-        }
+//         return null;
+//       });
+const explanationPromises = finalAnswers.map(async (item) => {
+  const correct =
+    response.data.correctAnswers?.[item.id];
 
-        return null;
-      });
+  if (String(item.answer) !== String(correct)) {
+    const explainRes = await api.post("/quiz/explain2", {
+      question: item.question,
+      correctAnswer: correct,
+      userAnswer: item.answer
+    });
+ setLoadingExplanation(true);
+    return {
+      id: item.id,
+      explanation: explainRes.data.explanation
+    };
+  }
+
+  return null;
+});
 
       const explanationResults = await Promise.all(explanationPromises);
 
