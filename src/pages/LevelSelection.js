@@ -2,7 +2,7 @@
 import { Button } from "antd";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
-import Placevalue from "./Placevalue";
+
 
 const LevelSelection = ({ category,level,onSelectLevel }) => {
   const { width, height } = useWindowSize();

@@ -5,41 +5,16 @@ import {  useOutletContext ,useLocation,useNavigate,useParams} from "react-route
 import { completeTask } from "../api/auth.js";
 import api from "../api/axiosClient";
 import LevelSelection from "./LevelSelection.js";
-import QuizCard from "./QuizCard.js";
-import Logics from "./Logics.js";
-import SortingQuizCard from "./SortingQuizCard.js";
 import MotivationScreen from "./MotivationScreen.js";
 import ResultModal from "./ResultModal.js";
 import StickerModal from "./StickerModal.js";
 import FlyingSticker from "./FlyingSticker.js";
 import GiftBox from "./GiftBox.js";
 import NoGiftBox from "./NoGiftBox.js";
-import Basket from "./Basket.js";
-import QuizWithTimer from "./QuizWithTimer.js";
-import SudokuBoard from "./SudokuBoard.js";
-import Puzzle from "./Puzzle.js";
-import PrimaryPage from "./PrimaryPage.js";
+
 import { useSearchParams } from "react-router-dom";
-import PuzzleWheel from "./PuzzleWheel.js";
-import PuzzleWheelKinder from "./PuzzleWheelKinder.js";
-import MoneyQuiz from "./MoneyQuiz.js";
-import Measurement from "./Measurement.js";
-import ShapesQuiz from "./ShapesQuiz.js";
-import Fraction from "./Fraction.js";
-import TimeQuiz from "./TimeQuiz.js";
-import TimeOption from "./TimeOption.js";
 import Robot from "./Robot.js";
-import AngleQuiz from "./AngleQuiz.js";
-import FractionTopics from "./FractionTopics.js";
-import FractionTopicsQuiz from "./FractionTopicsQuiz.js";
-import Placevalue from "./Placevalue.js"
-import Grade4ws1 from "./Grade4ws1.js";
-import Grade4ws2 from "./Grade4ws2.js";
-import Grade4ws3 from "./Grade4ws3.js";
-import Lgreenplants from "./Lgreenplants.js";
-import Grade4quiz from "./Grade4quiz.js";
-import ImageTextReader from "./Imagetextreader.js";
-import LearnByVideo from "./LearnByVideo.js";
+
 
 
 const QuizPage = ({ user, setUser,setCompletedLevel,setCompletedCategory,setCompletedSelectedLevel,
@@ -736,92 +711,14 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",}}>
         <div style={{ display: "none" }}>
   {level ? level : user.level}
 </div>
-        { category === "math" && selectedLevel === 2 ? (
-            <QuizWithTimer
-              questions={questions}
-              answers={answers}
-              setAnswers={setAnswers}
-              //  submitQuiz={submitQuiz}
-              // submitted={submitted}
-              //  results={results}
-              setFeedbackMessage={setFeedbackMessage}
-              setFinalScore={setFinalScore}
-              setSubmitted={setSubmitted}
-              addPointsToBackend={addPointsToBackend}
-              setResults={setResults}
-              giftmessage={giftmessage}
-              fetchQuiz={fetchQuiz}
-              speakLine={speakLine}
-            />
-   
-        ): category==="robot" ?(
+        category==="robot" &&(
           <Robot 
           user={user}
-          />
+          />)
        
- ): level ==="primary"  && (selectedLevel ==="Quiz📝" ) ?(<>
- 
-          <Grade4quiz
-          user={user}
-         category ={category}
- level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-          />
-</>
 
- ): category==="grade4"   && (level ==="olympiad") ?(
-          <Grade4ws1 
-          user={user}
+
           
-         category ={category}
- level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-          />
- ): 
-//  category==="greenplants"   && selectedLevel ==="Learn📖" ?(
-//           <Lgreenplants
-//           user={user}
-//          category ={category}
-//  level={level}
-//      selectedLevel={selectedLevel}
-//             addPointsToBackend={addPointsToBackend}
-//             setResults={setResults}
-//           />
-//  ):
-  selectedLevel ==="Learn📖" ?(
-          <LearnByVideo
-          user={user}
-         category ={category}
- level={level}
-     selectedLevel={selectedLevel}
-            addPointsToBackend={addPointsToBackend}
-            setResults={setResults}
-          />
- ):(
-            <QuizCard
-              level={level}
-              selectedLevel={selectedLevel}
-              category={category}
-              questions={questions}
-              answers={answers}
-              setAnswers={setAnswers}
-              submitQuiz={submitQuiz}
-              submitted={submitted}
-              results={results}
-              loading={loading}
-              fetchQuiz={fetchQuiz}
-              firstInputRef={firstInputRef}
-              titleStyle={titleStyle}
-              numberStyle={numberStyle}
-              buttonStyle={buttonStyle}
-              playAgainButtonStyle={playAgainButtonStyle}
-              speakLine={speakLine}
-            />
-          )}
         </div>
       </div>
 {console.log(category,selectedLevel)}
