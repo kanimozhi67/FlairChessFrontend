@@ -9,9 +9,7 @@ const LevelSelection = ({ category,level,onSelectLevel }) => {
   const motivationList = ["Sharp-witted","Smart","Bright","Awesome","Amazing","Brilliant","Fantastic"];
   const levels =
  ( level ==="olympiad") && category==="grade4"
-   ? ["Green Plants","Plant Adaptation","Animals and their Young ones","Animal Adaptations",
-    "Circulatory & Excretory System","Food our basic need",
-    "Digestion of Food","Clothes","Air Water Weather","The Solar System","Keeping the Earth Clean","Soil","Solids Liquids & Gases"
+   ? ["Green Plants"
    ]
    
      : ["Learn📖","Quiz📝"];
