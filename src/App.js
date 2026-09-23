@@ -24,6 +24,7 @@ import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import PaymentWrapper from "./pages/PaymentWrapper";
 import OlympiadExplore from "./pages/OlympiadExplore";
 import ExploreSoftware from "./pages/ExploreSoftware";
+import ReadingComprehension from "./pages/ReadingComprehension/ReadingComprehension";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -124,7 +125,17 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
             }
           />
         
-
+{/* <Route
+  path="/reading-comprehension"
+  element={
+    <PrivateRoute user={user}>
+      <ReadingComprehension
+        grade={1}
+        studentId={user?._id}
+      />
+    </PrivateRoute>
+  }
+/> */}
           <Route
             path="/mystickers"
             element={

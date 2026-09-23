@@ -26,6 +26,7 @@ const [winner,setWinner]=useState(null)
       const resPoints = await api.get("/quiz/progress/today");
       const today = resPoints.data.todayPoints ?? 0;
       const totalPoints = resPoints.data.totalPoints ?? 0;
+      console.log("Total Points:",totalPoints)
       setTodayPoints(today);
 
       // 2️⃣ Fetch global leaderboard
@@ -38,20 +39,20 @@ const [winner,setWinner]=useState(null)
 );
 console.log(resLeaderboard.data.top5)
       setLeaderboard(top5);
-// setWinner(top5?.[0] || null);
-//student of the month
-const now = new Date();
 
-// Last day of current month
-const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-// Check if today is last day (or past)
-const isMonthEnded = now.getDate() === lastDay.getDate();
-if (isMonthEnded && top5.length > 0) {
-  setWinner(top5[0]);
-} else {
-  setWinner(null); // or keep previous winner if stored
-}
+      const winnerRes = await api.get(
+  "/quiz/progress/student-of-month"
+);
+
+console.log(
+  "Student of Month:",
+  winnerRes.data
+);
+
+setWinner(
+  winnerRes.data.winner || null
+);
 
 
       // 3️⃣ Setup current user object
@@ -62,14 +63,26 @@ if (isMonthEnded && top5.length > 0) {
         points: totalPoints,
         rank: backendCurrentUser?.rank || null,
       });
-
+console.log(currentUser)
       // 4️⃣ Fetch school leaderboard (only students)
-     const resSchoolLeaderboard = await api.get(`/quiz/progress/schoolleaderbd?userId=${userId}`);
-     console.log(resSchoolLeaderboard)
-const schoolTop5 = (resSchoolLeaderboard.data.top5 || []).filter(
-  (u) => u.studentId && u.username !== "Unknown"
-);
-setSchoolLeaderboard(schoolTop5);
+    try {
+  const resSchoolLeaderboard = await api.get(
+    `/quiz/progress/schoolleaderbd?userId=${userId}`
+  );
+
+  console.log("School leaderboard:", resSchoolLeaderboard.data);
+
+  const schoolTop5 = (resSchoolLeaderboard.data.top5 || []).filter(
+    (u) => u.studentId && u.username !== "Unknown"
+  );
+
+  setSchoolLeaderboard(schoolTop5);
+} catch (schoolError) {
+  console.error("School leaderboard error:", schoolError);
+
+  // Don't break the entire dashboard
+  setSchoolLeaderboard([]);
+}
 
     } catch (err) {
       console.error("Dashboard load error:", err);
@@ -117,7 +130,19 @@ const previousMonth = prevDate.toLocaleString("default", { month: "long" });
           <div style={{ background: "linear-gradient(135deg, #FF9D2F, #FF6B6B)", 
             color: "#fff", fontSize: 24, fontWeight: "bold", textAlign: "center", padding: 12,
              width: "100%", borderRadius: "20px 20px 0 0", boxShadow: "0 6px 15px rgba(0,0,0,0.15)" }}>
-          🛡 Student of the Month {previousMonth}✨ <p>🏆 {winner?.username || "Aadhira"} 🥇</p>
+          🛡 Student of the Month {previousMonth}✨ 
+          {/* <p>🏆 {winner?.username || "Aadhira"}   ⭐ {winner?.points} Points🥇</p> */}
+           <p>
+    {winner ? (
+      <>
+        🏆 {winner.username} 
+   
+        ⭐ {winner.points} Points 🥇
+      </>
+    ) : (
+      "🏆 Winner will be announced soon"
+    )}
+  </p>
           </div>
     
 </div>
@@ -161,7 +186,7 @@ const previousMonth = prevDate.toLocaleString("default", { month: "long" });
                         e.currentTarget.style.transform = "scale(1)";
                         e.currentTarget.style.backgroundColor = "#17d627";
                       }}
-                    >Enter your name</Button>  to see your dashboard rank</h1>}
+                    >Enter your name</Button>  <br></br>to see your dashboard rank</h1>}
               {console.log(currentUser.username)}
               <Progress
                 type="circle"

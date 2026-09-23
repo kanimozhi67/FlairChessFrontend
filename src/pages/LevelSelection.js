@@ -12,7 +12,7 @@ const LevelSelection = ({ category,level,onSelectLevel }) => {
    ? ["Green Plants"
    ]
    
-     : ["Learn📖","Quiz📝"];
+     : ["Champ📖","Master📝"];
   return (
     <div style={{
       margin: 0,

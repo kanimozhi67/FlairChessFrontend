@@ -211,7 +211,7 @@ const Layout = ({ user, setUser,todayTaskCount }) => {
     color: "inherit",
   }}
 >
-  🎓 FLAIR OLYMPIAD SCIENCE ✨
+  🎓 FLAIR VOCO ✨
 </button></div>
 <div  style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
  <button

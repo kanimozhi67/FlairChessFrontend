@@ -14,6 +14,7 @@ import NoGiftBox from "./NoGiftBox.js";
 
 import { useSearchParams } from "react-router-dom";
 import Robot from "./Robot.js";
+import ReadingComprehension from "./ReadingComprehension/ReadingComprehension.js";
 
 
 
@@ -114,42 +115,98 @@ const urlSelectedLevel = Number(searchParams.get("selectedLevel"));
     }
   };
 
-  const containerStyle = {
-    width: "100%",
-    minHeight: "100vh", // full viewport height for vertical centering
-    padding: 16,
-    background: "linear-gradient(135deg, #ffe680, #f08c8cff)",
- 
-boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",
+// ======================================================
+// MAIN QUIZ PAGE LAYOUT
+// ======================================================
 
+const containerStyle = {
+  width: "100%",
+  minHeight: "100vh",
 
-    display: "flex",
-   justifyContent: width > 768 ? "center" : "space-between",
- // center horizontally
- //  alignItems:   width > 768 ? "center" : "space-between", // center vertically
-    overflowX: "hidden",
-    boxSizing: "border-box",
-  };
+  background:
+    "linear-gradient(135deg, #ffe680 0%, #f8b36a 50%, #f08c8c 100%)",
 
-  const innerStyle = {
-    display: "flex",
-    flexDirection: width < 768 ? "column" : "row", // responsive stacking
-    gap: 20,
-    alignItems: "flex-start",
- justifyContent: width > 768 ? "center" : "space-between",
-    width: "100%",
-    maxWidth: 1200,
-    margin: "0 auto",
-   // marginLeft:-60
-  };
+  boxShadow:
+    "0 12px 30px rgba(255, 160, 140, 0.45)",
 
-  const quizCardStyle = {
-    width: width < 768 ? "90%" : "580px", // responsive width
-    flex: "0 0 auto", // prevent stretching
-    margin: width < 768 ? "20px 0" : "0 20px",
-   // boxShadow: "0 4px 12px rgba(0,0,0,0.1)", // optional styling
-  };
+  display: "flex",
+  justifyContent: "center",
 
+  overflowX: "hidden",
+
+  boxSizing: "border-box",
+};
+
+// ======================================================
+// FULL WIDTH INNER AREA
+// ======================================================
+
+const innerStyle = {
+  display: "flex",
+
+  flexDirection:
+    width < 768
+      ? "column"
+      : "row",
+
+  gap: 20,
+
+  alignItems: "flex-start",
+
+  justifyContent: "center",
+
+  width: "100%",
+
+  /*
+   * IMPORTANT:
+   * Do not keep maxWidth: 1200 here.
+   * ReadingComprehension needs to use the
+   * available width from QuizPage.
+   */
+
+  maxWidth: "none",
+
+  margin: "0 auto",
+
+  boxSizing: "border-box",
+
+  padding:
+    width < 768
+      ? "0 10px"
+      : "0 15px",
+};
+
+// ======================================================
+// QUIZ CONTENT AREA
+// ======================================================
+
+const quizCardStyle = {
+  width: "100%",
+
+  /*
+   * IMPORTANT:
+   * Previously this was 580px.
+   *
+   * That was the reason your ReadingComprehension
+   * component remained narrow.
+   */
+
+  flex: "1 1 auto",
+
+  margin:
+    width < 768
+      ? "20px 0"
+      : "0",
+
+  boxSizing: "border-box",
+
+  /*
+   * Allows the child to shrink correctly
+   * without creating horizontal overflow.
+   */
+
+  minWidth: 0,
+};
   const allStickers = [
     "🍰",
     "🍫",
@@ -240,25 +297,27 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",
 
  
   const feedmsg = (score) => {
-  let len = questions.length; // default
+  // let len = questions.length; // default
+  let len=8;
 console.log(level)
   // Category-based length
   switch (level) {
     case "primary":
       if(selectedLevel ==="Quiz📝")
       {
-       len = 10;
+       len = 8;
       console.log(len)}
      
          break;
     case "olympiad":
      
-        len=15;
+        len=8;
        console.log(len)
          break;
     
     default:
-      len = questions.length;
+      // len = questions.length;
+      len=8;
       console.log(len)
   }
 
@@ -294,71 +353,7 @@ console.log(level)
 
     try {
       let res;
-      if (category === "sorting") {
-   
-        if(level=== "primary"){
-            if (selectedLevel === 1) res = await api.get("/quiz/sortp");
-        else if (selectedLevel === 2) res = await api.get("/quiz/sortplevel2");
-        else res = await api.get("/quiz/sortplevel3");
-        }else{
-        if (selectedLevel === 1) res = await api.get("/quiz/sort");
-        else if (selectedLevel === 2) res = await api.get("/quiz/sortlevel2");
-        else res = await api.get("/quiz/sortlevel3");
-        }
-      } else if (category === "multiplication") {
-       
-        if(level==="primary"){
-             if (selectedLevel === 1) res = await api.get("/quiz/mulp");
-         if (selectedLevel === 2) res = await api.get("/quiz/mulplevel2");
-      
-        //  res = await api.get("/quiz/mulplevel3");
-        }else{
-        if (selectedLevel === 1) res = await api.get("/quiz/mul");
-        else if (selectedLevel === 2) res = await api.get("/quiz/mullevel2");
-        else res = await api.get("/quiz/mullevel3");
-      
-      }
-     } else if (category === "division") {
- if (selectedLevel === 1) res = await api.get("/quiz/div");
-        else if (selectedLevel === 2) res = await api.get("/quiz/divlevel2");
-        else res = await api.get("/quiz/divlevel3");
-      
-     }else if (category === "math") {
      
-        if (level === "primary") {
-          if (selectedLevel === 1) res = await api.get("/quiz/mathp");
-           if (selectedLevel === 2) res = await api.get("/quiz/mathp2");
-        //  else res = await api.get("/quiz/mathplevel3");
-          setQuestions(res.data.questions || []);
-          setAnswers({});
-        } else {
-          if (selectedLevel === 1) res = await api.get("/quiz/math");
-          else if (selectedLevel === 2) res = await api.get("/quiz/math");
-          else res = await api.get("/quiz/mathlevel3");
-        
-        }
-      } else if (category === "sudoku") {
-      
-        res = await api.get("/quiz/sudoku");
-        setQuestions(res.data.questions || []);
-        setPuzzleId(res.data.puzzleId); // Store puzzleId
-        setAnswers({});
-        //else if (selectedLevel === 2) res = await api.get("/quiz/sudokulevel2");
-        // else res = await api.get("/quiz/sudokulevel3");
-      
-      } else {
-        if (level === "primary") {
-          res = await api.get(`/quiz/mathp?level=${selectedLevel}`);
-          setQuestions(res.data.questions || []);
-          setAnswers({});
-        } else {
-          res = await api.get(`/quiz/math?level=${selectedLevel}`);
-          setQuestions(res.data.questions || []);
-          setAnswers({});
-        }
-      }
-      setQuestions(res.data.questions || []);
-      setAnswers({});
       //  setAnswers(Array((res.data.questions || []).length).fill(null));
     } catch (err) {
       console.error("fetchQuiz error:", err);
@@ -442,8 +437,10 @@ const categoryName = searchParams.get("category");
   };
 
   // Helper: send points to backend and update UI
-const addPointsToBackend = async (points = 0) => {
+const addPointsToBackend = async (points = 0,lastStory) => {
  console.log(user.level);
+ console.log(points);
+ console.log(lastStory);
 
 await api.post("/users/completed", {
   Id: user._id,
@@ -451,12 +448,13 @@ await api.post("/users/completed", {
   category,
   selectedLevel,
   points,
+  lastStory,
   role:user.role,
 });
 
 
-    if(points!==0){
-handleComplete(points);}
+//     if(points!==0){
+// handleComplete(points);}
 
     if (!user || !user._id) return;
     try {
@@ -467,6 +465,7 @@ handleComplete(points);}
       {
         studentId: user._id,   // 🔥 REQUIRED
         points: points,
+        completedStory:lastStory,
       }
     );
       const total = res?.data?.points ?? res?.data?.total ?? null;
@@ -652,19 +651,19 @@ useEffect(() => {
   }
 }, [urlSelectedLevel]);
   // Render flows
-  if (!selectedLevel &&  category!=="robot") {
-    return (
-      <LevelSelection
-      category={category}
-      level={level}
-        onSelectLevel={(lvl, msg) => {
-          setSelectedLevel(lvl);
-          setMotivationMessage(msg);
-          setShowMotivation(true);
-        }}
-      />
-    );
-  {}}
+  // if (!selectedLevel &&  category!=="robot") {
+  //   return (
+  //     <LevelSelection
+  //     category={category}
+  //     level={level}
+  //       onSelectLevel={(lvl, msg) => {
+  //         setSelectedLevel(lvl);
+  //         setMotivationMessage(msg);
+  //         setShowMotivation(true);
+  //       }}
+  //     />
+  //   );
+  // {}}
 
   if (showMotivation) {
     return (
@@ -680,10 +679,14 @@ useEffect(() => {
   }
 
   return (
-    <div style={{    background: "linear-gradient(135deg, #ffe680, #f08c8cff)",
+    <div
+     style={{  
+      //  background: "linear-gradient(135deg, #ffe680, #f08c8cff)",
  
-boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",}}>
-{ category!=="robot" &&
+        //boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",
+}}
+>
+{/* { category!=="robot" &&
            <button
   onClick={() => window.location.reload()}
   style={{
@@ -701,7 +704,7 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",}}>
 >
    👉Change level from {selectedLevel}
 </button>
-}
+} */}
     <div style={containerStyle}>
  
       <div style={innerStyle}>
@@ -711,17 +714,39 @@ boxShadow: "0 12px 30px rgba(255, 160, 140, 0.45)",}}>
         <div style={{ display: "none" }}>
   {level ? level : user.level}
 </div>
-        category==="robot" &&(
+        {category==="robot" ?(
           <Robot 
           user={user}
           />)
-       
-
+       :  category==="1" ?
+        <ReadingComprehension
+        grade={category}
+        studentId={user?._id}
+         category={category}
+         level={level}
+         selectedLevel={selectedLevel} 
+         user={user} 
+         addPointsToBackend={addPointsToBackend}
+         
+      />
+:
+ <ReadingComprehension
+        grade={category}
+        studentId={user?._id}
+         category={category}
+         level={level}
+         selectedLevel={selectedLevel} 
+         user={user} 
+         addPointsToBackend={addPointsToBackend}
+         
+      />
+        }
 
           
         </div>
       </div>
 {console.log(category,selectedLevel)}
+
       <GiftBox
         setSelectedStickers={setSelectedStickers}
         setShowStickerModal={setShowStickerModal}
