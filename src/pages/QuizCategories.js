@@ -144,6 +144,28 @@ const QuizCategories = ({ setUser }) => {
         FLAIR AI Robot
       </Button>
     </Col>
+    <Col xs={24} sm={10} md={9}>
+      <Button
+        block
+        size="large"
+        onClick={() => navigate("/quiz/wheel")}
+        style={{
+          height: 120,
+          border: "none",
+          borderRadius: 25,
+    // 🌈 Purple & Blue
+background: "linear-gradient(135deg, #667EEA, #764BA2)",
+          color: "#fff",
+          fontSize: "1.2rem",
+          fontWeight: "bold",
+          boxShadow: "0 8px 18px rgba(255,107,107,0.3)",
+        }}
+      >
+     🎡
+        <br />
+    SPIN THE WHEEL
+      </Button>
+    </Col>
 
     {/* 🧸 Kindergarten */}
     <Col xs={24} sm={10} md={9}>

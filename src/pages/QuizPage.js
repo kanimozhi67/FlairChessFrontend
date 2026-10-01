@@ -15,6 +15,8 @@ import NoGiftBox from "./NoGiftBox.js";
 import { useSearchParams } from "react-router-dom";
 import Robot from "./Robot.js";
 import ReadingComprehension from "./ReadingComprehension/ReadingComprehension.js";
+import CompletedVocabulary from "./ReadingComprehension/CompletedVocabulary.js";
+import CompletedVocabularyWheel from "./ReadingComprehension/CompletedVocabularyWheel.js";
 
 
 
@@ -718,6 +720,10 @@ useEffect(() => {
           <Robot 
           user={user}
           />)
+          :  category==="wheel" ?(
+          <CompletedVocabularyWheel
+          user={user}
+          />)
        :  category==="1" ?
         <ReadingComprehension
         grade={category}
@@ -788,6 +794,7 @@ useEffect(() => {
         flyData={flyData}
         setShowResultModal={setShowResultModal}
       />
+
       {/* <Basket basket={basket} /> */}
     </div>
     </div>

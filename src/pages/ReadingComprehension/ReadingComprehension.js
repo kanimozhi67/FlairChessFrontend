@@ -32,6 +32,7 @@ import {
 import api from "../../api/axiosClient";
 
 import "./reading.css";
+import CompletedVocabulary from "./CompletedVocabulary";
 
 const {
   Title,
@@ -1832,12 +1833,12 @@ const ReadingComprehension = ({
                 "blur(8px)",
             }}
           >
-            <BookOutlined />
-
-            Grade {grade} Reading
-            Adventure
-
-            <RocketOutlined />
+          
+                  <CompletedVocabulary
+  grade={category}
+  studentId={user._id}
+  user={user}
+/>
           </div>
         </div>
 
@@ -2065,8 +2066,148 @@ const ReadingComprehension = ({
         {/* ==================================================
             VOCABULARY
         ================================================== */}
+{/* ==================================================
+    CURRENT STORY VOCABULARY
+================================================== */}
 
-        {!startQuiz &&
+{!startQuiz &&
+  Array.isArray(readingData?.vocabulary) &&
+  readingData.vocabulary.length > 0 && (
+    <Card
+      style={{
+        width: "100%",
+        borderRadius: "28px",
+        marginTop: "25px",
+        marginBottom: "25px",
+        border: "none",
+        background: "rgba(255,255,255,0.97)",
+        boxShadow: "0 15px 35px rgba(0,0,0,0.12)",
+        overflow: "hidden",
+      }}
+      styles={{
+        body: {
+          padding:
+            window.innerWidth < 600
+              ? "20px 15px"
+              : "30px 40px",
+        },
+      }}
+    >
+      <Title
+        level={3}
+        style={{
+          marginBottom: "20px",
+          fontWeight: 800,
+          color: currentTheme.accent,
+        }}
+      >
+        🧠 New Words
+      </Title>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+          width: "100%",
+        }}
+      >
+        {readingData.vocabulary.map(
+          (word, index) => {
+            const wordText =
+              typeof word === "string"
+                ? word
+                : word?.word;
+
+            const meaningText =
+              typeof word === "string"
+                ? ""
+                : word?.meaning;
+
+            const exampleText =
+              typeof word === "string"
+                ? ""
+                : word?.example;
+
+            return (
+              <div
+                key={`${wordText}-${index}`}
+                style={{
+                  width: "100%",
+                  boxSizing: "border-box",
+                  padding: "12px 14px",
+                  borderRadius: "14px",
+                  background:
+                    currentTheme.accentLight,
+                  border:
+                    `1px solid ${currentTheme.accent}`,
+                  color: currentTheme.accent,
+                  overflow: "hidden",
+                }}
+              >
+                {/* WORD + MEANING */}
+
+                <div
+                  style={{
+                    fontSize:
+                      window.innerWidth < 600
+                        ? "15px"
+                        : "17px",
+                    lineHeight: 1.5,
+                    fontWeight: 700,
+                    wordBreak: "break-word",
+                    overflowWrap: "anywhere",
+                  }}
+                >
+                  <span>
+                    {wordText}
+                  </span>
+
+                  {meaningText && (
+                    <>
+                      <span> = </span>
+
+                      <span
+                        style={{
+                          fontWeight: 500,
+                        }}
+                      >
+                        {meaningText}
+                      </span>
+                    </>
+                  )}
+                </div>
+
+                {/* EXAMPLE */}
+
+                {exampleText && (
+                  <div
+                    style={{
+                      marginTop: "5px",
+                      fontSize:
+                        window.innerWidth < 600
+                          ? "13px"
+                          : "14px",
+                      lineHeight: 1.5,
+                      color: currentTheme.accent,
+                      wordBreak: "break-word",
+                      overflowWrap: "anywhere",
+                    }}
+                  >
+                    <strong>
+                      Example:
+                    </strong>{" "}
+                    {exampleText}
+                  </div>
+                )}
+              </div>
+            );
+          }
+        )}
+      </div>
+    </Card>
+  )}
+        {/* {!startQuiz &&
           Array.isArray(
             readingData.vocabulary
           ) &&
@@ -2179,7 +2320,7 @@ const ReadingComprehension = ({
                 )}
               </Space>
             </Card>
-          )}
+          )} */}
 
         {/* ==================================================
             START QUIZ

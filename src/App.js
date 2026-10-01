@@ -25,6 +25,8 @@ import PaymentWrapper from "./pages/PaymentWrapper";
 import OlympiadExplore from "./pages/OlympiadExplore";
 import ExploreSoftware from "./pages/ExploreSoftware";
 import ReadingComprehension from "./pages/ReadingComprehension/ReadingComprehension";
+import CompletedVocabulary from "./pages/ReadingComprehension/CompletedVocabulary";
+import FullCompletedVocabulary from "./pages/ReadingComprehension/FullCompletedVocobulary";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -136,11 +138,24 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
     </PrivateRoute>
   }
 /> */}
+
+
+
           <Route
             path="/mystickers"
             element={
               <PrivateRoute user={user}>
-                <Mystickers user={user} setUser={setUser} />
+                      <FullCompletedVocabulary
+  // grade={category}
+  studentId={user._id}
+  user={user}
+/>
+                {/* <Mystickers user={user} setUser={setUser} /> */}
+                {/* <CompletedVocabulary
+  // grade={grade}
+  // studentId={studentId}
+  user={user}
+/> */}
               </PrivateRoute>
             }
           />

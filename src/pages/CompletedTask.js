@@ -51,17 +51,17 @@ const CompletedTask = ({ user }) => {
       align: "center",
     },
     {
-      title: "📘 Category",
+      title: "📘 Grade",
       dataIndex: "completedCategory",
       key: "completedCategory",
       align: "center",
     },
-    {
-      title: "⭐ Difficulty",
-      dataIndex: "completedSelectedLevel",
-      key: "completedSelectedLevel",
-      align: "center",
-    },
+    // {
+    //   title: "⭐ Difficulty",
+    //   dataIndex: "completedSelectedLevel",
+    //   key: "completedSelectedLevel",
+    //   align: "center",
+    // },
     {
       title: "Time",
       dataIndex: "time",
