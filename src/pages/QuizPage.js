@@ -94,29 +94,101 @@ const urlSelectedLevel = Number(searchParams.get("selectedLevel"));
     cursor: "pointer",
   };
   //  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
- const isMobile = width < 767;
+const isMobile = width < 767;
   // --- speakLine helper (non-blocking) ---
-  const speakLine = (text) => {
-    if (!window.speechSynthesis) return;
-    try {
-      const utter = new SpeechSynthesisUtterance(text);
-      // utter.pitch = 1.8;
-      // utter.rate = 1.05;
-      //  utter.lang = "en-US";
-       utter.lang = "en-US";
-      utter.rate = isMobile ? 0.90 : 1.05;
-      utter.pitch = 1.8;
-      utter.volume = 2;
-      const voices = window.speechSynthesis.getVoices();
-       utter.voice = isMobile ? voices.find((v) => /child/i.test(v.name)) : voices.find((v) => /zira/i.test(v.name));
-      // utter.voice =
-      //   voices.find((v) => /zira/i.test(v.name)) ;
-      window.speechSynthesis.speak(utter);
-    } catch (e) {
-      // ignore speech errors
-    }
-  };
+//   if (isMobile) { const speakLine = (
+//   text
+//   ) => {
+//     if (
+//       typeof window === "undefined" ||
+//       !window.speechSynthesis
+//     ) {
+//       return;
+//     }
 
+//     window.speechSynthesis.cancel();
+
+//     // const text = meaning
+//     //   ? `${word}. ${meaning}`
+//     //   : word;
+
+//     const speech =
+//       new SpeechSynthesisUtterance(
+//         text
+//       );
+
+//     speech.lang = "en-US";
+//     speech.rate = 0.85;
+//     speech.pitch = 1;
+
+//     window.speechSynthesis.speak(
+//       speech
+//     );
+//   }};
+// if (!isMobile) { const speakLine = (text) => {
+//     if (!window.speechSynthesis) return;
+//     try {
+//       const utter = new SpeechSynthesisUtterance(text);
+//       // utter.pitch = 1.8;
+//       // utter.rate = 1.05;
+//       //  utter.lang = "en-US";
+//        utter.lang = "en-US";
+//       utter.rate =  1.05;
+//       utter.pitch = 1.8;
+//       utter.volume = 2;
+//       const voices = window.speechSynthesis.getVoices();
+//        utter.voice = voices.find((v) => /zira/i.test(v.name));
+//       //  utter.voice = isMobile ? voices.find((v) => /child/i.test(v.name)) : voices.find((v) => /zira/i.test(v.name));
+//       // utter.voice =
+//       //   voices.find((v) => /zira/i.test(v.name)) ;
+//       window.speechSynthesis.speak(utter);
+//     } catch (e) {
+//       // ignore speech errors
+//     }
+//   }};
+const speakLine = (text) => {
+  if (
+    typeof window === "undefined" ||
+    !window.speechSynthesis
+  ) {
+    return;
+  }
+
+  try {
+    window.speechSynthesis.cancel();
+
+    const utter = new SpeechSynthesisUtterance(text);
+
+    utter.lang = "en-US";
+    utter.volume = 1;
+
+    const voices = window.speechSynthesis.getVoices();
+
+    if (isMobile) {
+      // Mobile voice
+      utter.rate = 0.85;
+      utter.pitch = 1;
+
+      utter.voice =
+        voices.find((v) => /female|samantha|susan/i.test(v.name)) ||
+        voices.find((v) => /en-US/i.test(v.lang)) ||
+        voices[0];
+    } else {
+      // Desktop voice
+      utter.rate = 1.05;
+      utter.pitch = 1.8;
+
+      utter.voice =
+        voices.find((v) => /zira/i.test(v.name)) ||
+        voices.find((v) => /en-US/i.test(v.lang)) ||
+        voices[0];
+    }
+
+    window.speechSynthesis.speak(utter);
+  } catch (error) {
+    console.error("Speech error:", error);
+  }
+};
 // ======================================================
 // MAIN QUIZ PAGE LAYOUT
 // ======================================================
@@ -491,98 +563,7 @@ await api.post("/users/completed", {
     }
   };
 
-  // Submit quiz and handle results
-  const submitQuiz = async () => {
-     setSubmitted(true);
-    if (!questions || questions.length === 0) return;
-   
-    // Sorting quiz
-    if (category === "sorting") {
-      const allAnswered = questions.every((q) =>
-        q.numbers.every(
-          (_, idx) =>
-            answers[`${q.id}-${idx}`] !== undefined &&
-            answers[`${q.id}-${idx}`] !== ""
-        )
-      );
-      if (!allAnswered) {
-        setFeedbackMessage("⚠️ Please answer all questions before submitting!");
-        return;
-      }
 
-      try {
-        const payload = questions.map((q) => ({
-          id: q.id,
-          answer: q.numbers.map((_, idx) => Number(answers[`${q.id}-${idx}`])),
-        }));
-
-        const res = await api.post("/quiz/checksort", {
-          userId: user?._id,
-          answers: payload,
-        });
-
-        const score = res?.data?.score ?? 0;
-        setFinalScore(score);
-        // setSubmitted(true);
-
-        await addPointsToBackend(score);
-        const resResults = {};
-        questions.forEach((q) => {
-          q.numbers.forEach((_, idx) => {
-            const key = `${q.id}-${idx}`;
-            resResults[key] =
-              Number(answers[key]) === res.data.correctAnswers[q.id][idx];
-          });
-        });
-        setResults(resResults);
-        
-   giftmessage(score);
-      } catch (err) {
-        console.error("submitQuiz (sorting) error:", err);
-        setFeedbackMessage("❌ Submit failed.");
-      }
-
-      return;
-    }
-
-    const hasAllKeys = questions.every((q) => answers.hasOwnProperty(q.id));
-
-    if (!hasAllKeys) {
-      setFeedbackMessage("⚠️ Quiz incomplete!");
-      return;
-    }
-
-    //normal quiz
-
-    const res = await api.post("/quiz/check", {
-      answers: questions.map((q) => ({ id: q.id, answer: answers[q.id] })),
-    });
-
-    console.log("submitquiz");
-    console.log("ANSWERS:", answers);
-    console.log(
-      "QUESTIONS:",
-      questions.map((q) => q.id)
-    );
-    console.log("Correct ANSWERS:", res.data?.correctAnswers);
-    const score = res?.data?.score ?? 0;
-    setFinalScore(score);
-   
-
-    await addPointsToBackend(score);
-
-
-
-
-    const resResults = {};
-    questions.forEach((q) => {
-      resResults[q.id] =
-        Number(answers[q.id]) === Number(res.data.correctAnswers[q.id]);
-    });
-    setResults(resResults);
-
-   giftmessage(score);
-  };
 
   const giftmessage = (score) => {
     const feedback =

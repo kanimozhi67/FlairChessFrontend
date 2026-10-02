@@ -12,21 +12,63 @@ const MotivationScreen = ({ message, onStart ,user}) => {
  const isMobile = width < 768;
  useEffect(() => {
   let utterance;
+const speakMotivation = () => {
+  if (
+    typeof window === "undefined" ||
+    !window.speechSynthesis
+  ) {
+    return;
+  }
 
-  const speakMotivation = () => {
-    utterance = new SpeechSynthesisUtterance(`${user?.username} , You are ${message}! You can do it! `);
-   utterance.lang = "en-US";
-      utterance.rate = isMobile ?  0.90 : 1.05;
-      utterance.pitch = 1.8;
-      utterance.volume = 2;
+  try {
+    window.speechSynthesis.cancel();
+
+    const utter = new SpeechSynthesisUtterance(`${user?.username} , You are ${message}! You can do it! `);
+
+    utter.lang = "en-US";
+    utter.volume = 1;
 
     const voices = window.speechSynthesis.getVoices();
-    // pick a suitable voice or fallback
-    //utterance.voice = voices.find(v => v.name.toLowerCase().includes("zira") || v.name.toLowerCase().includes("child")) || voices[0];
-    // utterance.voice = voices.find(v => v.name.toLowerCase().includes("zira"));
- utterance.voice = isMobile ? voices.find((v) => /child/i.test(v.name)) : voices.find((v) => /zira/i.test(v.name));
-    window.speechSynthesis.speak(utterance);
-  };
+
+    if (isMobile) {
+      // Mobile voice
+      utter.rate = 0.85;
+      utter.pitch = 1;
+
+      utter.voice =
+        voices.find((v) => /female|samantha|susan/i.test(v.name)) ||
+        voices.find((v) => /en-US/i.test(v.lang)) ||
+        voices[0];
+    } else {
+      // Desktop voice
+      utter.rate = 1.05;
+      utter.pitch = 1.8;
+
+      utter.voice =
+        voices.find((v) => /zira/i.test(v.name)) ||
+        voices.find((v) => /en-US/i.test(v.lang)) ||
+        voices[0];
+    }
+
+    window.speechSynthesis.speak(utter);
+  } catch (error) {
+    console.error("Speech error:", error);
+  }
+};
+//   const speakMotivation = () => {
+//     utterance = new SpeechSynthesisUtterance(`${user?.username} , You are ${message}! You can do it! `);
+//    utterance.lang = "en-US";
+//       utterance.rate = isMobile ?  0.90 : 1.05;
+//       utterance.pitch = 1.8;
+//       utterance.volume = 2;
+
+//     const voices = window.speechSynthesis.getVoices();
+//     // pick a suitable voice or fallback
+//     //utterance.voice = voices.find(v => v.name.toLowerCase().includes("zira") || v.name.toLowerCase().includes("child")) || voices[0];
+//     // utterance.voice = voices.find(v => v.name.toLowerCase().includes("zira"));
+//  utterance.voice = isMobile ? voices.find((v) => /child/i.test(v.name)) : voices.find((v) => /zira/i.test(v.name));
+//     window.speechSynthesis.speak(utterance);
+//   };
 
   // ensure voices are loaded
   if (window.speechSynthesis.getVoices().length === 0) {
