@@ -29,6 +29,7 @@ const FullCompletedVocabulary = ({
 }) => {
   const [completedStories, setCompletedStories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [enableSpinWheel,setEnablespinWheel]= useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
 

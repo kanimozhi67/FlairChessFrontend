@@ -17,6 +17,7 @@ import Robot from "./Robot.js";
 import ReadingComprehension from "./ReadingComprehension/ReadingComprehension.js";
 import CompletedVocabulary from "./ReadingComprehension/CompletedVocabulary.js";
 import CompletedVocabularyWheel from "./ReadingComprehension/CompletedVocabularyWheel.js";
+import ReadingComprehensionkg from "./ReadingComprehension/ReadingComprehensionkg.js";
 
 
 
@@ -377,21 +378,16 @@ console.log(level)
   // Category-based length
   switch (level) {
     case "primary":
-      if(selectedLevel ==="Quiz📝")
-      {
        len = 8;
-      console.log(len)}
-     
          break;
-    case "olympiad":
-     
+    case "kindergarten":
         len=8;
        console.log(len)
          break;
     
     default:
       // len = questions.length;
-      len=8;
+      len=2;
       console.log(len)
   }
 
@@ -704,9 +700,10 @@ useEffect(() => {
           :  category==="wheel" ?(
           <CompletedVocabularyWheel
           user={user}
+          addPointsToBackend={addPointsToBackend}
           />)
-       :  category==="1" ?
-        <ReadingComprehension
+       :  level==="kindergarten" ?
+        <ReadingComprehensionkg
         grade={category}
         studentId={user?._id}
          category={category}
@@ -714,7 +711,7 @@ useEffect(() => {
          selectedLevel={selectedLevel} 
          user={user} 
          addPointsToBackend={addPointsToBackend}
-         
+         speakLine={speakLine}
       />
 :
  <ReadingComprehension
@@ -732,7 +729,7 @@ useEffect(() => {
           
         </div>
       </div>
-{console.log(category,selectedLevel)}
+{console.log(category)}
 
       <GiftBox
         setSelectedStickers={setSelectedStickers}

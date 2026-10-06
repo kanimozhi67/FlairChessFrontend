@@ -1,6 +1,7 @@
 import React, {
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -232,7 +233,7 @@ const shuffleArray = (array = []) => {
 // ======================================================
 
 const ReadingComprehension = ({
-  grade = 1,
+  grade ,
   studentId,
   category,
   level,
@@ -286,7 +287,7 @@ const ReadingComprehension = ({
 
   const [currentStory, setCurrentStory] =
     useState(0);
-
+const passageCardRef = useRef(null);
   const [
     allStoriesCompleted,
     setAllStoriesCompleted,
@@ -460,9 +461,9 @@ const ReadingComprehension = ({
         const gradeReadings =
           backendReadings.filter(
             (reading) =>
-              Number(
+              String(
                 reading.grade
-              ) === Number(grade)
+              ) === String(grade)
           );
 
         if (
@@ -1834,11 +1835,18 @@ const ReadingComprehension = ({
             }}
           >
           
-                  <CompletedVocabulary
+                  {/* <CompletedVocabulary
   grade={category}
   studentId={user._id}
   user={user}
-/>
+/> */}
+
+  {!startQuiz && (
+<CompletedVocabulary
+  grade={grade}
+  studentId={studentId}
+  user={user}
+/>)}
           </div>
         </div>
 
@@ -2386,8 +2394,9 @@ const ReadingComprehension = ({
                 "rgba(255,255,255,0.98)",
               boxShadow:
                 "0 18px 40px rgba(0,0,0,0.14)",
-              marginBottom:
-                "30px",
+         
+              // marginBottom:
+              //   "30px",
             }}
             styles={{
               body: {
@@ -2419,6 +2428,7 @@ const ReadingComprehension = ({
                   setStartQuiz(false)
                 }
                 style={{
+                  color:"orange",
                   borderRadius:
                     "18px",
                   height:
@@ -2509,7 +2519,7 @@ const ReadingComprehension = ({
 
             {/* QUESTION TYPE */}
 
-            <div
+            {/* <div
               style={{
                 marginTop:
                   "20px",
@@ -2540,7 +2550,7 @@ const ReadingComprehension = ({
                 {currentQuestion +
                   1}
               </Tag>
-            </div>
+            </div> */}
 
             {/* QUESTION */}
 

@@ -147,7 +147,7 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
               <PrivateRoute user={user}>
                       <FullCompletedVocabulary
   // grade={category}
-  studentId={user._id}
+  studentId={user?._id}
   user={user}
 />
                 {/* <Mystickers user={user} setUser={setUser} /> */}

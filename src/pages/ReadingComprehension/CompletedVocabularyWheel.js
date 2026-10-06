@@ -22,14 +22,13 @@ import api from "../../api/axiosClient";
 const { Title, Text, Paragraph } = Typography;
 
 const WHEEL_COLORS = [
-  "#667eea",
-  "#f093fb",
-  "#43e97b",
-  "#fa709a",
-  "#30cfd0",
+  "#FF0080",
+  "#FFD000",
+  "#00F5A0",
+  "#00D9FF",
+  "#A855F7",
 ];
-
-const CompletedVocabularyWheel = ({ studentId, user }) => {
+const CompletedVocabularyWheel = ({ studentId, user,addPointsToBackend }) => {
   const [completedStories, setCompletedStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -388,6 +387,7 @@ const CompletedVocabularyWheel = ({ studentId, user }) => {
         "Correct! " +
           selectedWord.word
       );
+      addPointsToBackend(2);
     }
   };
 
@@ -698,7 +698,7 @@ const CompletedVocabularyWheel = ({ studentId, user }) => {
           danger
           loading={spinning}
           disabled={
-            spinning ||
+            spinning || selectedWord||
             wheelWords.length < 2
           }
           onClick={spinWheel}
@@ -725,7 +725,7 @@ const CompletedVocabularyWheel = ({ studentId, user }) => {
             onClick={() =>
               createWheelWords()
             }
-            disabled={spinning}
+            disabled={spinning || selectedWord}
           >
             New 5 Words
           </Button>
