@@ -249,7 +249,8 @@ const ReadingComprehensionkg = ({
 
   const [readingData, setReadingData] =
     useState(null);
-
+const [currentVocabulary, setCurrentVocabulary] = useState(0);
+const [completedVocabulary,setCompletedVocabulary]=useState(false)
   const [loading, setLoading] =
     useState(true);
 
@@ -408,8 +409,8 @@ const speakLine = (text) => {
   const passagePages = useMemo(() => {
     const pages = [];
 
-    for (let i = 0; i < passageLines.length; i += 2) {
-      pages.push(passageLines.slice(i, i + 2));
+    for (let i = 0; i < passageLines.length; i += 3) {
+      pages.push(passageLines.slice(i, i + 3));
     }
 
     return pages;
@@ -645,7 +646,12 @@ const handlePreviousPassage = () => {
   // ======================================================
   // RESET QUIZ
   // ======================================================
-
+const handleBackToVocabulary = () => {
+  setCompletedVocabulary(false);
+  setCurrentVocabulary(0);
+  setPassagePage(0);
+  setStartQuiz(false);
+};
   const resetQuizState = () => {
     setCurrentQuestion(0);
     setSelectedAnswer(null);
@@ -656,8 +662,37 @@ const handlePreviousPassage = () => {
     setSubmitting(false);
     setStartQuiz(false);
     setPassagePage(0);
+      // Reset vocabulary
+  setCurrentVocabulary(0);
+    setCompletedVocabulary(false);
   };
 
+  const vocabularyList = Array.isArray(
+  readingData?.vocabulary
+)
+  ? readingData.vocabulary
+  : [];
+
+const currentVocabularyItem =
+  vocabularyList[currentVocabulary];
+
+const handleNextVocabulary = () => {
+  if (currentVocabulary < vocabularyList.length - 1) {
+    setCurrentVocabulary((prev) => prev + 1);
+  } else {
+    // Last vocabulary word → go to story passage
+    setCompletedVocabulary(true);
+    setCurrentVocabulary(0);
+  }
+};
+
+const handlePreviousVocabulary = () => {
+  if (currentVocabulary > 0) {
+    setCurrentVocabulary(
+      (prev) => prev - 1
+    );
+  }
+};
   // ======================================================
   // CREATE QUESTIONS
   // 5 STORY + 3 VOCABULARY
@@ -719,90 +754,139 @@ const handlePreviousPassage = () => {
     // VOCABULARY QUESTIONS
     // ====================================================
 
-    const vocabulary =
-      Array.isArray(
-        readingData.vocabulary
+ // ====================================================
+// VOCABULARY QUESTIONS
+// ====================================================
+
+const vocabulary = Array.isArray(readingData.vocabulary)
+  ? readingData.vocabulary
+  : [];
+
+const vocabularyQuestions = vocabulary
+  .slice(0, 3)
+  .map((item, index) => {
+
+    // -----------------------------------------------
+    // GET WORD + MEANING
+    // -----------------------------------------------
+
+    const word =
+      typeof item === "string"
+        ? item
+        : item?.word;
+
+    const correctAnswer =
+      typeof item === "string"
+        ? item
+        : item?.meaning;
+
+    if (!word || !correctAnswer) {
+      return null;
+    }
+
+    // -----------------------------------------------
+    // GET WRONG ANSWERS
+    // -----------------------------------------------
+
+    const wrongAnswers = vocabulary
+      .filter((v) => {
+
+        const vWord =
+          typeof v === "string"
+            ? v
+            : v?.word;
+
+        const vMeaning =
+          typeof v === "string"
+            ? v
+            : v?.meaning;
+
+        return (
+          vWord &&
+          vWord !== word &&
+          vMeaning &&
+          String(vMeaning).trim() !==
+            String(correctAnswer).trim()
+        );
+      })
+      .map((v) =>
+        typeof v === "string"
+          ? v
+          : v?.meaning
       )
-        ? readingData.vocabulary
-        : [];
+      .filter(Boolean);
 
-    const vocabularyQuestions =
-      vocabulary
-        .slice(0, 3)
-        .map(
-          (
-            item,
-            index
-          ) => {
-            const word =
-              typeof item ===
-              "string"
-                ? item
-                : item?.word;
+    // -----------------------------------------------
+    // MAKE SURE CORRECT ANSWER IS ALWAYS INCLUDED
+    // -----------------------------------------------
 
-            const correctAnswer =
-              typeof item ===
-              "string"
-                ? item
-                : item?.meaning;
-
-            if (
-              !word ||
-              !correctAnswer
-            ) {
-              return null;
-            }
-
-            const wrongAnswers =
-              vocabulary
-                .filter(
-                  (v) => {
-                    const vWord =
-                      typeof v ===
-                      "string"
-                        ? v
-                        : v?.word;
-
-                    return (
-                      vWord &&
-                      vWord !== word
-                    );
-                  }
-                )
-                .map(
-                  (v) =>
-                    typeof v ===
-                    "string"
-                      ? v
-                      : v?.meaning
-                )
-                .filter(Boolean);
-
-            const options =
-              shuffleArray([
-                correctAnswer,
-                ...wrongAnswers,
-              ]).slice(0, 4);
-
-            return {
-              id: `vocabulary-${currentStory}-${index}`,
-
-              type: "vocabulary",
-
-              word,
-
-              question:
-                `🧠 What does the word "${word}" mean?`,
-
-              answer:
-                correctAnswer,
-
-              options,
-            };
-          }
+    const uniqueWrongAnswers = [
+      ...new Set(
+        wrongAnswers.map((answer) =>
+          String(answer).trim()
         )
-        .filter(Boolean);
+      ),
+    ].filter(
+      (answer) =>
+        answer !==
+        String(correctAnswer).trim()
+    );
 
+    // Take maximum 3 wrong answers
+    const selectedWrongAnswers =
+      shuffleArray(uniqueWrongAnswers).slice(0, 3);
+
+    // -----------------------------------------------
+    // IMPORTANT:
+    // ADD CORRECT ANSWER AFTER SELECTING WRONG ONES
+    // -----------------------------------------------
+
+    const options = shuffleArray([
+      String(correctAnswer).trim(),
+      ...selectedWrongAnswers,
+    ]);
+
+    // -----------------------------------------------
+    // SAFETY CHECK
+    // -----------------------------------------------
+
+    if (
+      !options.some(
+        (option) =>
+          String(option).trim() ===
+          String(correctAnswer).trim()
+      )
+    ) {
+      console.error(
+        "❌ Correct vocabulary answer missing:",
+        {
+          word,
+          correctAnswer,
+          options,
+        }
+      );
+
+      // Force correct answer into options
+      options[0] = String(correctAnswer).trim();
+    }
+
+    return {
+      id: `vocabulary-${currentStory}-${index}`,
+
+      type: "vocabulary",
+
+      word,
+
+      question:
+        `🧠 What does the word "${word}" mean?`,
+
+      answer:
+        String(correctAnswer).trim(),
+
+      options,
+    };
+  })
+  .filter(Boolean);
     return [
       ...storyQuestions,
       ...vocabularyQuestions,
@@ -1955,7 +2039,7 @@ const handlePreviousPassage = () => {
   user={user}
 /> */}
 
-  {!startQuiz && (
+  {!startQuiz  && !completedVocabulary && (
 <CompletedVocabulary
   grade={grade}
   studentId={studentId}
@@ -1968,7 +2052,7 @@ const handlePreviousPassage = () => {
             PASSAGE
         ================================================== */}
 
-        {!startQuiz &&
+        {!startQuiz  && completedVocabulary && 
           readingData.passage && (
             <Card
               key={`story-${currentStory}`}
@@ -2118,7 +2202,7 @@ const handlePreviousPassage = () => {
                       "15px",
                   }}
                 >
-                    
+                
                   <BookOutlined /> 🌈{" "}
                   {readingData.title ||
                     "Reading Comprehension"}{" "}
@@ -2176,7 +2260,7 @@ const handlePreviousPassage = () => {
                     <div
                       style={{
                         textAlign: "center",
-                        marginBottom: "20px",
+                        // marginBottom: "20px",
                         color: "rgba(255,255,255,0.95)",
                         fontSize:
                           window.innerWidth < 600
@@ -2185,10 +2269,124 @@ const handlePreviousPassage = () => {
                         fontWeight: 800,
                       }}
                     >
-                      📖 Part {passagePage + 1} of {totalPassagePages}
+                   
                     </div>
- {readingData.passage.emoji}
-                    {/* TWO LINES */}
+                     { readingData.storyimage &&  <>
+                       <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        // marginTop: "20px",
+                      }}
+                    >
+
+
+<div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "16px",
+    width: "100%",
+    flexWrap: "wrap",
+    // padding: "10px 12px",
+    boxSizing: "border-box",
+  }}
+>
+  {/* Back to Vocabulary */}
+  <Button
+    onClick={handleBackToVocabulary}
+    style={{
+      width: "100%",
+      maxWidth: "220px",
+      minWidth: "140px",
+      height: "50px",
+      borderRadius: "25px",
+      fontSize: "clamp(13px, 2vw, 16px)",
+      fontWeight: "bold",
+      background: "linear-gradient(135deg, #ff9a9e, #fad0c4)",
+      border: "none",
+      color: "#6a1b4d",
+      boxShadow: "0 6px 15px rgba(255, 154, 158, 0.35)",
+      whiteSpace: "nowrap",
+      padding: "0 20px",
+    }}
+  >
+    📚 Back to Vocabulary
+  </Button>
+
+  {/* Listen */}
+  <Button
+    type="primary"
+    size="large"
+    onClick={() => speakLine(readingData.passage)}
+    style={{
+      width: "100%",
+      maxWidth: "220px",
+      minWidth: "140px",
+      height: "50px",
+      borderRadius: "25px",
+      fontSize: "clamp(13px, 2vw, 16px)",
+      fontWeight: "bold",
+      background: "linear-gradient(135deg, #ff9a9e, #fad0c4)",
+      border: "none",
+      color: "#6a1b4d",
+      boxShadow: "0 6px 15px rgba(255, 154, 158, 0.35)",
+      whiteSpace: "nowrap",
+      padding: "0 20px",
+    }}
+  >
+    🔊 Listen
+  </Button>
+</div>
+                      
+                      <br></br>
+                    </div>
+  {readingData.storyimage? 
+
+                    <img
+  src={`${process.env.REACT_APP_API_URL}${readingData.storyimage}`}
+  alt={readingData.title}
+/>
+:<div
+  style={{
+    fontSize: "clamp(60px, 15vw, 120px)",
+    lineHeight: 1,
+    textAlign: "center",
+    width: "100%",
+    margin: "10px auto",
+  }}
+>
+  {readingData?.emoji}
+</div> }
+</> }
+            {!readingData.storyimage &&      <> 
+                     <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                      
+                      }}
+                    > 
+                          <Button
+                 type="primary"
+                        size="large"
+  onClick={handleBackToVocabulary}
+      style={{
+                          borderRadius: "15px",
+                        
+                          fontSize: "16px",
+                          fontWeight: 700,
+                         background: "linear-gradient(135deg, #ff9a9e, #fad0c4)",
+    border: "none",
+    color: "#6a1b4d",
+    boxShadow: "0 6px 15px rgba(255, 154, 158, 0.35)",
+                        }}
+
+>
+  📚 Back to Vocabulary
+</Button></div>
+               {/* 📖 Part {passagePage + 1} of {totalPassagePages} */}
                     <div
                       style={{
                         display: "flex",
@@ -2232,6 +2430,7 @@ const handlePreviousPassage = () => {
                         marginTop: "20px",
                       }}
                     > 
+         
                       <Button
                         type="primary"
                         size="large"
@@ -2329,6 +2528,30 @@ const handlePreviousPassage = () => {
                         </Button>
                       )}
                     </div>
+                    
+                    
+                     </> }
+{readingData.storyimage &&  
+                     <Button
+                          type="primary"
+                          size="large"
+                          onClick={() => setStartQuiz(true)}
+                          style={{
+                            minWidth:
+                              window.innerWidth < 600
+                                ? "160px"
+                                : "190px",
+                            height: "48px",
+                            borderRadius: "15px",
+                            fontWeight: 700,
+                            background:
+                              currentTheme.buttonBackground,
+                            border: "none",
+                            boxShadow: currentTheme.shadow,
+                          }}
+                        >
+                          🚀 Start Quiz
+                        </Button> }
                   </div>
                 </div>
               </div>
@@ -2338,144 +2561,283 @@ const handlePreviousPassage = () => {
         {/* ==================================================
             VOCABULARY
         ================================================== */}
+
 {/* ==================================================
     CURRENT STORY VOCABULARY
 ================================================== */}
 
-{!startQuiz &&
-  Array.isArray(readingData?.vocabulary) &&
-  readingData.vocabulary.length > 0 && (
+{!startQuiz  && !completedVocabulary  &&
+  vocabularyList.length > 0 &&
+  currentVocabularyItem && (
     <Card
       style={{
         width: "100%",
-        borderRadius: "28px",
+        borderRadius: "30px",
         marginTop: "25px",
         marginBottom: "25px",
         border: "none",
-        background: "rgba(255,255,255,0.97)",
-        boxShadow: "0 15px 35px rgba(0,0,0,0.12)",
+        background: "rgba(255,255,255,0.98)",
+        boxShadow:
+          "0 15px 40px rgba(0,0,0,0.15)",
         overflow: "hidden",
       }}
       styles={{
         body: {
           padding:
             window.innerWidth < 600
-              ? "20px 15px"
-              : "30px 40px",
+              ? "25px 18px"
+              : "40px 50px",
         },
       }}
     >
-      <Title
-        level={3}
+      {/* HEADER */}
+
+      <div
         style={{
-          marginBottom: "20px",
-          fontWeight: 800,
-          color: currentTheme.accent,
+          textAlign: "center",
+          marginBottom: "25px",
         }}
       >
-        🧠 New Words
-      </Title>
+        <div
+          style={{
+            fontSize:
+              window.innerWidth < 600
+                ? "28px"
+                : "34px",
+            fontWeight: 800,
+            color: currentTheme.accent,
+          }}
+        >
+          🧠 New Word
+        </div>
+
+        <div
+          style={{
+            marginTop: "8px",
+            fontSize:
+              window.innerWidth < 600
+                ? "14px"
+                : "16px",
+            color: "#888",
+            fontWeight: 600,
+          }}
+        >
+          Word {currentVocabulary + 1} of{" "}
+          {vocabularyList.length}
+        </div>
+      </div>
+
+      {/* WORD CARD */}
+
+      <div
+        style={{
+          width: "100%",
+          minHeight:
+            window.innerWidth < 600
+              ? "260px"
+              : "300px",
+          borderRadius: "28px",
+          background:
+            currentTheme.passageBackground,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          padding:
+            window.innerWidth < 600
+              ? "30px 20px"
+              : "45px",
+          boxSizing: "border-box",
+          boxShadow:
+            currentTheme.shadow,
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Decorative circles */}
+
+        <div
+          style={{
+            position: "absolute",
+            width: "150px",
+            height: "150px",
+            borderRadius: "50%",
+            background:
+              "rgba(255,255,255,0.15)",
+            top: "-60px",
+            right: "-50px",
+          }}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            width: "100px",
+            height: "100px",
+            borderRadius: "50%",
+            background:
+              "rgba(255,255,255,0.12)",
+            bottom: "-40px",
+            left: "-30px",
+          }}
+        />
+
+        {/* WORD */}
+
+        <div
+          style={{
+            position: "relative",
+            zIndex: 2,
+            fontSize:
+              window.innerWidth < 600
+                ? "42px"
+                : "58px",
+            fontWeight: 900,
+            color: "#ffffff",
+            textShadow:
+              "0 4px 12px rgba(0,0,0,0.25)",
+            wordBreak: "break-word",
+            overflowWrap: "anywhere",
+            lineHeight: 1.15,
+          }}
+        >
+          <Button
+                        type="primary"
+                        size="large"
+                     
+                   onClick={() =>
+    speakLine(
+      typeof currentVocabularyItem === "string"
+        ? currentVocabularyItem
+        : `${currentVocabularyItem?.word}. Meaning: ${currentVocabularyItem?.meaning}. Example: ${currentVocabularyItem?.example}`
+    )
+  }
+                      style={{
+   
+    fontSize: window.innerWidth < 600 ? "14px" : "16px",
+    fontWeight: "bold",
+  
+    background: "transparent",
+    border: "none",
+    color: "#6a1b4d",
+    // boxShadow: "0 6px 15px rgba(255, 154, 158, 0.35)",
+  }}
+                      >
+                        🔊 
+                      </Button>
+          {typeof currentVocabularyItem ===
+          "string"
+            ? currentVocabularyItem
+            : currentVocabularyItem?.word}
+
+          
+        </div>
+
+        {/* MEANING */}
+
+        <div
+          style={{
+            position: "relative",
+            zIndex: 2,
+            marginTop: "20px",
+            fontSize:
+              window.innerWidth < 600
+                ? "17px"
+                : "21px",
+            fontWeight: 500,
+            color: "#ffffff",
+            lineHeight: 1.6,
+            maxWidth: "800px",
+            wordBreak: "break-word",
+            overflowWrap: "anywhere",
+          }}
+        >
+          {typeof currentVocabularyItem ===
+          "string"
+            ? ""
+            : currentVocabularyItem?.meaning}
+        </div>
+
+        {/* EXAMPLE */}
+
+        {typeof currentVocabularyItem !==
+          "string" &&
+          currentVocabularyItem?.example && (
+            <div
+              style={{
+                position: "relative",
+                zIndex: 2,
+                marginTop: "15px",
+                fontSize:
+                  window.innerWidth < 600
+                    ? "14px"
+                    : "16px",
+                color:
+                  "rgba(255,255,255,0.9)",
+                fontStyle: "italic",
+                maxWidth: "700px",
+                lineHeight: 1.5,
+              }}
+            >
+              💡 Example:{" "}
+              {currentVocabularyItem.example}
+            </div>
+          )}
+      </div>
+
+      {/* NAVIGATION */}
 
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          gap: "12px",
-          width: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "15px",
+          marginTop: "25px",
+          flexWrap: "wrap",
         }}
       >
-        {readingData.vocabulary.map(
-          (word, index) => {
-            const wordText =
-              typeof word === "string"
-                ? word
-                : word?.word;
+        {/* PREVIOUS */}
 
-            const meaningText =
-              typeof word === "string"
-                ? ""
-                : word?.meaning;
+        <Button
+          size="large"
+          disabled={currentVocabulary === 0}
+          onClick={handlePreviousVocabulary}
+          style={{
+            minWidth:
+              window.innerWidth < 600
+                ? "120px"
+                : "140px",
+            height: "50px",
+            borderRadius: "16px",
+            fontWeight: 700,
+          }}
+        >
+          ⬅️ Back
+        </Button>
 
-            const exampleText =
-              typeof word === "string"
-                ? ""
-                : word?.example;
+        {/* NEXT */}
 
-            return (
-              <div
-                key={`${wordText}-${index}`}
-                style={{
-                  width: "100%",
-                  boxSizing: "border-box",
-                  padding: "12px 14px",
-                  borderRadius: "14px",
-                  background:
-                    currentTheme.accentLight,
-                  border:
-                    `1px solid ${currentTheme.accent}`,
-                  color: currentTheme.accent,
-                  overflow: "hidden",
-                }}
-              >
-                {/* WORD + MEANING */}
-
-                <div
-                  style={{
-                    fontSize:
-                      window.innerWidth < 600
-                        ? "15px"
-                        : "17px",
-                    lineHeight: 1.5,
-                    fontWeight: 700,
-                    wordBreak: "break-word",
-                    overflowWrap: "anywhere",
-                  }}
-                >
-                  <span>
-                    {wordText}
-                  </span>
-
-                  {meaningText && (
-                    <>
-                      <span> = </span>
-
-                      <span
-                        style={{
-                          fontWeight: 500,
-                        }}
-                      >
-                        {meaningText}
-                      </span>
-                    </>
-                  )}
-                </div>
-
-                {/* EXAMPLE */}
-
-                {exampleText && (
-                  <div
-                    style={{
-                      marginTop: "5px",
-                      fontSize:
-                        window.innerWidth < 600
-                          ? "13px"
-                          : "14px",
-                      lineHeight: 1.5,
-                      color: currentTheme.accent,
-                      wordBreak: "break-word",
-                      overflowWrap: "anywhere",
-                    }}
-                  >
-                    <strong>
-                      Example:
-                    </strong>{" "}
-                    {exampleText}
-                  </div>
-                )}
-              </div>
-            );
-          }
-        )}
+        <Button
+  type="primary"
+  onClick={handleNextVocabulary}
+  style={{
+    minWidth: window.innerWidth < 600 ? "130px" : "160px",
+    height: window.innerWidth < 600 ? "45px" : "50px",
+    borderRadius: "25px",
+    fontSize: window.innerWidth < 600 ? "15px" : "17px",
+    fontWeight: "bold",
+    background: currentVocabulary === vocabularyList.length - 1
+      ? "linear-gradient(135deg, #00c853, #64dd17)"
+      : "linear-gradient(135deg, #667eea, #764ba2)",
+    border: "none",
+  }}
+>
+  {currentVocabulary === vocabularyList.length - 1
+    ? "Finished 🎉"
+    : "Next ➡️"}
+</Button>
       </div>
     </Card>
   )}

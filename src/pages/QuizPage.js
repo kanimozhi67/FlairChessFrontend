@@ -713,6 +713,17 @@ useEffect(() => {
          addPointsToBackend={addPointsToBackend}
          speakLine={speakLine}
       />
+       :  level==="primary" & category!=3 & category!=5 &   category!=4 ?
+        <ReadingComprehensionkg
+        grade={category}
+        studentId={user?._id}
+         category={category}
+         level={level}
+         selectedLevel={selectedLevel} 
+         user={user} 
+         addPointsToBackend={addPointsToBackend}
+         speakLine={speakLine}
+      />
 :
  <ReadingComprehension
         grade={category}
