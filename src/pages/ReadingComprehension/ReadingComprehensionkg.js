@@ -1985,6 +1985,7 @@ const vocabularyQuestions = vocabulary
       }
     >
       <DecorativeBackground />
+      
 
       <div
         style={{
@@ -2053,137 +2054,35 @@ const vocabularyQuestions = vocabulary
         ================================================== */}
 
         {!startQuiz  && completedVocabulary && 
-          readingData.passage && (
-            <Card
-              key={`story-${currentStory}`}
-              style={{
-                width: "100%",
-                backgroundColor:"light pink",
-                minHeight:
-                  "550px",
-                borderRadius:
-                  "32px",
-                border:
-                  "1px solid rgba(255,255,255,0.25)",
-                // background:
-                //   currentTheme.passageBackground,
-                boxShadow:
-                  currentTheme.shadow,
-                overflow:
-                  "hidden",
-                position:
-                  "relative",
-              }}
-              styles={{
-                body: {
-                  padding:
-                    window.innerWidth <
-                    600
-                      ? "25px 20px"
-                      : "40px 50px",
-                  position:
-                    "relative",
-                  zIndex: 2,
-                },
-              }}
-            >
-              {/* DECORATION */}
-
+          readingData.passage && (<>
+           
               <div
-                style={{
-                  position:
-                    "absolute",
-                  width:
-                    "280px",
-                  height:
-                    "280px",
-                  borderRadius:
-                    "50%",
-                  background:
-                    currentTheme.circle1,
-                  top:
-                    "-140px",
-                  right:
-                    "-90px",
-                }}
-              />
-
-              <div
-                style={{
-                  position:
-                    "absolute",
-                  width:
-                    "140px",
-                  height:
-                    "140px",
-                  borderRadius:
-                    "50%",
-                  background:
-                    currentTheme.circle2,
-                  top: "60px",
-                  right: "80px",
-                }}
-              />
-
-              <div
-                style={{
-                  position:
-                    "absolute",
-                  width: "60px",
-                  height: "60px",
-                  borderRadius:
-                    "50%",
-                  background:
-                    currentTheme.circle3,
-                  top: "35px",
-                  right: "35px",
-                }}
-              />
-
-              <div
-                style={{
-                  position:
-                    "absolute",
-                  width:
-                    "230px",
-                  height:
-                    "230px",
-                  borderRadius:
-                    "50%",
-                  background:
-                    currentTheme.circle1,
-                  bottom:
-                    "-120px",
-                  left:
-                    "-90px",
-                }}
-              />
-
-              <div
-                style={{
-                  position:
-                    "absolute",
-                  width: "85px",
-                  height: "85px",
-                  borderRadius:
-                    "50%",
-                  background:
-                    currentTheme.circle2,
-                  bottom: "40px",
-                  left: "100px",
-                }}
-              />
-
-              {/* CONTENT */}
-
-              <div
-                style={{
-                  position:
-                    "relative",
-                  zIndex: 5,
-                }}
-              >
-                <Title
+                    style={{
+                      minHeight:
+                        window.innerWidth < 600
+                          ? "180px"
+                          : "210px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {/* PAGE INDICATOR */}
+                    {/* <div
+                      style={{
+                        textAlign: "center",
+                       
+                        color: "rgba(255,255,255,0.95)",
+                        fontSize:
+                          window.innerWidth < 600
+                            ? "14px"
+                            : "16px",
+                        fontWeight: 800,
+                      }}
+                    >
+                   
+                    </div> */}
+                     <Title
                   level={1}
                   style={{
                     fontSize:
@@ -2194,7 +2093,7 @@ const vocabularyQuestions = vocabulary
                     textAlign:
                       "center",
                     color:
-                      "#db0bd1",
+                      "#f1e3f1",
                     fontWeight: 800,
                     textShadow:
                       "0 3px 10px rgba(0,0,0,0.20)",
@@ -2208,69 +2107,6 @@ const vocabularyQuestions = vocabulary
                     "Reading Comprehension"}{" "}
                   📚
                 </Title>
-
-                <Divider
-                  style={{
-                    margin:
-                      "10px 0 30px",
-                    borderColor:
-                      "rgba(255,255,255,0.35)",
-                  }}
-                />
-
-                <div
-                  style={{
-                    // background:
-                    //   "rgba(255,255,255,0.14)",
-                     background:
-                   currentTheme.passageBackground,
-                    border:
-                      "1px solid rgba(255,255,255,0.25)",
-                    borderRadius:
-                      "24px",
-                    padding:
-                      window.innerWidth <
-                      600
-                        ? "20px"
-                        : "30px",
-                    backdropFilter:
-                      "blur(10px)",
-                    WebkitBackdropFilter:
-                      "blur(10px)",
-                    boxShadow:
-                      "0 12px 35px rgba(0,0,0,0.10)",
-                  }}
-                >
-                  {/* ================================================
-                      CURRENT PASSAGE - ONLY 2 LINES AT A TIME
-                  ================================================= */}
-
-                  <div
-                    style={{
-                      minHeight:
-                        window.innerWidth < 600
-                          ? "180px"
-                          : "210px",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {/* PAGE INDICATOR */}
-                    <div
-                      style={{
-                        textAlign: "center",
-                        // marginBottom: "20px",
-                        color: "rgba(255,255,255,0.95)",
-                        fontSize:
-                          window.innerWidth < 600
-                            ? "14px"
-                            : "16px",
-                        fontWeight: 800,
-                      }}
-                    >
-                   
-                    </div>
                      { readingData.storyimage &&  <>
                        <div
                       style={{
@@ -2386,7 +2222,142 @@ const vocabularyQuestions = vocabulary
 >
   📚 Back to Vocabulary
 </Button></div>
-               {/* 📖 Part {passagePage + 1} of {totalPassagePages} */}
+
+
+              {/* DECORATION */}
+
+              <div
+                style={{
+                  position:
+                    "absolute",
+                  width:
+                    "280px",
+                  height:
+                    "280px",
+                  borderRadius:
+                    "50%",
+                  background:
+                    currentTheme.circle1,
+                  top:
+                    "-140px",
+                  right:
+                    "-90px",
+                }}
+              />
+
+              <div
+                style={{
+                  position:
+                    "absolute",
+                  width:
+                    "140px",
+                  height:
+                    "140px",
+                  borderRadius:
+                    "50%",
+                  background:
+                    currentTheme.circle2,
+                  top: "60px",
+                  right: "80px",
+                }}
+              />
+
+              <div
+                style={{
+                  position:
+                    "absolute",
+                  width: "60px",
+                  height: "60px",
+                  borderRadius:
+                    "50%",
+                  background:
+                    currentTheme.circle3,
+                  top: "35px",
+                  right: "35px",
+                }}
+              />
+
+              <div
+                style={{
+                  position:
+                    "absolute",
+                  width:
+                    "230px",
+                  height:
+                    "230px",
+                  borderRadius:
+                    "50%",
+                  background:
+                    currentTheme.circle1,
+                  bottom:
+                    "-120px",
+                  left:
+                    "-90px",
+                }}
+              />
+
+              <div
+                style={{
+                  position:
+                    "absolute",
+                  width: "85px",
+                  height: "85px",
+                  borderRadius:
+                    "50%",
+                  background:
+                    currentTheme.circle2,
+                  bottom: "40px",
+                  left: "100px",
+                }}
+              />
+
+              {/* CONTENT */}
+
+              <div
+                style={{
+                  position:
+                    "relative",
+                  zIndex: 5,
+                }}
+              >
+               
+
+                <Divider
+                  style={{
+                    margin:
+                      "10px 0 30px",
+                    borderColor:
+                      "rgba(255,255,255,0.35)",
+                  }}
+                />
+
+                <div
+                  style={{
+                    // background:
+                    //   "rgba(255,255,255,0.14)",
+                     background:
+                   currentTheme.passageBackground,
+                    border:
+                      "1px solid rgba(255,255,255,0.25)",
+                    borderRadius:
+                      "24px",
+                    padding:
+                      window.innerWidth <
+                      600
+                        ? "20px"
+                        : "30px",
+                    backdropFilter:
+                      "blur(10px)",
+                    WebkitBackdropFilter:
+                      "blur(10px)",
+                    boxShadow:
+                      "0 12px 35px rgba(0,0,0,0.10)",
+                  }}
+                >
+                  {/* ================================================
+                      CURRENT PASSAGE - ONLY 2 LINES AT A TIME
+                  ================================================= */}
+  {/* 📖 Part {passagePage + 1} of {totalPassagePages} */}
                     <div
                       style={{
                         display: "flex",
@@ -2528,6 +2499,12 @@ const vocabularyQuestions = vocabulary
                         </Button>
                       )}
                     </div>
+                
+                </div>
+              </div>
+       
+
+             
                     
                     
                      </> }
@@ -2553,9 +2530,7 @@ const vocabularyQuestions = vocabulary
                           🚀 Start Quiz
                         </Button> }
                   </div>
-                </div>
-              </div>
-            </Card>
+            </>
           )}
 
         {/* ==================================================
