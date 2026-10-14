@@ -35,6 +35,7 @@ import api from "../../api/axiosClient";
 
 import "./reading.css";
 import CompletedVocabulary from "./CompletedVocabulary";
+import StoryPdfViewer from "./StoryPdfViewer";
 
 const {
   Title,
@@ -2003,7 +2004,7 @@ const vocabularyQuestions = vocabulary
         {/* ==================================================
             HEADER
         ================================================== */}
-
+{!startQuiz  && !completedVocabulary &&
         <div
           style={{
             textAlign:
@@ -2040,23 +2041,23 @@ const vocabularyQuestions = vocabulary
   user={user}
 /> */}
 
-  {!startQuiz  && !completedVocabulary && (
+   (
 <CompletedVocabulary
   grade={grade}
   studentId={studentId}
   user={user}
-/>)}
+/>)
           </div>
-        </div>
+        </div>}
 
         {/* ==================================================
             PASSAGE
         ================================================== */}
 
-        {!startQuiz  && completedVocabulary && 
+        {!startQuiz  && completedVocabulary  &&
           readingData.passage && (<>
            
-              <div
+              {/* <div
                     style={{
                       minHeight:
                         window.innerWidth < 600
@@ -2066,7 +2067,7 @@ const vocabularyQuestions = vocabulary
                       flexDirection: "column",
                       justifyContent: "center",
                     }}
-                  >
+                  > */}
                     {/* PAGE INDICATOR */}
                     {/* <div
                       style={{
@@ -2082,6 +2083,7 @@ const vocabularyQuestions = vocabulary
                     >
                    
                     </div> */}
+                      {  !readingData.storyimage  &&  <>
                      <Title
                   level={1}
                   style={{
@@ -2101,12 +2103,13 @@ const vocabularyQuestions = vocabulary
                       "15px",
                   }}
                 >
-                
+             
                   <BookOutlined /> 🌈{" "}
                   {readingData.title ||
                     "Reading Comprehension"}{" "}
                   📚
                 </Title>
+                </>}
                      { readingData.storyimage &&  <>
                        <div
                       style={{
@@ -2115,7 +2118,7 @@ const vocabularyQuestions = vocabulary
                         // marginTop: "20px",
                       }}
                     >
-
+                    
 
 <div
   style={{
@@ -2150,12 +2153,9 @@ const vocabularyQuestions = vocabulary
   >
     📚 Back to Vocabulary
   </Button>
-
-  {/* Listen */}
-  <Button
-    type="primary"
-    size="large"
-    onClick={() => speakLine(readingData.passage)}
+{ !readingData.storyimage && <>
+   <Button
+    onClick={() => setStartQuiz(true)}
     style={{
       width: "100%",
       maxWidth: "220px",
@@ -2172,18 +2172,24 @@ const vocabularyQuestions = vocabulary
       padding: "0 20px",
     }}
   >
-    🔊 Listen
-  </Button>
+                          🚀 Start Quiz
+                        </Button> </>}
 </div>
                       
                       <br></br>
                     </div>
   {readingData.storyimage? 
 
-                    <img
-  src={`${process.env.REACT_APP_API_URL}${readingData.storyimage}`}
-  alt={readingData.title}
-/>
+//                     <img
+//   src={`${process.env.REACT_APP_API_URL}${readingData.storyimage}`}
+//   alt={readingData.title}
+// />
+ <StoryPdfViewer
+    pdfUrl={`${process.env.REACT_APP_API_URL}${readingData.storyimage}`}
+    title={readingData.title}
+     setStartQuiz={setStartQuiz}
+  />
+
 :<div
   style={{
     fontSize: "clamp(60px, 15vw, 120px)",
@@ -2508,28 +2514,8 @@ const vocabularyQuestions = vocabulary
                     
                     
                      </> }
-{readingData.storyimage &&  
-                     <Button
-                          type="primary"
-                          size="large"
-                          onClick={() => setStartQuiz(true)}
-                          style={{
-                            minWidth:
-                              window.innerWidth < 600
-                                ? "160px"
-                                : "190px",
-                            height: "48px",
-                            borderRadius: "15px",
-                            fontWeight: 700,
-                            background:
-                              currentTheme.buttonBackground,
-                            border: "none",
-                            boxShadow: currentTheme.shadow,
-                          }}
-                        >
-                          🚀 Start Quiz
-                        </Button> }
-                  </div>
+
+                  {/* </div> */}
             </>
           )}
 
