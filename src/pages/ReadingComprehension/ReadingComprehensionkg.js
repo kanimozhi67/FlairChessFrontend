@@ -2083,33 +2083,7 @@ const vocabularyQuestions = vocabulary
                     >
                    
                     </div> */}
-                      {  !readingData.storyimage  &&  <>
-                     <Title
-                  level={1}
-                  style={{
-                    fontSize:
-                      window.innerWidth <
-                      600
-                        ? "25px"
-                        : "34px",
-                    textAlign:
-                      "center",
-                    color:
-                      "#f1e3f1",
-                    fontWeight: 800,
-                    textShadow:
-                      "0 3px 10px rgba(0,0,0,0.20)",
-                    marginBottom:
-                      "15px",
-                  }}
-                >
-             
-                  <BookOutlined /> 🌈{" "}
-                  {readingData.title ||
-                    "Reading Comprehension"}{" "}
-                  📚
-                </Title>
-                </>}
+                  
                      { readingData.storyimage &&  <>
                        <div
                       style={{
@@ -2227,7 +2201,7 @@ const vocabularyQuestions = vocabulary
 
 >
   📚 Back to Vocabulary
-</Button></div>
+</Button><br></br></div>
 
 
               {/* DECORATION */}
@@ -2356,6 +2330,33 @@ const vocabularyQuestions = vocabulary
                   {/* ================================================
                       CURRENT PASSAGE - ONLY 2 LINES AT A TIME
                   ================================================= */}
+                      {  !readingData.storyimage  &&  <>
+                     <Title
+                  level={1}
+                  style={{
+                    fontSize:
+                      window.innerWidth <
+                      600
+                        ? "25px"
+                        : "34px",
+                    textAlign:
+                      "center",
+                    color:
+                      pageBackground,
+                    fontWeight: 800,
+                    textShadow:
+                      "0 3px 10px rgba(0,0,0,0.20)",
+                    marginBottom:
+                      "15px",
+                  }}
+                >
+             
+                  <BookOutlined /> 🌈{" "}
+                  {readingData.title ||
+                    "Reading Comprehension"}{" "}
+                  📚
+                </Title>
+                </>} <hr></hr>
   {/* 📖 Part {passagePage + 1} of {totalPassagePages} */}
   <div
   style={{
