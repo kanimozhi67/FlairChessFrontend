@@ -284,6 +284,19 @@ console.log("TEXT TO READ:", JSON.stringify(cleanText));
     pageNumber + pagesPerView - 1,
     numPages
   );
+
+
+const handleBackToStory = () => {
+  stopSpeaking();
+
+  setPdfFinished(false);
+
+  // Return to the previous visible page or spread
+  setPageNumber((prev) => Math.max(1, prev - pagesPerView));
+};
+
+
+
 useEffect(() => {
   if (numPages > 0 && pageNumber + pagesPerView - 1 >= numPages) {
     setPdfFinished(true);
@@ -291,6 +304,7 @@ useEffect(() => {
     setPdfFinished(false);
   }
 }, [pageNumber, numPages, pagesPerView]);
+
   return (
     <div className="story-pdf-container">
 
@@ -486,37 +500,67 @@ useEffect(() => {
       )}
 
       </>}
-      {pdfFinished && (
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "center",
-      marginTop: "20px",
-      padding: "10px",
-    }}
-  >
-    <Button
-      onClick={() => setStartQuiz(true)}
-      style={{
-        width: "100%",
-        maxWidth: "220px",
-        minWidth: "140px",
-        height: "50px",
-        borderRadius: "25px",
-        fontSize: "clamp(13px, 2vw, 16px)",
-        fontWeight: "bold",
-        background: "linear-gradient(135deg, #ff9a9e, #fad0c4)",
-        border: "none",
-        color: "#6a1b4d",
-        boxShadow: "0 6px 15px rgba(255, 154, 158, 0.35)",
-        whiteSpace: "nowrap",
-        padding: "0 20px",
-      }}
-    >
-      🚀 Start Quiz
-    </Button>
+
+{pdfFinished && (
+  <div className="story-finished-screen">
+    <div className="finished-confetti">✨ ⭐ 🌈 ⭐ ✨</div>
+
+    <div className="finished-illustration">
+      <span className="finished-book">📖</span>
+      <span className="finished-character">🐻</span>
+      <span className="finished-sparkle">🌟</span>
+    </div>
+
+    <h2 className="finished-title">
+      Hooray! Story Completed!
+    </h2>
+
+    <p className="finished-subtitle">
+      You did an amazing job! 🎉
+    </p>
+
+    <div className="finished-achievement">
+      <span className="finished-medal">🏅</span>
+      <div>
+        <strong>Reading Champion!</strong>
+        <p>You reached the end of your story.</p>
+      </div>
+      <span className="finished-star">⭐</span>
+    </div>
+
+    <div className="finished-progress">
+      <div className="finished-progress-track">
+        <div className="finished-progress-fill" />
+      </div>
+      <span>100% Story Completed!</span>
+    </div>
+
+    <p className="finished-question">
+      What would you like to do next?
+    </p>
+
+    <div className="finished-actions">
+      <Button
+        onClick={handleBackToStory}
+        className="finished-back-button"
+      >
+        📚 Back to Story
+      </Button>
+
+      <Button
+        onClick={() => setStartQuiz(true)}
+        className="finished-quiz-button"
+      >
+        🚀 Start Quiz
+      </Button>
+    </div>
+
+    <p className="finished-footer">
+      Keep reading, keep learning, keep shining! 💖
+    </p>
   </div>
 )}
+
     </div>
   );
 };

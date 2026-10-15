@@ -13,6 +13,203 @@
   margin: 0 0 18px;
 }
 
+.story-finished-screen {
+  width: 100%;
+  max-width: 760px;
+  box-sizing: border-box;
+  margin: 24px auto;
+  padding: clamp(20px, 5vw, 42px);
+  border-radius: 30px;
+  text-align: center;
+  overflow: hidden;
+  background: linear-gradient(
+    145deg,
+    #fff5fb 0%,
+    #f0f7ff 50%,
+    #fff8df 100%
+  );
+  border: 3px solid #ffffff;
+  box-shadow: 0 12px 35px rgba(112, 92, 180, 0.15);
+}
+
+.finished-confetti {
+  font-size: clamp(20px, 5vw, 32px);
+  letter-spacing: 8px;
+  margin-bottom: 12px;
+}
+
+.finished-illustration {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 10px auto 22px;
+  width: 100%;
+}
+
+.finished-book {
+  font-size: clamp(58px, 12vw, 100px);
+  transform: rotate(-8deg);
+}
+
+.finished-character {
+  font-size: clamp(68px, 14vw, 115px);
+}
+
+.finished-sparkle {
+  font-size: clamp(30px, 7vw, 55px);
+  align-self: flex-start;
+}
+
+.finished-title {
+  color: #7c3aed;
+  font-size: clamp(25px, 5vw, 38px);
+  font-weight: 900;
+  line-height: 1.25;
+  margin: 12px 0;
+}
+
+.finished-subtitle {
+  color: #475569;
+  font-size: clamp(15px, 2.5vw, 19px);
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.finished-achievement {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  max-width: 440px;
+  margin: 0 auto 24px;
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px dashed #f9a8d4;
+  text-align: left;
+}
+
+.finished-medal,
+.finished-star {
+  font-size: 30px;
+}
+
+.finished-achievement strong {
+  display: block;
+  color: #be185d;
+  font-size: 16px;
+}
+
+.finished-achievement p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.finished-progress {
+  max-width: 440px;
+  margin: 0 auto 26px;
+  color: #15803d;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.finished-progress-track {
+  height: 13px;
+  margin-bottom: 9px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #dbeafe;
+}
+
+.finished-progress-fill {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #34d399, #84cc16);
+}
+
+.finished-question {
+  color: #334155;
+  font-weight: 800;
+  font-size: clamp(16px, 3vw, 20px);
+  margin: 24px 0 16px;
+}
+
+.finished-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  width: 100%;
+}
+
+.finished-actions .ant-btn {
+  width: 100%;
+  max-width: 230px;
+  min-width: 0;
+  height: 54px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 28px;
+  color: #fff;
+  font-size: clamp(14px, 2.5vw, 17px);
+  font-weight: 800;
+  white-space: normal;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.finished-actions .ant-btn:hover {
+  color: #fff !important;
+  transform: translateY(-3px);
+}
+
+.finished-back-button,
+.finished-back-button:hover {
+  background: linear-gradient(135deg, #38bdf8, #6366f1) !important;
+}
+
+.finished-quiz-button,
+.finished-quiz-button:hover {
+  background: linear-gradient(135deg, #fb7185, #c026d3) !important;
+}
+
+.finished-footer {
+  margin: 24px 0 0;
+  color: #9333ea;
+  font-size: clamp(12px, 2.5vw, 15px);
+  font-weight: 700;
+}
+
+@media (max-width: 480px) {
+  .story-finished-screen {
+    margin: 12px auto;
+    padding: 22px 14px;
+    border-radius: 22px;
+  }
+
+  .finished-achievement {
+    gap: 8px;
+    padding: 12px 8px;
+  }
+
+  .finished-actions {
+    flex-direction: column;
+  }
+
+  .finished-actions .ant-btn {
+    max-width: 100%;
+  }
+
+  .finished-confetti {
+    letter-spacing: 3px;
+  }
+}
+
 .story-pdf-content {
   width: 100%;
   min-width: 0;
