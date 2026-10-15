@@ -166,16 +166,42 @@ const [pdfFinished, setPdfFinished] = useState(false);
         const page = await pdfDocument.getPage(currentPage);
         const content = await page.getTextContent();
 
-        const pageText = content.items
-          .filter(
-            (item) =>
-              typeof item.str === "string" &&
-              item.str.trim().length > 0
-          )
-          .map((item) => item.str)
-          .join(" ")
-          .replace(/\s+/g, " ")
-          .trim();
+        // const pageText = content.items
+        //   .filter(
+        //     (item) =>
+        //       typeof item.str === "string" &&
+        //       item.str.trim().length > 0
+        //   )
+        //   .map((item) => item.str)
+        //   .join(" ")
+        //   .replace(/\s+/g, " ")
+        //   .trim();
+
+
+const pageText = content.items
+  .filter((item) => {
+    if (
+      typeof item.str !== "string" ||
+      !item.str.trim()
+    ) {
+      return false;
+    }
+
+    // Ignore footer text at the bottom of the PDF page
+    const yPosition = item.transform?.[5] ?? 0;
+    const pageHeight = page.view[3] - page.view[1];
+
+    if (yPosition < pageHeight * 0.06) {
+      return false;
+    }
+
+    return true;
+  })
+  .map((item) => item.str)
+  .join(" ")
+  .replace(/\s+/g, " ")
+  .trim();
+
 
         if (pageText) {
           textParts.push(pageText);
@@ -192,8 +218,21 @@ const [pdfFinished, setPdfFinished] = useState(false);
       }
 
       window.speechSynthesis.cancel();
+       // Remove emojis before speaking
+const cleanText = String(text)
+  // Remove emoji placeholders extracted from the PDF
+  .replace(/\b(?:n\s*){1,10}\b/gi, "")
+  // Remove remaining emoji and symbol characters
+  .replace(/[\u{1F000}-\u{1FAFF}\u{1FC00}-\u{1FFFF}]/gu, "")
+  .replace(/[\u2600-\u27FF\uFE0E\uFE0F\u200D\u20E3]/gu, "")
+  .replace(/\s+([.,!?;:])/g, "$1")
+  .replace(/\s+/g, " ")
+  .trim();
 
-      const utterance = new SpeechSynthesisUtterance(text);
+
+  if (!cleanText) return;
+console.log("TEXT TO READ:", JSON.stringify(cleanText));
+      const utterance = new SpeechSynthesisUtterance(cleanText);
       utterance.lang = "en-US";
       utterance.rate = 0.85;
       utterance.pitch = 1;

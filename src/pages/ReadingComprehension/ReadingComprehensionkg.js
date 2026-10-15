@@ -2328,21 +2328,14 @@ const vocabularyQuestions = vocabulary
               >
                
 
-                <Divider
-                  style={{
-                    margin:
-                      "10px 0 30px",
-                    borderColor:
-                      "rgba(255,255,255,0.35)",
-                  }}
-                />
+            
 
                 <div
                   style={{
                     // background:
                     //   "rgba(255,255,255,0.14)",
-                     background:
-                   currentTheme.passageBackground,
+                     background:"white",
+                  //  currentTheme.passageBackground,
                     border:
                       "1px solid rgba(255,255,255,0.25)",
                     borderRadius:
@@ -2364,6 +2357,20 @@ const vocabularyQuestions = vocabulary
                       CURRENT PASSAGE - ONLY 2 LINES AT A TIME
                   ================================================= */}
   {/* 📖 Part {passagePage + 1} of {totalPassagePages} */}
+  <div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    textAlign: "center",
+    fontSize: "clamp(60px, 12vw, 120px)",
+    lineHeight: 1.3,
+    padding: "15px 0",
+  }}
+>
+  {readingData?.emoji}
+</div>
                     <div
                       style={{
                         display: "flex",
@@ -2386,7 +2393,7 @@ const vocabularyQuestions = vocabulary
                                 : "21px",
                             lineHeight: 1.6,
                             letterSpacing: "0.2px",
-                            color: "#ffffff",
+                            color:  currentTheme.passageBackground,
                             fontWeight: 500,
                             textShadow:
                               "0 2px 5px rgba(0,0,0,0.15)",
