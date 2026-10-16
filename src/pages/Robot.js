@@ -275,6 +275,29 @@ utterance.onend = () => {
               >
                 🚀 Ask Robot
               </Button>
+            </Form.Item></Form>
+             <Form onFinish={fetchAns}>
+          
+            <Form.Item style={{ textAlign: "center" }}>
+              <Button
+                htmlType="submit"
+                size="large"
+                loading={loadingExplanation}
+
+onClick={(e) => setQuestion("Tell me a story")}
+          
+                style={{
+                  borderRadius: 22,
+                  fontWeight: "bold",
+                  fontSize: "clamp(1rem, 4vw, 1.1rem)",
+                  background: "linear-gradient(135deg, #34d399, #22c55e)",
+                  color: "white",
+                  border: "none",
+                  padding: "0.6rem 2.5rem",
+                }}
+              >
+                🚀 Tell me a story
+              </Button>
             </Form.Item>
           </Form>
 
