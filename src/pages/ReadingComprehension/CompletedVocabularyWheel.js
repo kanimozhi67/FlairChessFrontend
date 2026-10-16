@@ -270,62 +270,66 @@ const CompletedVocabularyWheel = ({ studentId, user,addPointsToBackend }) => {
   // --------------------------------------------------
   // SPIN WHEEL
   // --------------------------------------------------
+// --------------------------------------------------
+// SPIN WHEEL — FIXED POINTER ALIGNMENT
+// --------------------------------------------------
 
-  const spinWheel = () => {
-    if (
-      spinning ||
-      wheelWords.length === 0
-    ) {
-      return;
-    }
+const spinWheel = () => {
+  if (spinning || wheelWords.length === 0) {
+    return;
+  }
 
-    setSpinning(true);
-    setSelectedWord(null);
-    setOptions([]);
-    setSelectedAnswer(null);
-    setAnswered(false);
+  setSpinning(true);
+  setSelectedWord(null);
+  setOptions([]);
+  setSelectedAnswer(null);
+  setAnswered(false);
+  setCorrect(false);
 
-    // Random winning index
-    const winningIndex = Math.floor(
-      Math.random() * wheelWords.length
-    );
+  // Choose the winning word
+  const winningIndex = Math.floor(
+    Math.random() * wheelWords.length
+  );
 
-    const segmentAngle =
-      360 / wheelWords.length;
+  const segmentAngle = 360 / wheelWords.length;
 
-    /*
-      Add several complete rotations
-      so the wheel looks like it is really spinning.
-    */
-    const extraRotations = 5 * 360;
+  // Center angle of the winning segment.
+  // Segment 0 starts at the top and proceeds clockwise.
+  const winningCenterAngle =
+    winningIndex * segmentAngle + segmentAngle / 2;
 
-    const targetAngle =
-      extraRotations +
-      (360 -
-        winningIndex * segmentAngle -
-        segmentAngle / 2);
+  // Rotation required to place the winning word
+  // directly under the fixed pointer at the top.
+  const desiredRotation =
+    (360 - winningCenterAngle) % 360;
 
-    const newRotation =
-      rotation + targetAngle;
+  // Account for the wheel's existing rotation.
+  const currentAngle = ((rotation % 360) + 360) % 360;
 
-    setRotation(newRotation);
+  const adjustment =
+    (desiredRotation - currentAngle + 360) % 360;
 
-    setTimeout(() => {
-      const winner =
-        wheelWords[winningIndex];
+  // Add five complete turns for the spinning animation.
+  const extraRotations = 5 * 360;
 
-      setSelectedWord(winner);
+  const newRotation =
+    rotation + extraRotations + adjustment;
 
-      createAnswerOptions(
-        winner,
-        wheelWords
-      );
+  setRotation(newRotation);
 
-      setSpinning(false);
+  // Select the same word whose segment reaches the pointer.
+  const winner = wheelWords[winningIndex];
 
-      speakWord(winner.word);
-    }, 4200);
-  };
+  setTimeout(() => {
+    setSelectedWord(winner);
+
+    createAnswerOptions(winner, wheelWords);
+
+    setSpinning(false);
+
+    speakWord(winner.word);
+  }, 4200);
+};
 
   // --------------------------------------------------
   // CREATE MEANING OPTIONS
@@ -914,6 +918,14 @@ const CompletedVocabularyWheel = ({ studentId, user,addPointsToBackend }) => {
                     onClick={() => {
                       createWheelWords();
                     }}
+                       style={{
+            height: 60,
+            padding: "0 45px",
+            borderRadius: 20,
+            fontSize: 20,
+            fontWeight: 800,
+            background:"#FF0080",
+          }}
                   >
                     SPIN AGAIN 🎡
                   </Button>
