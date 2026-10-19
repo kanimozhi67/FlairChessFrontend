@@ -1,121 +1,377 @@
+
 import { useEffect, useState } from "react";
-import { Card, Spin, Row, Col, Empty, Button, message } from "antd";
-import { Link } from "react-router-dom";
+import {
+  Card,
+  Spin,
+  Row,
+  Col,
+  Empty,
+  Button,
+  message,
+  Typography,
+  Tag,
+} from "antd";
+import {
+  Link,
+} from "react-router-dom";
+import {
+  BookOutlined,
+  RocketOutlined,
+  StarFilled,
+  TrophyOutlined,
+  ReloadOutlined,
+} from "@ant-design/icons";
+
 import api from "../api/axiosClient";
 import { categoryRouteMap } from "../utils/categoryRouteMap";
 import CompletedTask from "./CompletedTask";
+import CompletedVocabulary from "./ReadingComprehension/CompletedVocabulary";
+import "./MyTasks.css";
 
-const MyTask = ({user,todayTaskCount,setTodayTaskCount,
+const { Title, Text, Paragraph } = Typography;
+
+const taskColors = [
+  { background: "#FFF0B3", accent: "#F59E0B", emoji: "🚀" },
+  { background: "#DDF7E8", accent: "#16A34A", emoji: "🧩" },
+  { background: "#E8E4FF", accent: "#7C3AED", emoji: "🎨" },
+  { background: "#FFE1EC", accent: "#E84393", emoji: "📚" },
+  { background: "#DDF4FF", accent: "#0284C7", emoji: "🔬" },
+  { background: "#FFE9D5", accent: "#EA580C", emoji: "🌟" },
+];
+
+const MyTask = ({
+  user,
+  todayTaskCount,
+  setTodayTaskCount,
 }) => {
- // console.log("user in MyTask" , user);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // 🔹 Fetch today's tasks
-  const fetchTasks = async () => {
-    try {
-      if(user.role === "Student")
-      {
-        const res = await api.get("/users/todaytaskstudent");
-      setTasks(res.data);
-    console.log(res.data)
-      setTodayTaskCount((res.data).length)
-        }
-      
-        else{
-      const res = await api.get("/users/todaytask");
-      setTasks(res.data);
-       
-       setTodayTaskCount((res.data).length)
-        }
-    } catch (err) {
-      message.error("Failed to load tasks");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    let cancelled = false;
 
-  if (loading) return <Spin size="large" />;
- // if (!tasks.length) return <Empty description="No tasks available" />;
+    const fetchTasks = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const endpoint =
+          user.role === "Student"
+            ? "/users/todaytaskstudent"
+            : "/users/todaytask";
+
+        const res = await api.get(endpoint);
+
+        if (cancelled) return;
+
+        const taskList = Array.isArray(res.data)
+          ? res.data
+          : [];
+
+        setTasks(taskList);
+        setTodayTaskCount?.(taskList.length);
+      } catch (error) {
+        if (!cancelled) {
+          message.error("Oops! We couldn't load your tasks. Please try again.");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchTasks();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user, retryKey, setTodayTaskCount]);
+
+  const retryFetch = () => {
+    setRetryKey((previous) => previous + 1);
+  };
+
+  if (loading) {
+    return (
+      <div className="mytask-loading">
+        <div className="mytask-loading-emoji">🪄</div>
+        <Spin size="large" />
+        <Title level={4}>Getting your fun activities ready...</Title>
+        <Text type="secondary">
+          Your next adventure is coming!
+        </Text>
+      </div>
+    );
+  }
 
   return (
+    <div className="mytask-page">
+      {/* Vocabulary section */}
+      <div className="mytask-section">
+        <CompletedVocabulary user={user} />
+      </div>
 
-    <div style={{  minHeight: "100vh", 
-       // display: "flex", 
-        background: "linear-gradient(135deg, #ffd194, #6a11cb)", 
-        padding: 20 }}>
-          {/* <Row><button style={{backgroundColor:" #a0d8e5",padding:15,borderRadius:0}}></button></Row> */}
-    <Row gutter={[16, 16]}>
-      {tasks.map((task) => (
-        <Col xs={24} md={12} lg={8} key={task.userTaskId}>
-          <Card
-            title={task.title}
-            extra={
-              <span style={{ color: "green", fontWeight: "bold" }}>
-                Active
-              </span>
-              
+      {/* Hero section */}
+      {/* <div className="mytask-hero">
+        <div className="mytask-hero-content">
+          <div className="mytask-hero-label">
+            <StarFilled /> YOUR LEARNING ADVENTURE
+          </div>
+
+          <Title className="mytask-hero-title">
+            My Fun Tasks <span>🌈</span>
+          </Title>
+
+          <Paragraph className="mytask-hero-description">
+            Learn something new, complete your activities,
+            and become a superstar!
+          </Paragraph>
+
+          <div className="mytask-stats">
+            <div className="mytask-stat">
+              <span className="mytask-stat-icon">🎯</span>
+              <div>
+                <strong>{tasks.length}</strong>
+                <span>Tasks today</span>
+              </div>
+            </div>
+
+            <div className="mytask-stat">
+              <span className="mytask-stat-icon">⭐</span>
+              <div>
+                <strong>
+                  {typeof todayTaskCount === "number"
+                    ? todayTaskCount
+                    : tasks.length}
+                </strong>
+                <span>On your list</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mytask-hero-art" aria-hidden="true">
+          <div className="mytask-orbit">✨</div>
+          <div className="mytask-rocket">🚀</div>
+          <div className="mytask-planet">🪐</div>
+          <div className="mytask-cloud">☁️</div>
+        </div>
+      </div> */}
+
+      {/* Task list heading */}
+      <div className="mytask-heading">
+        <div>
+          <Title level={2}>
+            <RocketOutlined /> Today's Adventures
+          </Title>
+          <Text type="secondary">
+            Pick an activity and let's get started!
+          </Text>
+        </div>
+
+        <Tag color="purple" className="mytask-count-tag">
+          {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
+        </Tag>
+      </div>
+
+      {/* Empty state */}
+      {tasks.length === 0 ? (
+        <Card className="mytask-empty-card">
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description={
+              <div className="mytask-empty-content">
+                <Title level={4}>No tasks for now! 🌻</Title>
+                <Text type="secondary">
+                  Take a little break. Your next learning
+                  adventure may be coming soon.
+                </Text>
+              </div>
             }
-          >
-             {task.description && (
-                <p>
-                  <strong>Description:</strong> {task.description}
-                </p>
-              )}
-              {<br></br>}
-            {task.categories.map((cat) =>
-              cat.levels.map((lvl) => {
-                const route = categoryRouteMap[cat.name];
+          />
 
-                return (
-                  <div
-                    key={`${cat.name}-${lvl.selectedLevel}`}
-                    style={{ marginBottom: 12,textAlign:"center" ,}}
-                  >
-                  
+          <div className="mytask-retry">
+            <Button
+              type="primary"
+              icon={<ReloadOutlined />}
+              onClick={retryFetch}
+              className="mytask-retry-button"
+            >
+              Check Again
+            </Button>
+          </div>
+        </Card>
+      ) : (
+        <Row gutter={[20, 20]} className="mytask-grid">
+          {tasks.map((task, taskIndex) => {
+            const theme = taskColors[taskIndex % taskColors.length];
 
-                    {route ? (
-                      <Link
-                        to={`${route}?selectedLevel=${lvl.selectedLevel}&userTaskId=${task.userTaskId}&category=${encodeURIComponent(
-                          cat.name
-                        )}`}
-                      >
-                        <Button  style={{textAlign:"center", background: "#ffbf00",
-                    color: "#4d3300",padding:10,fontSize:20,
-                      borderRadius:15,width:180}} type="primary" size="small">
-                          <p style={{textAlign:"center", background: "#ffbf00",
-                    color: "#4d3300",padding:10,fontSize:20,
-                      borderRadius:15,width:280}}>
-                     <strong>  {cat.name}<br></br>
-                    
-                     Level: {lvl.selectedLevel}</strong>
-                    </p>
-                        </Button>
-                      </Link>
+            const categories = Array.isArray(task.categories)
+              ? task.categories
+              : [];
+
+            const activityCount = categories.reduce(
+              (total, category) =>
+                total +
+                (Array.isArray(category.levels)
+                  ? category.levels.length
+                  : 0),
+              0
+            );
+
+            return (
+              <Col
+                xs={24}
+                sm={12}
+                lg={8}
+                xl={8}
+                key={task.userTaskId || task._id || taskIndex}
+                className="mytask-column"
+              >
+                <Card
+                  className="mytask-card"
+                  bordered={false}
+                  style={{
+                    "--task-accent": theme.accent,
+                    "--task-tint": theme.background,
+                  }}
+                >
+                  {/* Card header */}
+                  <div className="mytask-card-top">
+                    <div className="mytask-card-icon">
+                      {theme.emoji}
+                    </div>
+
+                    <Tag color="success" className="mytask-active-tag">
+                      <span className="mytask-status-dot" />
+                      Active
+                    </Tag>
+                  </div>
+
+                  <Title level={3} className="mytask-card-title">
+                    {task.title || "My Learning Task"}
+                  </Title>
+
+                  {task.description && (
+                    <Paragraph className="mytask-card-description">
+                      {task.description}
+                    </Paragraph>
+                  )}
+
+                  <div className="mytask-activity-heading">
+                    <BookOutlined />
+                    <span>Choose your activity</span>
+                  </div>
+
+                  {/* Category and level links */}
+                  <div className="mytask-activities">
+                    {categories.length === 0 ? (
+                      <Text type="secondary">
+                        No activities have been added yet.
+                      </Text>
                     ) : (
-                      <p style={{ color: "red" }}>
-                        Route not found for this category
-                      </p>
+                      categories.map((cat, categoryIndex) => {
+                        const levels = Array.isArray(cat.levels)
+                          ? cat.levels
+                          : [];
+
+                        return levels.map((lvl, levelIndex) => {
+                          const route = categoryRouteMap[cat.name];
+
+                          const selectedLevel = lvl.selectedLevel;
+                          const taskId = task.userTaskId;
+
+                          const activityUrl = route
+                            ? `${route}?selectedLevel=${encodeURIComponent(
+                                selectedLevel ?? ""
+                              )}&userTaskId=${encodeURIComponent(
+                                taskId ?? ""
+                              )}&category=${encodeURIComponent(cat.name)}`
+                            : null;
+
+                          return (
+                            <div
+                              className="mytask-activity-item"
+                              key={`${cat.name}-${selectedLevel}-${categoryIndex}-${levelIndex}`}
+                            >
+                              {activityUrl ? (
+                                <Link
+                                  to={activityUrl}
+                                  className="mytask-activity-link"
+                                >
+                                  <Button
+                                    block
+                                    className="mytask-activity-button"
+                                    style={{
+                                      "--activity-accent": theme.accent,
+                                    }}
+                                  >
+                                    <span className="mytask-activity-emoji">
+                                      {theme.emoji}
+                                    </span>
+
+                                    <span className="mytask-activity-text">
+                                      <strong>{cat.name}</strong>
+                                      <span>
+                                        Level: {selectedLevel}
+                                      </span>
+                                    </span>
+
+                                    <span className="mytask-activity-arrow">
+                                      →
+                                    </span>
+                                  </Button>
+                                </Link>
+                              ) : (
+                                <div className="mytask-route-error">
+                                  ⚠️ Activity route not found for{" "}
+                                  {cat.name}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        });
+                      })
                     )}
                   </div>
-                );
-              })
-            )}
-          </Card>
-        </Col>
-      ))}
-    </Row>
 
+                  {/* Card footer */}
+                  <div className="mytask-card-footer">
+                    <span>
+                      <TrophyOutlined /> Let's do our best!
+                    </span>
+                    <span>
+                      {activityCount}{" "}
+                      {activityCount === 1 ? "activity" : "activities"}
+                    </span>
+                  </div>
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+      )}
 
-    <CompletedTask 
-    user={user} 
-    
-    />
-  
+      {/* Completed tasks */}
+      <div className="mytask-completed-section">
+        <div className="mytask-completed-heading">
+          <span className="mytask-completed-emoji">🏆</span>
+          <div>
+            <Title level={2}>My Achievements</Title>
+            <Text type="secondary">
+              Look at all the amazing things you've completed!
+            </Text>
+          </div>
+        </div>
+
+        <CompletedTask user={user} />
+      </div>
     </div>
   );
 };

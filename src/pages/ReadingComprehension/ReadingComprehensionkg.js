@@ -1,4 +1,5 @@
 import React, {
+  use,
   useEffect,
   useMemo,
   useRef,
@@ -291,6 +292,7 @@ const [completedVocabulary,setCompletedVocabulary]=useState(false)
 
   const [currentStory, setCurrentStory] =
     useState(0);
+    const [remainingStoriesTitle,setRemainingStoriesTitle]=useState([]);
 
   const [
     allStoriesCompleted,
@@ -520,7 +522,8 @@ const handlePreviousPassage = () => {
               params,
             }
           );
-
+setRemainingStoriesTitle( response?.data?.data);
+console.log("remaining story title:",remainingStoriesTitle);
         console.log(
           "✅ Reading API response:",
           response.data
@@ -2035,18 +2038,15 @@ const vocabularyQuestions = vocabulary
             }}
           >
           
-                  {/* <CompletedVocabulary
-  grade={category}
-  studentId={user._id}
-  user={user}
-/> */}
+      
 
-   (
+   {/* (
 <CompletedVocabulary
   grade={grade}
   studentId={studentId}
   user={user}
-/>)
+  remainingStoriesTitle={remainingStoriesTitle}
+/>) */}
           </div>
         </div>}
 
@@ -2560,6 +2560,32 @@ const vocabularyQuestions = vocabulary
       }}
     >
       {/* HEADER */}
+        <Title
+                  level={1}
+                  style={{
+                    fontSize:
+                      window.innerWidth <
+                      600
+                        ? "25px"
+                        : "34px",
+                    textAlign:
+                      "center",
+                    color:
+                      pageBackground,
+                    fontWeight: 800,
+                    textShadow:
+                      "0 3px 10px rgba(0,0,0,0.20)",
+                    marginBottom:
+                      "15px",
+                  }}
+                >
+             
+                  <BookOutlined /> 🌈{" "}
+                  {readingData.title ||
+                    "Reading Comprehension"}{" "}
+                  📚
+                </Title>
+                 <hr></hr>
 
       <div
         style={{
@@ -2567,7 +2593,7 @@ const vocabularyQuestions = vocabulary
           marginBottom: "25px",
         }}
       >
-        <div
+        {/* <div
           style={{
             fontSize:
               window.innerWidth < 600
@@ -2578,7 +2604,7 @@ const vocabularyQuestions = vocabulary
           }}
         >
           🧠 New Word
-        </div>
+        </div> */}
 
         <div
           style={{

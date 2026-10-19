@@ -203,6 +203,7 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
               <PrivateRoute user={user}>
                 <MyTask
                   user={user}
+         
                   setUser={setUser}
                   fetchTasks={fetchTasks}
                   taskcompleted={taskCompleted}

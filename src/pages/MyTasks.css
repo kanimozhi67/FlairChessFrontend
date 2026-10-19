@@ -1,0 +1,765 @@
+
+/* =========================================
+   MY TASK - KIDS FRIENDLY RESPONSIVE DESIGN
+========================================= */
+
+.mytask-page {
+  --mytask-text: #34245c;
+  --mytask-muted: #77718b;
+
+  width: 100%;
+  min-height: 100vh;
+  padding: clamp(12px, 3vw, 32px);
+  overflow-wrap: anywhere;
+  background: linear-gradient(
+    160deg,
+    #fff9e8 0%,
+    #f6f0ff 45%,
+    #eaf8ff 100%
+  );
+  box-sizing: border-box;
+}
+
+.mytask-page *,
+.mytask-loading * {
+  box-sizing: border-box;
+}
+
+.mytask-section {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto 24px;
+}
+
+/* =========================================
+   LOADING
+========================================= */
+
+.mytask-loading {
+  min-height: 65vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+  background: linear-gradient(135deg, #fff8df, #f0eaff);
+}
+
+.mytask-loading-emoji {
+  font-size: clamp(48px, 9vw, 76px);
+  animation: mytask-float 2s ease-in-out infinite;
+}
+
+.mytask-loading .ant-typography {
+  margin: 0;
+  color: #5636a5;
+}
+
+/* =========================================
+   HERO
+========================================= */
+
+.mytask-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 1440px;
+  min-height: 250px;
+  margin: 0 auto 34px;
+  padding: clamp(22px, 4vw, 44px);
+  overflow: hidden;
+  border-radius: 30px;
+  background: linear-gradient(
+    120deg,
+    #6c3de8 0%,
+    #9661f5 52%,
+    #ff91bd 100%
+  );
+  box-shadow: 0 14px 35px rgba(111, 61, 210, 0.19);
+  color: white;
+}
+
+.mytask-hero-content {
+  position: relative;
+  z-index: 2;
+  width: 72%;
+  max-width: 750px;
+}
+
+.mytask-hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.mytask-hero-title.ant-typography {
+  margin: 0 0 12px;
+  color: #fff;
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.2;
+  font-weight: 900;
+}
+
+.mytask-hero-description.ant-typography {
+  max-width: 510px;
+  margin-bottom: 22px;
+  color: #fff;
+  font-size: clamp(14px, 1.6vw, 18px);
+  line-height: 1.7;
+}
+
+.mytask-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.mytask-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 145px;
+  padding: 12px 17px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.17);
+  backdrop-filter: blur(8px);
+}
+
+.mytask-stat-icon {
+  font-size: 27px;
+}
+
+.mytask-stat strong,
+.mytask-stat span:last-child {
+  display: block;
+}
+
+.mytask-stat strong {
+  color: white;
+  font-size: 21px;
+  line-height: 1.3;
+}
+
+.mytask-stat div span {
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mytask-hero-art {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 35%;
+  pointer-events: none;
+}
+
+.mytask-rocket {
+  position: absolute;
+  top: 50%;
+  left: 38%;
+  font-size: clamp(64px, 9vw, 116px);
+  transform: translateY(-50%) rotate(-12deg);
+  filter: drop-shadow(0 10px 12px rgba(53, 28, 113, 0.18));
+  animation: mytask-float 3s ease-in-out infinite;
+}
+
+.mytask-planet {
+  position: absolute;
+  right: 10%;
+  bottom: 14%;
+  font-size: clamp(30px, 4vw, 52px);
+}
+
+.mytask-orbit {
+  position: absolute;
+  top: 16%;
+  right: 20%;
+  font-size: 30px;
+}
+
+.mytask-cloud {
+  position: absolute;
+  right: 5%;
+  top: 40%;
+  font-size: 30px;
+  opacity: 0.9;
+}
+
+/* =========================================
+   SECTION HEADINGS
+========================================= */
+
+.mytask-heading {
+  max-width: 1440px;
+  margin: 0 auto 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mytask-heading .ant-typography,
+.mytask-completed-heading .ant-typography {
+  color: #392568;
+}
+
+.mytask-heading h2.ant-typography,
+.mytask-completed-heading h2.ant-typography {
+  margin: 0 0 6px;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 900;
+}
+
+.mytask-heading .ant-typography-secondary,
+.mytask-completed-heading .ant-typography-secondary {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.mytask-count-tag {
+  flex-shrink: 0;
+  padding: 7px 13px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* =========================================
+   TASK GRID AND CARDS
+========================================= */
+
+.mytask-grid {
+  max-width: 1440px;
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+.mytask-column {
+  display: flex;
+}
+
+.mytask-card.ant-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 2px solid rgba(124, 91, 200, 0.08);
+  border-radius: 25px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(67, 45, 113, 0.08);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.mytask-card.ant-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(67, 45, 113, 0.14);
+}
+
+.mytask-card .ant-card-body {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: clamp(16px, 2vw, 24px);
+}
+
+.mytask-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 17px;
+}
+
+.mytask-card-icon {
+  width: 62px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 20px;
+  background: var(--task-tint);
+  font-size: 34px;
+}
+
+.mytask-active-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.mytask-status-dot {
+  width: 7px;
+  height: 7px;
+  display: inline-block;
+  border-radius: 50%;
+  background: #16a34a;
+}
+
+.mytask-card-title.ant-typography {
+  margin: 0 0 10px;
+  color: var(--mytask-text);
+  font-size: clamp(19px, 2vw, 24px);
+  font-weight: 900;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.mytask-card-description.ant-typography {
+  margin-bottom: 18px;
+  color: var(--mytask-muted);
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.mytask-activity-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 13px;
+  color: #625080;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mytask-activities {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.mytask-activity-item {
+  width: 100%;
+  min-width: 0;
+}
+
+.mytask-activity-link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+}
+
+.mytask-activity-button.ant-btn {
+  width: 100%;
+  min-height: 68px;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  white-space: normal;
+  text-align: left;
+  border: 2px solid var(--task-tint);
+  border-radius: 17px;
+  background: var(--task-tint);
+  color: var(--mytask-text);
+  box-shadow: none;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.mytask-activity-button.ant-btn:hover,
+.mytask-activity-button.ant-btn:focus-visible {
+  color: var(--mytask-text) !important;
+  border-color: var(--activity-accent) !important;
+  background: #fff !important;
+  transform: scale(1.015);
+}
+
+.mytask-activity-emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 37px;
+  height: 37px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.75);
+  font-size: 21px;
+}
+
+.mytask-activity-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.mytask-activity-text strong {
+  color: var(--mytask-text);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.mytask-activity-text > span {
+  color: #726889;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mytask-activity-arrow {
+  flex-shrink: 0;
+  color: var(--activity-accent);
+  font-size: 23px;
+  font-weight: 900;
+}
+
+.mytask-route-error {
+  padding: 12px;
+  border-radius: 12px;
+  background: #fff1f0;
+  color: #cf1322;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.mytask-card-footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 19px;
+  color: #7c7096;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.mytask-card-footer span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.mytask-empty-card.ant-card {
+  max-width: 1440px;
+  margin: 0 auto;
+  border: 2px dashed #d9c9ff;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: none;
+}
+
+.mytask-empty-card .ant-card-body {
+  padding: clamp(24px, 5vw, 50px);
+}
+
+.mytask-empty-content {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.mytask-empty-content h4.ant-typography {
+  color: #5636a5;
+  font-weight: 800;
+}
+
+.mytask-empty-content .ant-typography-secondary {
+  line-height: 1.7;
+}
+
+.mytask-retry {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.mytask-retry-button.ant-btn {
+  min-height: 46px;
+  padding: 0 24px;
+  border: none;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  font-weight: 800;
+}
+
+/* =========================================
+   COMPLETED TASKS
+========================================= */
+
+.mytask-completed-section {
+  max-width: 1440px;
+  margin: 45px auto 0;
+  padding: clamp(18px, 3vw, 30px);
+  border: 1px solid rgba(124, 91, 200, 0.1);
+  border-radius: 27px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 8px 25px rgba(67, 45, 113, 0.05);
+}
+
+.mytask-completed-heading {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.mytask-completed-emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: #fff0b3;
+  font-size: 34px;
+}
+
+/* =========================================
+   ANIMATION
+========================================= */
+
+@keyframes mytask-float {
+  0%,
+  100% {
+    transform: translateY(-50%) rotate(-12deg);
+  }
+
+  50% {
+    transform: translateY(calc(-50% - 10px)) rotate(-7deg);
+  }
+}
+
+/* =========================================
+   TABLETS
+========================================= */
+
+@media (max-width: 991px) {
+  .mytask-hero {
+    min-height: 230px;
+  }
+
+  .mytask-hero-content {
+    width: 75%;
+  }
+
+  .mytask-hero-art {
+    width: 29%;
+  }
+
+  .mytask-rocket {
+    left: 15%;
+    font-size: 75px;
+  }
+
+  .mytask-cloud {
+    display: none;
+  }
+
+  .mytask-completed-section {
+    margin-top: 32px;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 575px) {
+  .mytask-page {
+    padding: 12px;
+  }
+
+  .mytask-section {
+    margin-bottom: 18px;
+  }
+
+  .mytask-hero {
+    min-height: 0;
+    margin-bottom: 27px;
+    padding: 23px 18px;
+    border-radius: 23px;
+  }
+
+  .mytask-hero-content {
+    width: 100%;
+  }
+
+  .mytask-hero-label {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .mytask-hero-title.ant-typography {
+    max-width: 300px;
+    font-size: clamp(27px, 8vw, 36px);
+  }
+
+  .mytask-hero-description.ant-typography {
+    max-width: 290px;
+    padding-right: 5px;
+    font-size: 14px;
+  }
+
+  .mytask-hero-art {
+    width: 100%;
+    opacity: 0.17;
+  }
+
+  .mytask-rocket {
+    left: auto;
+    right: 5%;
+    top: 36%;
+    font-size: 90px;
+  }
+
+  .mytask-planet {
+    right: 8%;
+    bottom: 8%;
+    font-size: 33px;
+  }
+
+  .mytask-orbit {
+    top: 8%;
+    right: 13%;
+  }
+
+  .mytask-stats {
+    gap: 8px;
+  }
+
+  .mytask-stat {
+    min-width: 0;
+    flex: 1;
+    gap: 7px;
+    padding: 10px;
+  }
+
+  .mytask-stat-icon {
+    font-size: 22px;
+  }
+
+  .mytask-stat strong {
+    font-size: 18px;
+  }
+
+  .mytask-stat div span {
+    font-size: 10px;
+  }
+
+  .mytask-heading {
+    align-items: flex-start;
+    margin-bottom: 17px;
+  }
+
+  .mytask-heading h2.ant-typography {
+    font-size: 22px;
+  }
+
+  .mytask-heading .ant-typography-secondary {
+    font-size: 12px;
+  }
+
+  .mytask-count-tag {
+    margin-top: 5px;
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  .mytask-grid {
+    row-gap: 14px !important;
+  }
+
+  .mytask-card.ant-card {
+    border-radius: 21px;
+  }
+
+  .mytask-card .ant-card-body {
+    padding: 18px;
+  }
+
+  .mytask-card-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 17px;
+    font-size: 29px;
+  }
+
+  .mytask-card-title.ant-typography {
+    font-size: 21px;
+  }
+
+  .mytask-activity-button.ant-btn {
+    min-height: 66px;
+    padding: 11px;
+    gap: 9px;
+  }
+
+  .mytask-activity-text strong {
+    font-size: 13px;
+  }
+
+  .mytask-activity-text > span {
+    font-size: 11px;
+  }
+
+  .mytask-completed-section {
+    margin-top: 28px;
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .mytask-completed-heading {
+    align-items: flex-start;
+    gap: 11px;
+  }
+
+  .mytask-completed-emoji {
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+    font-size: 27px;
+  }
+
+  .mytask-completed-heading h2.ant-typography {
+    font-size: 21px;
+  }
+
+  .mytask-completed-heading .ant-typography-secondary {
+    font-size: 12px;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .mytask-page *,
+  .mytask-loading * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
