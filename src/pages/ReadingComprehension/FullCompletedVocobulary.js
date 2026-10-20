@@ -268,11 +268,11 @@ const FullCompletedVocabulary = ({ studentId, user }) => {
           super word explorer! 🚀
         </Paragraph>
 
-        <div className="word-hero-badges">
+        {/* <div className="word-hero-badges">
           <span>🌈 Learn</span>
           <span>🔊 Listen</span>
           <span>💡 Discover</span>
-        </div>
+        </div> */}
       </header>
 {/* 
      

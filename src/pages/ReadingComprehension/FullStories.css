@@ -1,0 +1,828 @@
+
+/* =========================================
+   💜 FLAIR VOCO — COLORFUL STORY CARDS
+   Matching your reference screenshot
+   ========================================= */
+
+.my-stories-page {
+  width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 0;
+
+  background: linear-gradient(
+    115deg,
+    #7950f2 0%,
+    #a347ec 48%,
+    #e352cb 100%
+  );
+
+  color: #37247f;
+  font-family: "Nunito", "Trebuchet MS", sans-serif;
+}
+
+/* Remove previous decorative background layers */
+.my-stories-page::before,
+.my-stories-page::after {
+  display: none;
+}
+
+/* =========================================
+   📚 HEADER
+   ========================================= */
+
+.stories-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  margin: 0 0 16px;
+  padding: 15px 18px;
+
+  border: 2px solid #ffffff;
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 5px 15px #40207912;
+}
+
+.stories-header-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  width: 46px;
+  height: 46px;
+
+  border: 2px solid #ffffff;
+  border-radius: 15px;
+
+  background: linear-gradient(135deg, #a37bff, #7141df);
+  color: #ffffff;
+  font-size: 23px;
+
+  box-shadow: 0 4px 10px #7041d933;
+}
+
+.stories-header h2.ant-typography {
+  margin: 0 0 4px;
+  color: #52339f;
+  font-size: clamp(22px, 2.5vw, 30px);
+  font-weight: 900;
+}
+
+.stories-header-text > .ant-typography {
+  color: #786b96;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   🎒 GRADE MENU
+   ========================================= */
+
+.stories-navigation {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 17px;
+  padding: 10px;
+
+  border: 2px solid #ffffff;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 5px 15px #47217b12;
+}
+
+.stories-top-menu {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  width: 100%;
+  padding-bottom: 10px;
+  overflow-x: auto;
+
+  border-bottom: 1px solid #eee7fa;
+
+  scrollbar-width: thin;
+  scrollbar-color: #c9b1f9 transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.stories-menu-item {
+  flex: 1 0 0;
+  min-width: 78px;
+  padding: 10px 9px;
+
+  border: none;
+  border-radius: 25px;
+
+  background: #f1f3ff;
+  color: #54457e;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.stories-menu-item:hover {
+  background: #eee3ff;
+  color: #7141d9;
+}
+
+.stories-menu-item.selected {
+  background: linear-gradient(135deg, #a276fa, #7745d9);
+  color: #ffffff;
+  box-shadow: 0 4px 9px #7745d933;
+}
+
+/* Filter row */
+.stories-filter-menu {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 10px 0 0;
+}
+
+.story-filter-chip {
+  padding: 7px 10px;
+
+  border: 1px solid #c7e6ff;
+  border-radius: 20px;
+
+  background: #e9f5ff;
+  color: #3265a3;
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.story-filter-chip:hover {
+  background: #f0e6ff;
+  border-color: #d9c5ff;
+}
+
+.stories-sort {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.stories-sort-label {
+  color: #74658e;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.stories-sort .ant-select {
+  min-width: 110px;
+  max-width: 145px;
+}
+
+.stories-sort .ant-select-selector {
+  border-radius: 8px !important;
+}
+
+/* =========================================
+   ⭐ STORIES HEADING
+   ========================================= */
+
+.stories-section {
+  width: 100%;
+  min-width: 0;
+}
+
+.stories-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin: 0 0 14px;
+}
+
+.stories-section-heading h3 {
+  margin: 0;
+
+  color: #ff7045;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 900;
+}
+
+.heading-star {
+  color: #ffdc42;
+  filter: drop-shadow(0 2px 2px #a56b1d20);
+}
+
+.stories-section-heading p {
+  margin: 4px 0 0;
+  color: #fff8ff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.stories-section-heading .ant-tag {
+  margin: 0;
+  padding: 6px 11px;
+
+  border: 1px solid #ffffff;
+  border-radius: 20px;
+
+  background: #ffffffd9;
+  color: #7641bb;
+
+  font-size: 10px;
+  font-weight: 900;
+}
+
+/* =========================================
+   📖 STORY GRID
+   Four cards per row on desktop
+   ========================================= */
+
+.stories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 20px;
+
+  width: 100%;
+  min-width: 0;
+}
+
+/* White rounded cards */
+.story-card {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  overflow: hidden;
+
+  border: 3px solid #ffffff;
+  border-radius: 24px;
+
+  background: #ffffff;
+  box-shadow: 0 5px 15px #43227618;
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.story-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow: 0 12px 24px #38205d2c;
+}
+
+/* =========================================
+   🌤️ PASTEL STORY COVER
+   ========================================= */
+
+.story-cover {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 155px;
+  min-height: 130px;
+
+  overflow: hidden;
+  isolation: isolate;
+
+  background: linear-gradient(180deg, #aee9ff, #e3f8ff);
+}
+
+/* Different pastel colors for each story */
+.story-card:nth-child(4n + 1) .story-cover {
+  background: linear-gradient(180deg, #a9e6ff, #e3f8ff);
+}
+
+.story-card:nth-child(4n + 2) .story-cover {
+  background: linear-gradient(180deg, #b9f1c8, #edffdf);
+}
+
+.story-card:nth-child(4n + 3) .story-cover {
+  background: linear-gradient(180deg, #a7dcff, #e6f4ff);
+}
+
+.story-card:nth-child(4n) .story-cover {
+  background: linear-gradient(180deg, #ffd2e5, #fff0e6);
+}
+
+/* Sunny corner */
+.story-cover::before {
+  position: absolute;
+  z-index: -1;
+  top: 20px;
+  right: 14px;
+
+  width: 38px;
+  height: 38px;
+
+  border-radius: 50%;
+  background: #ffe77f;
+
+  box-shadow: 0 0 0 10px #fff5a522;
+  content: "";
+}
+
+/* Soft cloud decorations */
+.story-cover::after {
+  position: absolute;
+  z-index: -1;
+  top: 35px;
+  left: -10px;
+
+  width: 72px;
+  height: 27px;
+
+  border-radius: 30px;
+  background: #ffffffa3;
+
+  box-shadow:
+    18px -10px 0 -3px #ffffff91,
+    30px 0 0 -7px #ffffffa3;
+
+  content: "";
+}
+
+/* Actual cover images */
+.story-cover img {
+  position: relative;
+  z-index: 1;
+
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+
+  box-sizing: border-box;
+  object-fit: cover;
+
+  transition: transform 0.3s ease;
+}
+
+.story-card:hover .story-cover img {
+  transform: scale(1.04);
+}
+
+/* Large story emoji */
+.story-placeholder {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+
+  box-sizing: border-box;
+
+  font-size: clamp(65px, 7vw, 100px);
+  line-height: 1;
+  text-align: center;
+
+  filter: drop-shadow(0 4px 3px #45315b15);
+  animation: storyAppear 0.3s ease;
+}
+
+.story-placeholder.hidden {
+  display: none;
+}
+
+/* Grade badge */
+.story-grade-badge {
+  position: absolute;
+  z-index: 3;
+  top: 9px;
+  left: 9px;
+
+  max-width: calc(100% - 45px);
+  padding: 5px 9px;
+
+  border: 1px solid #ffffff;
+  border-radius: 18px;
+
+  background: #b18bff;
+  color: #ffffff;
+
+  font-size: 9px;
+  font-weight: 900;
+  white-space: nowrap;
+
+  box-shadow: 0 2px 6px #6744aa20;
+}
+
+/* Completed indicator */
+.story-completed-icon {
+  position: absolute;
+  z-index: 4;
+  top: 8px;
+  right: 8px;
+
+  display: grid;
+  place-items: center;
+
+  width: 25px;
+  height: 25px;
+
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+
+  background: #2cc878;
+  color: #ffffff;
+
+  font-size: 15px;
+}
+
+/* =========================================
+   📝 STORY TITLE AND DETAILS
+   ========================================= */
+
+.story-card-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  min-width: 0;
+  padding: 12px 15px 14px;
+}
+
+.story-card-content h4 {
+  display: -webkit-box;
+
+  min-height: 28px;
+  margin: 0 0 10px;
+  overflow: hidden;
+
+  color: #392a91;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.story-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  min-width: 0;
+  margin: 0 0 10px;
+  overflow: hidden;
+
+  color: #847a9b;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.story-meta .anticon {
+  color: #8c60e6;
+}
+
+/* Footer */
+.story-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 7px;
+
+  margin-top: auto;
+}
+
+/* Grade-style labels */
+.completed-label,
+.reading-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  max-width: 100%;
+  padding: 7px 11px;
+
+  border: 0;
+  border-radius: 22px;
+
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.completed-label {
+  background: #e2f9e8;
+  color: #218b4b;
+}
+
+.reading-label {
+  background: #eee5ff;
+  color: #7040cb;
+}
+
+.story-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  color: #bd8218;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.story-score .anticon {
+  color: #ffc83d;
+}
+
+/* =========================================
+   ✨ SHOW MORE
+   ========================================= */
+
+.show-more-container {
+  display: flex;
+  justify-content: center;
+  margin: 25px 0 12px;
+}
+
+.show-more-container .ant-btn {
+  height: auto;
+  min-height: 43px;
+  padding: 11px 25px;
+
+  border: 2px solid #ffffff;
+  border-radius: 25px;
+
+  background: linear-gradient(135deg, #a477f5, #7142d2);
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 900;
+
+  box-shadow: 0 5px 12px #47217b25;
+}
+
+.show-more-container .ant-btn:hover {
+  background: linear-gradient(135deg, #b48bff, #8152df);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   ⏳ LOADING AND EMPTY STATES
+   ========================================= */
+
+.stories-loading,
+.stories-empty {
+  padding: 30px 15px;
+  border: 2px solid #ffffff;
+  border-radius: 20px;
+  background: #ffffffed;
+  text-align: center;
+}
+
+.stories-loading {
+  display: flex;
+  min-height: 200px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #7545d3;
+}
+
+.stories-loading p {
+  margin-top: 12px;
+  color: #76658f;
+  font-weight: 800;
+}
+
+.stories-empty .ant-empty-description {
+  color: #705a94;
+}
+
+/* =========================================
+   💻 LAPTOP
+   ========================================= */
+
+@media (max-width: 1200px) {
+  .stories-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .story-cover {
+    height: 150px;
+  }
+
+  .story-card-content h4 {
+    font-size: 14px;
+  }
+}
+
+/* =========================================
+   📱 TABLET
+   ========================================= */
+
+@media (max-width: 768px) {
+  .my-stories-page {
+    padding: 12px;
+  }
+
+  .stories-header {
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .stories-navigation {
+    padding: 8px;
+  }
+
+  .stories-menu-item {
+    flex: 0 0 auto;
+    min-width: 76px;
+  }
+
+  .stories-filter-menu {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 7px;
+  }
+
+  .stories-sort {
+    flex: 0 0 auto;
+    margin-left: 3px;
+  }
+
+  .stories-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .story-cover {
+    height: 145px;
+  }
+
+  .story-card-content {
+    padding: 10px;
+  }
+
+  .story-card-content h4 {
+    font-size: 13px;
+  }
+}
+
+/* =========================================
+   📱 MOBILE
+   ========================================= */
+
+@media (max-width: 480px) {
+  .my-stories-page {
+    padding: 9px;
+  }
+
+  .stories-header {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .stories-header-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .stories-header h2.ant-typography {
+    font-size: 20px;
+  }
+
+  .stories-header-text > .ant-typography {
+    font-size: 11px;
+  }
+
+  .stories-navigation {
+    margin-bottom: 14px;
+    border-radius: 15px;
+  }
+
+  .stories-menu-item {
+    min-width: 70px;
+    padding: 9px 8px;
+    font-size: 10px;
+  }
+
+  .story-filter-chip {
+    padding: 6px 9px;
+    font-size: 9px;
+  }
+
+  .stories-section-heading {
+    align-items: flex-start;
+  }
+
+  .stories-section-heading h3 {
+    font-size: 18px;
+  }
+
+  .stories-section-heading p {
+    font-size: 11px;
+  }
+
+  .stories-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px;
+  }
+
+  .story-card {
+    border-radius: 19px;
+  }
+
+  .story-cover {
+    height: clamp(130px, 38vw, 175px);
+    min-height: 120px;
+  }
+
+  .story-placeholder {
+    font-size: clamp(55px, 15vw, 82px);
+  }
+
+  .story-card-content {
+    padding: 10px;
+  }
+
+  .story-card-content h4 {
+    min-height: 34px;
+    font-size: 13px;
+  }
+
+  .completed-label,
+  .reading-label {
+    padding: 6px 8px;
+    font-size: 9px;
+  }
+}
+
+/* Extra-small phones */
+@media (max-width: 340px) {
+  .stories-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .story-cover {
+    height: 190px;
+  }
+
+  .stories-section-heading {
+    flex-direction: column;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .story-card,
+  .story-cover img,
+  .story-placeholder,
+  .stories-menu-item,
+  .show-more-container .ant-btn {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .story-card:hover,
+  .story-card:hover .story-cover img {
+    transform: none;
+  }
+}
+
+@keyframes storyAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

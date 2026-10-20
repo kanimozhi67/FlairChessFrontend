@@ -49,7 +49,7 @@ const WORD_EMOJIS = [
   "🎈",
 ];
 
-const CompletedVocabularyWheel = ({
+const WheelDuplicate = ({
   studentId,
   user,
   addPointsToBackend,
@@ -57,7 +57,7 @@ const CompletedVocabularyWheel = ({
   const [completedStories, setCompletedStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+const [disableWheel,setDisableWheel] = useState(false);
   const [wheelWords, setWheelWords] = useState([]);
   const [selectedWord, setSelectedWord] = useState(null);
 
@@ -310,6 +310,7 @@ const CompletedVocabularyWheel = ({
       setSpinning(false);
       speakWord(winner.word);
     }, 4200);
+    setDisableWheel(true);
   };
 
   // -----------------------------------------------
@@ -332,7 +333,7 @@ const CompletedVocabularyWheel = ({
       }
     } else {
       speakWord(
-        `Good try! ${selectedWord.word} means ${selectedWord.meaning}`
+        `Try again! ${selectedWord.word} means ${selectedWord.meaning}`
       );
     }
   };
@@ -342,6 +343,7 @@ const CompletedVocabularyWheel = ({
   // -----------------------------------------------
 
   const playAgain = () => {
+    setDisableWheel(false);
     createWheelWords();
   };
 
@@ -439,7 +441,7 @@ const CompletedVocabularyWheel = ({
         <div className="vocab-hero-decor vocab-decor-two">🌈</div>
         <div className="vocab-hero-decor vocab-decor-three">✨</div>
 
-        <div className="vocab-hero-emoji">🎡🦋📚</div>
+        <div className="vocab-hero-emoji">🎡</div>
 
         <Title className="vocab-hero-title">
           Word Explorer!
@@ -449,13 +451,12 @@ const CompletedVocabularyWheel = ({
           Spin, discover, learn and become a word superstar!
         </Paragraph>
 
-        <div className="vocab-hero-tags">
+        {/* <div className="vocab-hero-tags">
           <Tag>🌟 {allVocabulary.length} words to discover</Tag>
           <Tag>🏆 +2 points for a correct answer</Tag>
-        </div>
-      </header>
+        </div> */}
 
-      {/* QUICK STATS */}
+          {/* QUICK STATS */}
 
       <Row gutter={[12, 12]} className="vocab-stats-row">
         <Col xs={12} sm={8}>
@@ -488,9 +489,12 @@ const CompletedVocabularyWheel = ({
           </div>
         </Col>
       </Row>
+      </header>
+
+    
 
       {/* WORD COLLECTION PREVIEW */}
-
+{/* 
       <section className="vocab-section">
         <div className="vocab-section-heading">
           <div className="vocab-heading-emoji">🎒</div>
@@ -520,7 +524,7 @@ const CompletedVocabularyWheel = ({
             </Col>
           ))}
         </Row>
-      </section>
+      </section> */}
 
       {/* SPINNING WHEEL */}
 
@@ -589,7 +593,7 @@ const CompletedVocabularyWheel = ({
         </div>
 
         <div className="vocab-wheel-actions">
-          <Button
+        {!disableWheel && <>  <Button
             type="primary"
             size="large"
             className="vocab-spin-button"
@@ -597,17 +601,26 @@ const CompletedVocabularyWheel = ({
             disabled={spinning || wheelWords.length === 0 || !!selectedWord}
             onClick={spinWheel}
           >
-            {spinning ? "WHEEE! SPINNING..." : "SPIN THE WHEEL! 🎡"}
+            {spinning ? "WHEEE! SPINNING...": "SPIN THE WHEEL! 🎡"}
           </Button>
-
-          <Button
+            <Button
             icon={<ReloadOutlined />}
             className="vocab-new-words-button"
             disabled={spinning || !!selectedWord}
             onClick={createWheelWords}
           >
             New Words
-          </Button>
+          </Button> </>}
+ {answered && <Button
+                  type="primary"
+                  size="large"
+                  className="vocab-next-button"
+                  icon={<ReloadOutlined />}
+                  onClick={playAgain}
+                >
+                  DISCOVER ANOTHER WORD! 🎡
+                </Button>}
+        
         </div>
       </section>
 
@@ -656,7 +669,7 @@ const CompletedVocabularyWheel = ({
           </div>
 
           {/* MEANING CARD */}
-
+{/* 
           <Card className="vocab-meaning-card">
             <div className="vocab-learning-heading">
               <div className="vocab-learning-icon">💡</div>
@@ -681,9 +694,9 @@ const CompletedVocabularyWheel = ({
                 onClick={() => speakWord(selectedWord.meaning)}
                 aria-label="Listen to the meaning"
               />
-            </div>
+            </div> */}
 
-            {selectedWord.example && (
+            {/* {selectedWord.example && (
               <div className="vocab-example-box">
                 <div className="vocab-example-heading">
                   <span>📝</span>
@@ -703,8 +716,8 @@ const CompletedVocabularyWheel = ({
                   Listen to the sentence
                 </Button>
               </div>
-            )}
-          </Card>
+            )} */}
+          {/* </Card> */}
 
           {/* MULTIPLE CHOICE QUIZ */}
 
@@ -823,15 +836,7 @@ const CompletedVocabularyWheel = ({
                   </>
                 )}
 
-                <Button
-                  type="primary"
-                  size="large"
-                  className="vocab-next-button"
-                  icon={<ReloadOutlined />}
-                  onClick={playAgain}
-                >
-                  DISCOVER ANOTHER WORD! 🎡
-                </Button>
+               
               </div>
             )}
           </Card>
@@ -854,4 +859,4 @@ const CompletedVocabularyWheel = ({
   );
 };
 
-export default CompletedVocabularyWheel;
+export default WheelDuplicate;

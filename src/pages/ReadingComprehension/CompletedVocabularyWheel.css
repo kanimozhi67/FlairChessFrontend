@@ -58,13 +58,12 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: clamp(26px, 5vw, 48px) 16px;
+  padding: clamp(14px, 3vw, 26px) 12px;
   text-align: center;
-  border-radius: 30px;
+  border-radius: 20px;
   background: linear-gradient(125deg, #654de8, #a855e8 55%, #ed79c4);
-  box-shadow: 0 12px 30px rgba(99, 68, 197, 0.19);
+  box-shadow: 0 8px 20px rgba(99, 68, 197, 0.15);
 }
-
 .vocab-hero-emoji {
   position: relative;
   z-index: 1;

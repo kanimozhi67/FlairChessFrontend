@@ -27,6 +27,7 @@ import ExploreSoftware from "./pages/ExploreSoftware";
 import ReadingComprehension from "./pages/ReadingComprehension/ReadingComprehension";
 import CompletedVocabulary from "./pages/ReadingComprehension/CompletedVocabulary";
 import FullCompletedVocabulary from "./pages/ReadingComprehension/FullCompletedVocobulary";
+import FullStories from "./pages/ReadingComprehension/FullStories";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -127,17 +128,7 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
             }
           />
         
-{/* <Route
-  path="/reading-comprehension"
-  element={
-    <PrivateRoute user={user}>
-      <ReadingComprehension
-        grade={1}
-        studentId={user?._id}
-      />
-    </PrivateRoute>
-  }
-/> */}
+
 
 
 
@@ -150,12 +141,21 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
   studentId={user?._id}
   user={user}
 />
-                {/* <Mystickers user={user} setUser={setUser} /> */}
-                {/* <CompletedVocabulary
-  // grade={grade}
-  // studentId={studentId}
+ 
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/stories"
+            element={
+              <PrivateRoute user={user}>
+                      <FullStories
+
+  studentId={user?._id}
   user={user}
-/> */}
+/>
+ 
               </PrivateRoute>
             }
           />

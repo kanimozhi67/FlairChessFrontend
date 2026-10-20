@@ -166,6 +166,7 @@ background: "linear-gradient(135deg, #667EEA, #764BA2)",
     SPIN THE WHEEL
       </Button>
     </Col>
+  
 
     {/* 🧸 Kindergarten */}
     <Col xs={24} sm={10} md={9}>
@@ -212,7 +213,29 @@ background: "linear-gradient(135deg, #667EEA, #764BA2)",
         Primary Level
       </Button>
     </Col>
+  <Col xs={24} sm={10} md={9}>
+      <Button
+        block
+        size="large"
+        onClick={() => navigate("/quiz/stories")}
+        style={{
+          height: 120,
+          border: "none",
+          borderRadius: 25,
+    // 🌈 Purple & Blue
 
+background: "linear-gradient(135deg, #d60edd, #d651b0)",
+          color: "#fff",
+          fontSize: "1.2rem",
+          fontWeight: "bold",
+          boxShadow: "0 8px 18px rgba(255,107,107,0.3)",
+        }}
+      >
+     📚
+        <br />
+    Explore Stories
+      </Button>
+    </Col>
   </Row>
 )}
 

@@ -18,6 +18,8 @@ import ReadingComprehension from "./ReadingComprehension/ReadingComprehension.js
 import CompletedVocabulary from "./ReadingComprehension/CompletedVocabulary.js";
 import CompletedVocabularyWheel from "./ReadingComprehension/CompletedVocabularyWheel.js";
 import ReadingComprehensionkg from "./ReadingComprehension/ReadingComprehensionkg.js";
+import WheelDuplicate from "./ReadingComprehension/WheelDuplicate.js";
+import FullStories from "./ReadingComprehension/FullStories.js";
 
 
 
@@ -698,8 +700,16 @@ useEffect(() => {
           user={user}
           />)
           :  category==="wheel" ?(
-          <CompletedVocabularyWheel
+          // <CompletedVocabularyWheel
+          <WheelDuplicate
           user={user}
+          addPointsToBackend={addPointsToBackend}
+          />)
+          :  category==="stories" ?(
+          // <CompletedVocabularyWheel
+          <FullStories
+          user={user}
+           studentId={user?._id}
           addPointsToBackend={addPointsToBackend}
           />)
        :  level==="kindergarten" ?
