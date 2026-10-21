@@ -516,7 +516,10 @@ onClick={() => { setIsLogin(true); setModalOpen(true);
           e.currentTarget.style.backgroundColor = "#3700ff";
         }}
       >ScienceApp</Button>
-      <Button type="primary" onClick={() => { setIsLogin(true); setModalOpen(true); }}
+      <Button type="primary" 
+           onClick={() => {
+    window.location.href = "https://flair-voice-frontend.vercel.app";
+  }}
       style={{
           backgroundColor: "#2600ff",
           fontWeight: "bold",
@@ -537,7 +540,7 @@ onClick={() => { setIsLogin(true); setModalOpen(true);
           e.currentTarget.style.backgroundColor = "#3700ff";
         }}
       >Flair Voco</Button>
-      <Button type="primary"   
+      {/* <Button type="primary"   
       onClick={() => {
     window.location.href = "https://flair-chess.vercel.app";
   }}
@@ -560,7 +563,7 @@ onClick={() => { setIsLogin(true); setModalOpen(true);
           e.currentTarget.style.transform = "scale(1)";
           e.currentTarget.style.backgroundColor = "#3700ff";
         }}
-      >FlairChess</Button>
+      >FlairChess</Button> */}
       <SchoolLoginDropdown setUser={setUser} />
     </>
   )}
@@ -700,7 +703,7 @@ transform: "translateX(-50%)",        // ✅ FORCE full width
       >
         🗣️ Flair Voco
       </Button>
- <Button
+ {/* <Button
         // onClick={() => navigate("/exploreolymp")}
          onClick={() => {
     window.location.href = "https://flair-chess.vercel.app";
@@ -726,7 +729,7 @@ transform: "translateX(-50%)",        // ✅ FORCE full width
         }}
       >
         ♞FLAIRCHESS
-      </Button>
+      </Button> */}
   {!user && <SchoolLoginDropdown setUser={setUser} /> }  {/* Left */}
   {user &&
   <>
