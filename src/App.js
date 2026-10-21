@@ -25,6 +25,7 @@ import OlympiadExplore from "./pages/OlympiadExplore";
 import ExploreSoftware from "./pages/ExploreSoftware";
 import ChessAcademyPage from "./pages/ChessAcademy/ChessAcademyPage";
 import ChessComputerPage from "./pages/ChessAcademy/ChessComputerPage";
+import ChessTournamentMatch from "./pages/ChessAcademy/ChessTournamentMatch";
 
 
 const App = () => {
@@ -136,7 +137,10 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
   element={<ChessComputerPage 
    user={user} />}
 />
-
+<Route
+  path="/chess/tournaments/:tournamentId/match"
+  element={<ChessTournamentMatch user={user} />}
+/>
 {/* 
           <Route
             path="/mystickers"
@@ -235,7 +239,7 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
           path="/admin"
           element={
             <AdminRoute user={user}>
-              <AdminDashboard />
+              <AdminDashboard  user={user}/>
             </AdminRoute>
           }
         />

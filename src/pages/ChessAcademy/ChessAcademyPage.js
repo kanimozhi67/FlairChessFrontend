@@ -37,6 +37,14 @@ const ChessAcademyPage = ({ user }) => {
   const [joiningId, setJoiningId] = useState(null);
   const [error, setError] = useState("");
 
+
+
+
+const handlePlayMatch = (tournamentId, roundNumber, pairingId) => {
+  navigate(
+    `/chess/tournaments/${tournamentId}/match?round=${roundNumber}&pairingId=${pairingId}`
+  );
+};
   const loadTournaments = useCallback(async () => {
     setLoading(true);
     setError("");
@@ -80,6 +88,18 @@ const ChessAcademyPage = ({ user }) => {
     setJoiningId(id);
 
     try {
+      console.log("Logged-in user:", user?._id || user?.id);
+console.log(
+  "Tournament players:",
+  items.map((t) => ({
+    name: t.name,
+    joinedByMe: t.joinedByMe,
+    players: t.players,
+    participants: t.participants,
+  }))
+);
+
+setTournaments(items);
       await api.post(`/chess/tournaments/${id}/join`);
 
       message.success(`You joined ${tournament.name}!`);
@@ -120,30 +140,38 @@ const ChessAcademyPage = ({ user }) => {
   const getMaxPlayers = (tournament) =>
     Number(tournament.maxPlayers || 16);
 
-  const isJoined = (tournament) => {
-    if (tournament.joinedByMe === true || tournament.isJoined === true) {
-      return true;
-    }
+const isJoined = (tournament) => {
+  // Trust an explicit backend flag when available.
+  if (
+    tournament.joinedByMe === true ||
+    tournament.isJoined === true
+  ) {
+    return true;
+  }
 
-    const currentUserId = String(user?._id || user?.id || "");
+  const currentUserId = String(
+    user?._id || user?.id || user?.userId || ""
+  );
 
-    if (!currentUserId) return false;
+  if (!currentUserId) return false;
 
-    const participants =
-      tournament.players || tournament.participants || [];
+  const participants =
+    tournament.players || tournament.participants || [];
 
-    return participants.some((player) => {
-      const playerId =
-        player?._id ||
-        player?.id ||
-        player?.userId ||
-        player?.studentId ||
-        player;
+  if (!Array.isArray(participants)) return false;
 
-      return String(playerId) === currentUserId;
-    });
-  };
+  return participants.some((player) => {
+    const playerUserId =
+      player && typeof player === "object"
+        ? player.userId?._id ||
+          player.userId ||
+          player.studentId?._id ||
+          player.studentId
+        : player;
 
+    return String(playerUserId || "") === currentUserId;
+  });
+};
   const canJoin = (tournament) => {
     const status = getStatus(tournament);
     const players = getPlayers(tournament);
@@ -449,37 +477,50 @@ const ChessAcademyPage = ({ user }) => {
                     />
 
                     <div className="chess-tournament-footer">
-                      {joined ? (
-                        <Button
-                          block
-                          size="large"
-                          onClick={() =>
-                            navigate(`/chess/tournaments/${id}`)
-                          }
-                        >
-                          View Tournament <RightOutlined />
-                        </Button>
-                      ) : available ? (
-                        <Button
-                          block
-                          size="large"
-                          type="primary"
-                          loading={joiningId === id}
-                          onClick={() => joinTournament(tournament)}
-                        >
-                          Join Tournament <RightOutlined />
-                        </Button>
-                      ) : (
-                        <Button block size="large" disabled>
-                          {players >= maxPlayers
-                            ? "Tournament Full"
-                            : status === "completed"
-                            ? "Tournament Completed"
-                            : status === "ongoing"
-                            ? "Tournament In Progress"
-                            : "Registration Closed"}
-                        </Button>
-                      )}
+                    {joined ? (
+  <>
+    <Button
+      block
+      size="large"
+      onClick={() => navigate(`/chess/tournaments/${id}`)}
+    >
+      View Tournament <RightOutlined />
+    </Button>
+
+    {status === "in-progress" && (
+      <Button
+        block
+        size="large"
+        type="primary"
+        onClick={() =>
+          navigate(`/chess/tournaments/${id}`)
+        }
+      >
+        ♟️ View Tournament Matches
+      </Button>
+    )}
+  </>
+) : available ? (
+  <Button
+    block
+    size="large"
+    type="primary"
+    loading={joiningId === id}
+    onClick={() => joinTournament(tournament)}
+  >
+    Register Tournament <RightOutlined />
+  </Button>
+) : (
+  <Button block size="large" disabled>
+    {players >= maxPlayers
+      ? "Tournament Full"
+      : status === "completed"
+      ? "Tournament Completed"
+      : status === "in-progress"
+      ? "Tournament In Progress"
+      : "Registration Closed"}
+  </Button>
+)}
                     </div>
                   </Card>
                 </Col>
