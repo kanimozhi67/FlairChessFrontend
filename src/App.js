@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { message } from "antd";
@@ -24,10 +23,7 @@ import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import PaymentWrapper from "./pages/PaymentWrapper";
 import OlympiadExplore from "./pages/OlympiadExplore";
 import ExploreSoftware from "./pages/ExploreSoftware";
-import ReadingComprehension from "./pages/ReadingComprehension/ReadingComprehension";
-import CompletedVocabulary from "./pages/ReadingComprehension/CompletedVocabulary";
-import FullCompletedVocabulary from "./pages/ReadingComprehension/FullCompletedVocobulary";
-import FullStories from "./pages/ReadingComprehension/FullStories";
+
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -131,7 +127,7 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
 
 
 
-
+{/* 
           <Route
             path="/mystickers"
             element={
@@ -144,9 +140,9 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
  
               </PrivateRoute>
             }
-          />
+          /> */}
 
-          <Route
+          {/* <Route
             path="/stories"
             element={
               <PrivateRoute user={user}>
@@ -158,7 +154,7 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
  
               </PrivateRoute>
             }
-          />
+          /> */}
           <Route
             path="/quiz/progress"
             element={

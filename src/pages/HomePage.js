@@ -441,6 +441,31 @@ const btnheaderStyle= {
         }}
         >Sign Up</Button> */}
         <Button
+onClick={() => { setIsLogin(true); setModalOpen(true);
+  }}
+  style={{
+    backgroundColor: "#2600ff",
+    fontWeight: "bold",
+    padding: "8px 18px",
+    color: "white",
+    fontSize: 16,
+    borderRadius: 20,
+    border: "none",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+    transition: "all 0.3s ease",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "scale(1.05)";
+    e.currentTarget.style.backgroundColor = "#fb8c00";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "scale(1)";
+    e.currentTarget.style.backgroundColor = "#3700ff";
+  }}
+>
+  FlairChess
+</Button>
+        <Button
   onClick={() => {
     window.location.href = "https://www.flairolympiad.com";
   }}
@@ -911,7 +936,7 @@ transform: "translateX(-50%)",        // ✅ FORCE full width
       <Modal open={modalOpen} onCancel={() => setModalOpen(false)} footer={null} centered width={380}>
         <div style={{ textAlign: "center", marginBottom: 18 }}>
           <h2 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: "#7b2ff7" }}>
-            {isLogin ? "Welcome Back to FLAIR VOCO" : "Create Account in FLAIR VOCO"}
+            {isLogin ? "Welcome Back to FLAIR CHESS" : "Create Account in FLAIR CHESS"}
           </h2>
           <p style={{ color: "#666", marginTop: 4 }}>
             {isLogin ? "Login to continue" : "Sign up to get started"}

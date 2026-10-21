@@ -25,7 +25,7 @@ import {
 import api from "../api/axiosClient";
 import { categoryRouteMap } from "../utils/categoryRouteMap";
 import CompletedTask from "./CompletedTask";
-import CompletedVocabulary from "./ReadingComprehension/CompletedVocabulary";
+// import CompletedVocabulary from "./ReadingComprehension/CompletedVocabulary";
 import "./MyTasks.css";
 
 const { Title, Text, Paragraph } = Typography;
@@ -113,9 +113,7 @@ const MyTask = ({
   return (
     <div className="mytask-page">
       {/* Vocabulary section */}
-      <div className="mytask-section">
-        <CompletedVocabulary user={user} />
-      </div>
+     
 
       {/* Hero section */}
       {/* <div className="mytask-hero">

@@ -14,12 +14,8 @@ import NoGiftBox from "./NoGiftBox.js";
 
 import { useSearchParams } from "react-router-dom";
 import Robot from "./Robot.js";
-import ReadingComprehension from "./ReadingComprehension/ReadingComprehension.js";
-import CompletedVocabulary from "./ReadingComprehension/CompletedVocabulary.js";
-import CompletedVocabularyWheel from "./ReadingComprehension/CompletedVocabularyWheel.js";
-import ReadingComprehensionkg from "./ReadingComprehension/ReadingComprehensionkg.js";
-import WheelDuplicate from "./ReadingComprehension/WheelDuplicate.js";
-import FullStories from "./ReadingComprehension/FullStories.js";
+import ChessTournamentsPage from "./ChessAcademy/ChessTournamentsPage.jsx";
+
 
 
 
@@ -699,52 +695,10 @@ useEffect(() => {
           <Robot 
           user={user}
           />)
-          :  category==="wheel" ?(
-          // <CompletedVocabularyWheel
-          <WheelDuplicate
+         :
+         <ChessTournamentsPage
           user={user}
-          addPointsToBackend={addPointsToBackend}
-          />)
-          :  category==="stories" ?(
-          // <CompletedVocabularyWheel
-          <FullStories
-          user={user}
-           studentId={user?._id}
-          addPointsToBackend={addPointsToBackend}
-          />)
-       :  level==="kindergarten" ?
-        <ReadingComprehensionkg
-        grade={category}
-        studentId={user?._id}
-         category={category}
-         level={level}
-         selectedLevel={selectedLevel} 
-         user={user} 
-         addPointsToBackend={addPointsToBackend}
-         speakLine={speakLine}
-      />
-       :  level==="primary" & category!=3 & category!=5 &   category!=4 ?
-        <ReadingComprehensionkg
-        grade={category}
-        studentId={user?._id}
-         category={category}
-         level={level}
-         selectedLevel={selectedLevel} 
-         user={user} 
-         addPointsToBackend={addPointsToBackend}
-         speakLine={speakLine}
-      />
-:
- <ReadingComprehension
-        grade={category}
-        studentId={user?._id}
-         category={category}
-         level={level}
-         selectedLevel={selectedLevel} 
-         user={user} 
-         addPointsToBackend={addPointsToBackend}
-         
-      />
+          />
         }
 
           

@@ -1,0 +1,59 @@
+.chess-academy-page {
+  padding: clamp(12px, 2.5vw, 28px);
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.chess-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: clamp(22px, 4vw, 42px);
+  border-radius: 28px;
+  color: #fff;
+  background: linear-gradient(125deg, #5145cd 0%, #2877d5 52%, #28b9b0 100%);
+  box-shadow: 0 12px 34px rgba(59, 91, 190, .18);
+}
+.chess-hero h1 { color: #fff !important; margin: 8px 0 !important; }
+.chess-hero p { color: rgba(255,255,255,.92); }
+.chess-eyebrow { color: #e2eaff !important; letter-spacing: .12em; font-weight: 700; font-size: 11px; }
+.chess-hero-badge {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: clamp(72px, 12vw, 120px);
+  height: clamp(72px, 12vw, 120px);
+  border-radius: 30px;
+  background: rgba(255,255,255,.18);
+  font-size: clamp(42px, 7vw, 76px);
+}
+.chess-stats { margin: 18px 0; }
+.chess-stats .ant-card { border-radius: 18px; box-shadow: 0 4px 18px rgba(30, 50, 90, .06); }
+.chess-panel { border-radius: 18px; overflow: hidden; }
+.chess-tournament-list { display: flex; flex-direction: column; gap: 8px; }
+.chess-tournament-item {
+  appearance: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  border: 1px solid #e8ebf4;
+  background: #fff;
+  border-radius: 14px;
+  padding: 12px;
+  cursor: pointer;
+  transition: .18s ease;
+}
+.chess-tournament-item:hover { border-color: #8e9cf5; transform: translateY(-1px); }
+.chess-tournament-item.active { border-color: #635bdf; background: #f3f2ff; }
+.chess-item-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: #ecebff; color: #5947c6; font-size: 22px; }
+.chess-item-copy { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.chess-item-copy strong { overflow-wrap: anywhere; }
+.chess-item-copy small { color: #68738a; }
+.chess-loading { min-height: 240px; display: grid; place-items: center; }
+@media (max-width: 600px) {
+  .chess-hero { border-radius: 20px; }
+  .chess-hero-badge { border-radius: 20px; }
+  .chess-tournament-item { flex-wrap: wrap; }
+}
