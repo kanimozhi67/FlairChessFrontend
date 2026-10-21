@@ -1,8 +1,11 @@
 import axios from "axios";
-const baseURL =
+const baseURL =  process.env.API_URL ;
+
+
+// "http://localhost:5000" ||
   // process.env.REACT_APP_API_URL || "https://flairbackend.vercel.app";
   // "https://flair-olympiad-science-backend-wluf.vercel.app" ||
-   process.env.API_URL;
+  
 console.log("baseURL:", baseURL);
 const api = axios.create({
   // baseURL: "http://localhost:5000/api",
