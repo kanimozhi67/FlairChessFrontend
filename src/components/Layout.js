@@ -53,7 +53,7 @@ const Layout = ({ user, setUser,todayTaskCount }) => {
 },
 
 
-         { key: "mystickers", label: "📝 My Voco", path: "/mystickers" },
+        //  { key: "mystickers", label: "📝 My Voco", path: "/mystickers" },
       ]),
 
       
@@ -93,7 +93,7 @@ const Layout = ({ user, setUser,todayTaskCount }) => {
   ),
   path: "/task",
 },
- { key: "mystickers", label: "📝 ", path: "/mystickers" },
+//  { key: "mystickers", label: "📝 ", path: "/mystickers" },
 
       ]),
     { key: "dashboard", label: "🏆 ", path: "/quiz/progress" },
@@ -211,7 +211,7 @@ const Layout = ({ user, setUser,todayTaskCount }) => {
     color: "inherit",
   }}
 >
-  🎓 FLAIR VOCO ✨
+  🎓 FLAIR CHESS ✨
 </button></div>
 <div  style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
  <button

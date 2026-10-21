@@ -1,0 +1,299 @@
+
+.chess-computer-page {
+  min-height: 100vh;
+  padding: 24px;
+  background: linear-gradient(180deg, #f7f4ff, #fffaf2);
+  color: #30275e;
+}
+
+.computer-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.computer-page-header .ant-btn {
+  border-radius: 12px;
+}
+
+.computer-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: clamp(24px, 4vw, 42px);
+  overflow: hidden;
+  border-radius: 26px;
+  color: white;
+  background: linear-gradient(125deg, #5843d5, #9068ef);
+  box-shadow: 0 12px 30px rgba(88, 67, 213, 0.17);
+}
+
+.computer-hero .ant-typography {
+  color: white;
+}
+
+.computer-hero h1.ant-typography {
+  margin: 8px 0;
+  color: white;
+  font-size: clamp(27px, 4vw, 40px);
+  font-weight: 900;
+}
+
+.computer-eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  color: #ffe98c !important;
+}
+
+.computer-hero-emoji {
+  flex-shrink: 0;
+  font-size: clamp(65px, 10vw, 110px);
+  filter: drop-shadow(0 8px 10px rgba(25, 15, 65, 0.2));
+}
+
+.computer-game-layout {
+  margin-top: 24px;
+}
+
+.computer-board-card.ant-card,
+.computer-settings-card.ant-card {
+  height: 100%;
+  border: 1px solid #eee8ff;
+  border-radius: 22px;
+  box-shadow: 0 8px 26px rgba(57, 44, 110, 0.07);
+}
+
+.computer-board-card .ant-card-body,
+.computer-settings-card .ant-card-body {
+  padding: clamp(14px, 2.5vw, 25px);
+}
+
+.board-player-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.board-player-bottom {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+.player-avatar {
+  display: grid;
+  flex-shrink: 0;
+  width: 45px;
+  height: 45px;
+  place-items: center;
+  border-radius: 14px;
+  background: #f0eaff;
+  font-size: 25px;
+}
+
+.player-color-chip {
+  margin-left: auto;
+  padding: 7px 11px;
+  border-radius: 10px;
+  background: #f4efff;
+  color: #6548d8;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.board-player-bottom > .ant-tag {
+  margin-left: auto;
+}
+
+.computer-board-wrapper {
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.computer-game-alert {
+  margin-top: 20px;
+  border-radius: 14px;
+}
+
+.computer-result-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #f0fff5;
+  color: #219653;
+}
+
+.computer-result-actions .ant-btn {
+  margin-left: auto;
+  border-radius: 11px;
+  background: #6548d8;
+}
+
+.computer-settings-card h3.ant-typography {
+  margin-top: 0;
+  color: #30275e;
+  font-weight: 900;
+}
+
+.computer-settings-card h4.ant-typography {
+  color: #30275e;
+  font-weight: 800;
+}
+
+.computer-select {
+  display: block;
+  width: 100%;
+  margin-top: 9px;
+  margin-bottom: 22px;
+}
+
+.computer-select .ant-select-selector {
+  min-height: 44px !important;
+  align-items: center;
+  border-radius: 12px !important;
+}
+
+.computer-new-game-button.ant-btn {
+  height: 46px;
+  border: none;
+  border-radius: 13px;
+  background: linear-gradient(120deg, #6548d8, #8a67ec);
+  font-weight: 800;
+}
+
+.computer-score-panel,
+.computer-move-panel {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #eee8ff;
+}
+
+.computer-score-box {
+  display: flex;
+  min-height: 78px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border-radius: 14px;
+}
+
+.computer-score-box strong {
+  font-size: 25px;
+  line-height: 1.2;
+}
+
+.computer-score-box span {
+  font-size: 12px;
+}
+
+.score-win {
+  color: #18844a;
+  background: #e6faee;
+}
+
+.score-draw {
+  color: #946000;
+  background: #fff4d9;
+}
+
+.score-loss {
+  color: #c44747;
+  background: #fff0f0;
+}
+
+.computer-move-list {
+  display: flex;
+  max-height: 230px;
+  flex-direction: column;
+  gap: 7px;
+  overflow-y: auto;
+}
+
+.computer-move-row {
+  display: grid;
+  grid-template-columns: 35px 1fr 1fr;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  background: #f8f5ff;
+}
+
+.computer-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 15px;
+  border: 1px solid #ffe5a8;
+  border-radius: 15px;
+  background: #fff9e8;
+}
+
+.computer-tip > span {
+  font-size: 25px;
+}
+
+.computer-tip .ant-typography {
+  color: #655631;
+  line-height: 1.65;
+}
+
+@media (max-width: 767px) {
+  .chess-computer-page {
+    padding: 12px;
+  }
+
+  .computer-hero {
+    padding: 22px 18px;
+    border-radius: 20px;
+  }
+
+  .computer-hero-emoji {
+    font-size: 55px;
+  }
+
+  .computer-page-header {
+    align-items: flex-start;
+  }
+
+  .player-avatar {
+    width: 38px;
+    height: 38px;
+    font-size: 21px;
+  }
+
+  .player-color-chip {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  .computer-result-actions .ant-btn {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .computer-hero-emoji {
+    display: none;
+  }
+
+  .board-player-label {
+    gap: 8px;
+  }
+
+  .player-color-chip {
+    max-width: 85px;
+    text-align: center;
+  }
+}

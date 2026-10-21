@@ -14,7 +14,8 @@ import NoGiftBox from "./NoGiftBox.js";
 
 import { useSearchParams } from "react-router-dom";
 import Robot from "./Robot.js";
-import ChessTournamentsPage from "./ChessAcademy/ChessTournamentsPage.jsx";
+import ChessTournamentsPage from "./ChessAcademy/ChessTournamentsPage.js";
+import ChessAcademyPage from "./ChessAcademy/ChessAcademyPage.js";
 
 
 
@@ -696,10 +697,16 @@ useEffect(() => {
           user={user}
           />)
          :
+         user.role == "Admin" ?
          <ChessTournamentsPage
           user={user}
           />
+          :
+           <ChessAcademyPage
+          user={user}
+          />
         }
+
 
           
         </div>

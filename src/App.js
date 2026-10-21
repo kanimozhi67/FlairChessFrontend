@@ -23,6 +23,8 @@ import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import PaymentWrapper from "./pages/PaymentWrapper";
 import OlympiadExplore from "./pages/OlympiadExplore";
 import ExploreSoftware from "./pages/ExploreSoftware";
+import ChessAcademyPage from "./pages/ChessAcademy/ChessAcademyPage";
+import ChessComputerPage from "./pages/ChessAcademy/ChessComputerPage";
 
 
 const App = () => {
@@ -96,6 +98,7 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
   return (
     <BrowserRouter>
       <Routes>
+        {console.log("app user",user)}
         {/* Public routes */}
         <Route path="/" element={<HomePage user={user} setUser={setUser}/>} />
         <Route path="/onlinepage" element={<OnlinePage />} />
@@ -106,12 +109,15 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
           <Route path="/exploresoft"  element={<ExploreSoftware  /> }  />
 
         {/* Protected routes */}
-        <Route element={<Layout user={user} setUser={setUser} todayTaskCount={todayTaskCount} />}>
+        <Route
+         element={<Layout user={user} setUser={setUser} todayTaskCount={todayTaskCount} />}
+         >
           <Route
             path="/categories"
             element={
               <PrivateRoute user={user}>
-                <QuizCategories user={user} setUser={setUser} />
+                {/* <QuizCategories user={user} setUser={setUser} /> */}
+                <ChessAcademyPage user={user} />
               </PrivateRoute>
             }
           />
@@ -125,7 +131,11 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
           />
         
 
-
+<Route
+  path="/chess/play/computer"
+  element={<ChessComputerPage 
+   user={user} />}
+/>
 
 {/* 
           <Route
@@ -155,6 +165,10 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
               </PrivateRoute>
             }
           /> */}
+          {/* <Route
+  path="/chess"
+  element={<ChessAcademyPage user={user} />}
+/> */}
           <Route
             path="/quiz/progress"
             element={

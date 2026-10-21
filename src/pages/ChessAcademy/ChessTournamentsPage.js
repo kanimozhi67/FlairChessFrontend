@@ -19,7 +19,7 @@ const statusColor = {
   cancelled: "default",
 };
 
-export default function ChessTournamentsPage() {
+export default function ChessTournamentsPage({user}) {
   const [tournaments, setTournaments] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -35,7 +35,7 @@ export default function ChessTournamentsPage() {
   const load = useCallback(async (preferredId) => {
     setLoading(true);
     try {
-      const { data } = await api.get("/chess/tournaments");
+      const { data } = await api.get("/chess/tournaments/");
       const list = Array.isArray(data) ? data : [];
       setTournaments(list);
       const nextId = preferredId || selectedId;
@@ -52,7 +52,8 @@ export default function ChessTournamentsPage() {
   const createTournament = async (values) => {
     setSaving(true);
     try {
-      const { data } = await api.post("/chess/tournaments", values);
+      console.log(user.role)
+      const { data } = await api.post("/chess/tournaments/", values);
       message.success("Tournament created!");
       setCreateOpen(false);
       form.resetFields();

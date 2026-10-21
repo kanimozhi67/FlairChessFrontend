@@ -537,6 +537,30 @@ onClick={() => { setIsLogin(true); setModalOpen(true);
           e.currentTarget.style.backgroundColor = "#3700ff";
         }}
       >Flair Voco</Button>
+      <Button type="primary"   
+      onClick={() => {
+    window.location.href = "https://flair-chess.vercel.app";
+  }}
+      style={{
+          backgroundColor: "#2600ff",
+          fontWeight: "bold",
+          padding: "8px 18px",
+          color: "white",
+          fontSize: 16,
+          borderRadius: 20,
+          border: "none",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+          transition: "all 0.3s ease",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.05)";
+          e.currentTarget.style.backgroundColor = "#fb8c00";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+          e.currentTarget.style.backgroundColor = "#3700ff";
+        }}
+      >FlairChess</Button>
       <SchoolLoginDropdown setUser={setUser} />
     </>
   )}
@@ -648,6 +672,60 @@ transform: "translateX(-50%)",        // ✅ FORCE full width
         }}
       >
         {/* 🚀Explore  */} 🧬Science
+      </Button>
+ <Button
+        // onClick={() => navigate("/exploreolymp")}
+         onClick={() => {
+    window.location.href = "https://flair-voice-frontend.vercel.app";
+  }}
+        style={{
+          backgroundColor: "transparent",
+         // fontWeight: "bold",
+          padding: 5,
+          color: "white",
+          fontSize: 14,
+          borderRadius: 5,
+          border: "1px solid white",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+          transition: "all 0.3s ease",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.05)";
+          e.currentTarget.style.backgroundColor = "#fb8c00";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+          e.currentTarget.style.backgroundColor = "transparent";
+        }}
+      >
+        🗣️ Flair Voco
+      </Button>
+ <Button
+        // onClick={() => navigate("/exploreolymp")}
+         onClick={() => {
+    window.location.href = "https://flair-chess.vercel.app";
+  }}
+        style={{
+          backgroundColor: "transparent",
+         // fontWeight: "bold",
+          padding: 5,
+          color: "white",
+          fontSize: 14,
+          borderRadius: 5,
+          border: "1px solid white",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+          transition: "all 0.3s ease",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.05)";
+          e.currentTarget.style.backgroundColor = "#fb8c00";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+          e.currentTarget.style.backgroundColor = "transparent";
+        }}
+      >
+        ♞FLAIRCHESS
       </Button>
   {!user && <SchoolLoginDropdown setUser={setUser} /> }  {/* Left */}
   {user &&
@@ -936,7 +1014,7 @@ transform: "translateX(-50%)",        // ✅ FORCE full width
       <Modal open={modalOpen} onCancel={() => setModalOpen(false)} footer={null} centered width={380}>
         <div style={{ textAlign: "center", marginBottom: 18 }}>
           <h2 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: "#7b2ff7" }}>
-            {isLogin ? "Welcome Back to FLAIR CHESS" : "Create Account in FLAIR CHESS"}
+            {isLogin ? "Welcome Back to FLAIRCHESS" : "Create Account in FLAIRCHESS"}
           </h2>
           <p style={{ color: "#666", marginTop: 4 }}>
             {isLogin ? "Login to continue" : "Sign up to get started"}
