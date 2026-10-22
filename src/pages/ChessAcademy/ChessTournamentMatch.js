@@ -297,7 +297,7 @@ socket.on("connect_error", (error) => {
         <div>
           <Tag color="gold">🏆 Flair Chess Tournament</Tag>
           <Title level={2}>Your Big Match! ♟️</Title>
-          <Text>Think carefully, play fairly, and have fun.</Text>
+          <Text>Think carefully, play fairly and have fun.</Text>
         </div>
         <div className="tournament-match-trophy">🏆</div>
       </div>
