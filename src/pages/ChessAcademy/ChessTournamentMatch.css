@@ -1,88 +1,313 @@
 
+/* =========================================
+   FLAIR CHESS TOURNAMENT MATCH
+   Responsive layout + side-by-side timers
+========================================= */
+
 .tournament-match-page {
   min-height: 100vh;
-  padding: 24px;
+  padding: clamp(12px, 2.5vw, 30px);
   color: #30275e;
-  background: linear-gradient(180deg, #f7f4ff, #fffaf2);
+  background: linear-gradient(180deg, #f7f4ff 0%, #fffaf2 100%);
+  box-sizing: border-box;
 }
+
+.tournament-match-page *,
+.tournament-match-page *::before,
+.tournament-match-page *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================
+   HERO HEADER
+========================================= */
 
 .tournament-match-hero {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: clamp(22px, 4vw, 38px);
   border-radius: 26px;
-  color: #fff;
+  color: #ffffff;
   background: linear-gradient(125deg, #5843d5, #9068ef);
   box-shadow: 0 12px 30px rgba(88, 67, 213, 0.16);
 }
 
 .tournament-match-hero .ant-typography {
-  color: #fff;
+  color: #ffffff;
 }
 
 .tournament-match-hero h2 {
   margin: 12px 0;
-  color: #fff !important;
+  color: #ffffff !important;
   font-size: clamp(26px, 4vw, 38px);
   font-weight: 900;
+  line-height: 1.2;
+}
+
+.tournament-match-hero .ant-tag {
+  margin-bottom: 4px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: 700;
 }
 
 .tournament-match-trophy {
+  flex-shrink: 0;
   font-size: clamp(55px, 9vw, 95px);
+  line-height: 1;
 }
 
+/* =========================================
+   MAIN MATCH CARD
+========================================= */
+
 .tournament-match-card.ant-card {
-  max-width: 900px;
-  margin: 24px auto;
+  width: 100%;
+  max-width: 1200px;
+  margin: 28px auto;
+  overflow: hidden;
   border: 1px solid #eee8ff;
-  border-radius: 24px;
-  box-shadow: 0 8px 26px rgba(57, 44, 110, 0.08);
+  border-radius: 26px;
+  background: #ffffff;
+  box-shadow: 0 12px 35px rgba(57, 44, 110, 0.1);
 }
 
 .tournament-match-card .ant-card-body {
-  padding: clamp(14px, 3vw, 28px);
+  padding: clamp(20px, 3.5vw, 40px);
 }
+
+/* =========================================
+   PLAYER INFORMATION
+========================================= */
 
 .tournament-match-info {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: 18px;
+  margin-bottom: 22px;
 }
 
 .tournament-match-player {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
+}
+
+.tournament-match-player > div {
+  min-width: 0;
+}
+
+.tournament-match-player .ant-typography {
+  overflow-wrap: anywhere;
 }
 
 .tournament-player-avatar {
   display: grid;
-  width: 46px;
-  height: 46px;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
   place-items: center;
   border-radius: 15px;
-  background: #f0eaff;
-  font-size: 25px;
+  background: linear-gradient(135deg, #f0eaff, #fff0f6);
+  font-size: 26px;
 }
 
-.tournament-match-alert {
-  margin-bottom: 18px;
-  border-radius: 13px;
+.tournament-match-player .ant-tag {
+  margin-top: 5px;
+  margin-inline-end: 0;
+  border-radius: 12px;
 }
+
+/* =========================================
+   TURN / CONNECTION ALERT
+========================================= */
+
+.tournament-match-alert {
+  margin-bottom: 20px;
+  border-radius: 14px;
+}
+
+.tournament-match-card .ant-alert {
+  overflow-wrap: anywhere;
+}
+
+/* =========================================
+   CHESSBOARD + CLOCKS LAYOUT
+   Board left, clocks right
+========================================= */
+
+.chess-match-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  align-items: center;
+  gap: clamp(18px, 3vw, 32px);
+  width: 100%;
+  max-width: 1080px;
+  margin: 24px auto;
+}
+
+/* =========================================
+   CHESSBOARD
+========================================= */
 
 .tournament-match-board {
   width: 100%;
-  max-width: 560px;
+  max-width: 500px; /* Reduced from 650px */
+  min-width: 0;
   margin: 0 auto;
   overflow: hidden;
-  border: 5px solid #91445b;
+  border: 4px solid #91445b;
   border-radius: 12px;
-  box-shadow: 0 10px 24px rgba(72, 37, 60, 0.15);
+  background: #91445b;
+  box-shadow: 0 8px 20px rgba(72, 37, 60, 0.15);
 }
+/* Keep the chessboard responsive */
+.tournament-match-board > div {
+  max-width: 100%;
+}
+
+.tournament-match-board img {
+  max-width: 100%;
+}
+
+/* =========================================
+   CHESS CLOCK PANEL
+========================================= */
+
+.chess-clock-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+/* =========================================
+   INDIVIDUAL PLAYER CLOCK
+========================================= */
+
+.chess-clock-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  padding: 22px 14px;
+  border: 2px solid #eadff2;
+  border-radius: 21px;
+  background: linear-gradient(145deg, #fff9ef 0%, #f1eaff 100%);
+  box-shadow: 0 6px 18px rgba(74, 46, 112, 0.09);
+  text-align: center;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.chess-clock-card.clock-active {
+  border-color: #31a66a;
+  background: linear-gradient(145deg, #f2fff7 0%, #f0f9ff 100%);
+  box-shadow: 0 0 0 3px rgba(49, 166, 106, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Player avatar */
+
+.chess-clock-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border: 1px solid #f0e6ff;
+  border-radius: 18px;
+  background: #ffffff;
+  font-size: 31px;
+  box-shadow: 0 4px 10px rgba(74, 46, 112, 0.07);
+}
+
+/* Player name and piece color */
+
+.chess-clock-player {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 4px;
+  min-width: 0;
+}
+
+.chess-clock-player .ant-typography {
+  overflow-wrap: anywhere;
+}
+
+/* =========================================
+   TIMER DISPLAY
+========================================= */
+
+.chess-clock-time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  padding: 13px 5px;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 15px;
+  background: #302447;
+  color: #ffffff;
+  font-size: clamp(22px, 2.5vw, 29px);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Low time warning */
+
+.chess-clock-time.clock-low {
+  background: #b4233c;
+  border-color: #e66a7b;
+  animation: clock-pulse 1s infinite alternate;
+}
+
+@keyframes clock-pulse {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.76;
+  }
+}
+
+/* Active player label */
+
+.chess-clock-card .ant-tag {
+  margin-inline-end: 0;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
 
 .tournament-match-footer {
   display: flex;
@@ -90,12 +315,20 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 18px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0eafa;
 }
 
 .tournament-match-footer .ant-btn {
+  min-height: 42px;
   border-radius: 12px;
+  font-weight: 600;
 }
+
+/* =========================================
+   LOADING SCREEN
+========================================= */
 
 .tournament-match-loading {
   display: flex;
@@ -106,9 +339,53 @@
   gap: 20px;
   padding: 20px;
   text-align: center;
+  color: #30275e;
 }
 
-@media (max-width: 767px) {
+.tournament-match-loading .ant-spin {
+  color: #7657e8;
+}
+
+/* =========================================
+   TABLETS
+========================================= */
+
+@media (max-width: 900px) {
+  .tournament-match-card.ant-card {
+    max-width: 100%;
+  }
+
+ .chess-match-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 500px) 200px;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 900px;
+  margin: 24px auto;
+}
+
+  .chess-clock-card {
+    padding: 18px 10px;
+    gap: 9px;
+  }
+
+  .chess-clock-time {
+    font-size: 22px;
+    letter-spacing: 0;
+  }
+
+  .tournament-match-board {
+    border-width: 4px;
+  }
+}
+
+/* =========================================
+   MOBILE AND SMALL TABLETS
+========================================= */
+
+@media (max-width: 700px) {
   .tournament-match-page {
     padding: 12px;
   }
@@ -118,21 +395,90 @@
     border-radius: 20px;
   }
 
+  .tournament-match-hero h2 {
+    font-size: clamp(24px, 6vw, 32px);
+  }
+
   .tournament-match-trophy {
     font-size: 48px;
   }
 
+  .tournament-match-card.ant-card {
+    margin: 16px auto;
+    border-radius: 20px;
+  }
+
+  .tournament-match-card .ant-card-body {
+    padding: 16px;
+  }
+
   .tournament-match-info {
     flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .tournament-match-player {
+    gap: 10px;
+  }
+
+  .tournament-player-avatar {
+    width: 42px;
+    height: 42px;
+    font-size: 23px;
+  }
+
+  .tournament-match-alert {
+    margin-bottom: 14px;
+  }
+
+  /* Board first, clocks below */
+  .chess-match-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin: 18px auto;
   }
 
   .tournament-match-board {
+    width: 100%;
+    max-width: 500px;
     border-width: 3px;
+    border-radius: 10px;
+  }
+
+  /* Two clock cards side by side */
+  .chess-clock-panel {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .chess-clock-card {
+    padding: 15px 9px;
+    gap: 8px;
+    border-radius: 16px;
+  }
+
+  .chess-clock-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    font-size: 24px;
+  }
+
+  .chess-clock-time {
+    padding: 11px 4px;
+    border-radius: 11px;
+    font-size: clamp(17px, 4vw, 22px);
+    letter-spacing: 0;
   }
 
   .tournament-match-footer {
     align-items: stretch;
     flex-direction: column;
+    margin-top: 18px;
   }
 
   .tournament-match-footer .ant-btn {
@@ -140,8 +486,61 @@
   }
 }
 
+/* =========================================
+   SMALL PHONES
+========================================= */
+
 @media (max-width: 420px) {
+  .tournament-match-page {
+    padding: 8px;
+  }
+
+  .tournament-match-hero {
+    padding: 20px 14px;
+    border-radius: 17px;
+  }
+
   .tournament-match-trophy {
     display: none;
+  }
+
+  .tournament-match-card .ant-card-body {
+    padding: 12px;
+  }
+
+  .chess-match-layout {
+    gap: 12px;
+  }
+
+  .chess-clock-panel {
+    gap: 8px;
+  }
+
+  .chess-clock-card {
+    padding: 12px 6px;
+    gap: 7px;
+  }
+
+  .chess-clock-avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 21px;
+  }
+
+  .chess-clock-time {
+    padding: 10px 2px;
+    font-size: 17px;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY: REDUCE ANIMATION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .chess-clock-card,
+  .chess-clock-time {
+    transition: none;
+    animation: none;
   }
 }

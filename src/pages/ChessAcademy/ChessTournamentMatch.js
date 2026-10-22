@@ -34,7 +34,15 @@ function getAuthToken() {
     ""
   );
 }
+function formatTime(milliseconds) {
+  const totalSeconds = Math.ceil(Math.max(0, milliseconds) / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
 
+  return `${String(minutes).padStart(2, "0")}:${String(
+    seconds
+  ).padStart(2, "0")}`;
+}
 export default function ChessTournamentMatch({ user }) {
   const { tournamentId } = useParams();
   const [searchParams] = useSearchParams();
@@ -55,7 +63,17 @@ export default function ChessTournamentMatch({ user }) {
   const [gameStatus, setGameStatus] = useState("waiting");
   const [result, setResult] = useState("pending");
   const [opponentConnected, setOpponentConnected] = useState(false);
+const [opponentName, setOpponentName] = useState(" ...");
 
+const INITIAL_TIME = 5 * 60 * 1000; // 5 minutes per player
+
+const [clocks, setClocks] = useState({
+  w: INITIAL_TIME,
+  b: INITIAL_TIME,
+});
+
+const [activeClock, setActiveClock] = useState(null);
+const [clockSyncTime, setClockSyncTime] = useState(Date.now());
   const playerId = user?._id || user?.id;
 
   const applyState = useCallback((state) => {
@@ -67,6 +85,24 @@ export default function ChessTournamentMatch({ user }) {
       setGameStatus(state.status || "active");
       setResult(state.result || "pending");
       setSelectedSquare(null);
+if (state.opponentName) {
+  setOpponentName(state.opponentName);
+}
+      if (
+  Number.isFinite(state.whiteTimeMs) &&
+  Number.isFinite(state.blackTimeMs)
+) {
+  setClocks({
+    w: Math.max(0, state.whiteTimeMs),
+    b: Math.max(0, state.blackTimeMs),
+  });
+}
+
+setActiveClock(
+  state.status === "completed" ? null : state.activeClock || null
+);
+
+setClockSyncTime(Date.now());
     } catch (error) {
       console.error("Invalid chess state:", error);
       message.error("Could not load the match position.");
@@ -211,6 +247,26 @@ socket.on("connect_error", (error) => {
     },
     [connected, color, waitingForMove, gameStatus, applyState]
   );
+useEffect(() => {
+  if (!activeClock || gameStatus !== "active") return;
+
+  const timer = setInterval(() => {
+    const now = Date.now();
+    const elapsed = now - clockSyncTime;
+
+    setClocks((previous) => ({
+      ...previous,
+      [activeClock]: Math.max(
+        0,
+        previous[activeClock] - elapsed
+      ),
+    }));
+
+    setClockSyncTime(now);
+  }, 250);
+
+  return () => clearInterval(timer);
+}, [activeClock, gameStatus, clockSyncTime]);
 
   const onPieceDrop = useCallback(
     ({ sourceSquare, targetSquare }) => {
@@ -322,6 +378,9 @@ socket.on("connect_error", (error) => {
             <span className="tournament-player-avatar">🤝</span>
             <div>
               <Text strong>Opponent</Text>
+               <strong className="chess-player-name">
+      {opponentName}
+    </strong>
               <div>
                 <Tag color={opponentConnected ? "success" : "default"}>
                   {opponentConnected ? "Connected" : "Waiting"}
@@ -367,27 +426,90 @@ socket.on("connect_error", (error) => {
             className="tournament-match-alert"
           />
         )}
+<div className="chess-match-layout">
+  {/* Chessboard on the left */}
+  <div className="tournament-match-board">
+    <Chessboard
+      options={{
+        position: fen,
+        boardOrientation: color === "b" ? "black" : "white",
+        onPieceDrop,
+        onSquareClick,
+        squareStyles: boardStyles,
+        allowDragging:
+          connected &&
+          !waitingForMove &&
+          gameStatus !== "completed" &&
+          !!myTurn,
+        darkSquareStyle: { backgroundColor: "#91445b" },
+        lightSquareStyle: { backgroundColor: "#f9e9d2" },
+        animationDuration: 200,
+      }}
+    />
+  </div>
 
-        <div className="tournament-match-board">
-          <Chessboard
-            options={{
-              position: fen,
-              boardOrientation: color === "b" ? "black" : "white",
-              onPieceDrop,
-              onSquareClick,
-              squareStyles: boardStyles,
-              allowDragging:
-                connected &&
-                !waitingForMove &&
-                gameStatus !== "completed" &&
-                !!myTurn,
-              darkSquareStyle: { backgroundColor: "#91445b" },
-              lightSquareStyle: { backgroundColor: "#f9e9d2" },
-              animationDuration: 200,
-            }}
-          />
-        </div>
+  {/* Timers on the right */}
+  <div className="chess-clock-panel">
+    <div
+      className={`chess-clock-card ${
+        activeClock === (color === "w" ? "b" : "w")
+          ? "clock-active"
+          : ""
+      }`}
+    >
+      <div className="chess-clock-avatar">🤝</div>
 
+      <Text strong>Opponent</Text>
+       <strong className="chess-player-name">
+      {opponentName}
+    </strong>
+
+      <Text type="secondary">
+        {color === "w" ? "Black pieces" : "White pieces"}
+      </Text>
+
+      <div
+        className={`chess-clock-time ${
+          clocks[color === "w" ? "b" : "w"] <= 30000
+            ? "clock-low"
+            : ""
+        }`}
+      >
+        {formatTime(clocks[color === "w" ? "b" : "w"])}
+      </div>
+
+      {activeClock === (color === "w" ? "b" : "w") && (
+        <Tag color="success">⏱️ Playing</Tag>
+      )}
+    </div>
+
+    <div
+      className={`chess-clock-card ${
+        activeClock === color ? "clock-active" : ""
+      }`}
+    >
+      <div className="chess-clock-avatar">👑</div>
+
+      <Text strong>{user?.username || "You"}</Text>
+
+      <Text type="secondary">
+        {color === "w" ? "White pieces" : "Black pieces"}
+      </Text>
+
+      <div
+        className={`chess-clock-time ${
+          clocks[color] <= 30000 ? "clock-low" : ""
+        }`}
+      >
+        {formatTime(clocks[color])}
+      </div>
+
+      {activeClock === color && (
+        <Tag color="success">⏱️ Your turn</Tag>
+      )}
+    </div>
+  </div>
+</div>
         <div className="tournament-match-footer">
           <Text type="secondary">
             {connected ? "🟢 Connected" : "🔴 Disconnected"}
