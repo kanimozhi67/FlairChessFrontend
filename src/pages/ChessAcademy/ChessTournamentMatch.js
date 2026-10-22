@@ -73,7 +73,7 @@ const [clocks, setClocks] = useState({
 });
 
 const [activeClock, setActiveClock] = useState(null);
-const [clockSyncTime, setClockSyncTime] = useState(Date.now());
+
   const playerId = user?._id || user?.id;
 
   const applyState = useCallback((state) => {
@@ -99,10 +99,17 @@ if (state.opponentName) {
 }
 
 setActiveClock(
-  state.status === "completed" ? null : state.activeClock || null
+  state.status === "completed"
+    ? null
+    : state.activeClock || new Chess(state.fen).turn()
 );
-
-setClockSyncTime(Date.now());
+console.log("Chess timer state:", {
+  status: state.status,
+  activeClock: state.activeClock,
+  whiteTimeMs: state.whiteTimeMs,
+  blackTimeMs: state.blackTimeMs,
+  turn: new Chess(state.fen).turn(),
+});
     } catch (error) {
       console.error("Invalid chess state:", error);
       message.error("Could not load the match position.");
@@ -247,12 +254,20 @@ socket.on("connect_error", (error) => {
     },
     [connected, color, waitingForMove, gameStatus, applyState]
   );
+const clockTickRef = useRef(Date.now());
+
 useEffect(() => {
-  if (!activeClock || gameStatus !== "active") return;
+  if (!activeClock || gameStatus !== "active") {
+    return;
+  }
+
+  clockTickRef.current = Date.now();
 
   const timer = setInterval(() => {
     const now = Date.now();
-    const elapsed = now - clockSyncTime;
+    const elapsed = now - clockTickRef.current;
+
+    clockTickRef.current = now;
 
     setClocks((previous) => ({
       ...previous,
@@ -261,12 +276,10 @@ useEffect(() => {
         previous[activeClock] - elapsed
       ),
     }));
-
-    setClockSyncTime(now);
-  }, 250);
+  }, 100);
 
   return () => clearInterval(timer);
-}, [activeClock, gameStatus, clockSyncTime]);
+}, [activeClock, gameStatus]);
 
   const onPieceDrop = useCallback(
     ({ sourceSquare, targetSquare }) => {
