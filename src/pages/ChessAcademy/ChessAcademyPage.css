@@ -271,6 +271,111 @@
 .chess-bottom-banner .ant-btn { flex-shrink: 0; min-height: 44px; padding: 0 18px; border: 0; border-radius: 14px; background: linear-gradient(120deg, #78304f, #bd527c); color: white; font-weight: 850; }
 .chess-bottom-banner .ant-btn:hover { background: #59203d !important; color: white !important; }
 
+
+
+/* 🏆 Tournament standings */
+.tournament-standings {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fff9e9 0%, #f4efff 100%);
+  border: 1px solid #eee2ff;
+}
+
+.tournament-standings-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 12px;
+  color: #5734a5;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.standings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.standings-player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #eee8fb;
+  border-radius: 13px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.standings-player:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(91, 59, 155, 0.1);
+}
+
+.standings-champion {
+  background: linear-gradient(110deg, #fff4c7, #fff);
+  border-color: #f4d46a;
+}
+
+.standings-player-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.standings-rank {
+  min-width: 32px;
+  font-size: 20px;
+  text-align: center;
+  font-weight: 800;
+  color: #5734a5;
+}
+
+.standings-player-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.standings-player-name {
+  overflow-wrap: anywhere;
+  font-weight: 700;
+  color: #30234f;
+}
+
+.standings-player-rating {
+  margin-top: 3px;
+  font-size: 12px;
+  color: #88809d;
+}
+
+.standings-empty {
+  padding: 14px 8px;
+  text-align: center;
+  color: #81769b;
+  font-size: 13px;
+}
+
+@media (max-width: 420px) {
+  .tournament-standings {
+    padding: 11px;
+  }
+
+  .standings-player {
+    padding: 9px;
+  }
+
+  .standings-player-name {
+    font-size: 13px;
+  }
+}
+
+
+
 @media (max-width: 767px) {
   .chess-academy-page { padding: 10px; }
   .chess-hero { min-height: 0; padding: 23px 18px; border-radius: 23px; }

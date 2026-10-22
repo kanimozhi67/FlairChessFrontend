@@ -142,6 +142,30 @@ const joinTournament = async (tournament) => {
   const getMaxPlayers = (tournament) =>
     Number(tournament.maxPlayers || 16);
 
+
+const getStandings = (tournament) => {
+  const players = Array.isArray(tournament.players)
+    ? tournament.players
+    : [];
+
+  return players
+    .filter((player) => !player.withdrawn)
+    .sort(
+      (a, b) =>
+        Number(b.score || 0) - Number(a.score || 0) ||
+        Number(b.rating || 0) - Number(a.rating || 0) ||
+        String(a.displayName || "").localeCompare(
+          String(b.displayName || "")
+        )
+    )
+    .map((player, index) => ({
+      ...player,
+      rank: index + 1,
+    }));
+};
+
+
+
 const isJoined = (tournament) => {
   // Trust an explicit backend flag when available.
   if (
@@ -535,6 +559,60 @@ const isJoined = (tournament) => {
   </Button>
 )}
                     </div>
+
+
+
+                    
+{/* 🏆 Tournament Standings */}
+<div className="tournament-standings">
+  <div className="tournament-standings-heading">
+    <TrophyOutlined />
+    <span>🏆 Live Standings</span>
+  </div>
+
+  {getStandings(tournament).length === 0 ? (
+    <div className="standings-empty">
+      No players registered yet. Be the first to join! ♟️
+    </div>
+  ) : (
+    <div className="standings-list">
+      {getStandings(tournament).map((player) => (
+        <div
+          className={`standings-player ${
+            player.rank === 1 ? "standings-champion" : ""
+          }`}
+          key={player._id || player.userId}
+        >
+          <div className="standings-player-left">
+            <span className="standings-rank">
+              {player.rank === 1
+                ? "🥇"
+                : player.rank === 2
+                ? "🥈"
+                : player.rank === 3
+                ? "🥉"
+                : `#${player.rank}`}
+            </span>
+
+            <div className="standings-player-info">
+              <span className="standings-player-name">
+                {player.displayName || "Chess Player"}
+              </span>
+              <span className="standings-player-rating">
+                Rating: {player.rating ?? 800}
+              </span>
+            </div>
+          </div>
+
+          <Tag color={player.rank === 1 ? "gold" : "purple"}>
+            ⭐ {Number(player.score || 0)} pts
+          </Tag>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
                   </Card>
                 </Col>
               );
