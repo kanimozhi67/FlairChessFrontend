@@ -26,6 +26,7 @@ import ExploreSoftware from "./pages/ExploreSoftware";
 import ChessAcademyPage from "./pages/ChessAcademy/ChessAcademyPage";
 import ChessComputerPage from "./pages/ChessAcademy/ChessComputerPage";
 import ChessTournamentMatch from "./pages/ChessAcademy/ChessTournamentMatch";
+import ChessTournamentDetailsPage from "./pages/ChessAcademy/ChessTournamentDetailsPage";
 
 
 const App = () => {
@@ -136,6 +137,10 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
   path="/chess/play/computer"
   element={<ChessComputerPage 
    user={user} />}
+/>
+<Route
+  path="/chess/tournaments/:tournamentId"
+  element={<ChessTournamentDetailsPage user={user} />}
 />
 <Route
   path="/chess/tournaments/:tournamentId/match"

@@ -77,42 +77,44 @@ const handlePlayMatch = (tournamentId, roundNumber, pairingId) => {
     loadTournaments();
   }, [loadTournaments]);
 
-  const joinTournament = async (tournament) => {
-    const id = tournament._id || tournament.id;
+ 
+const joinTournament = async (tournament) => {
+  const id = tournament._id || tournament.id;
 
-    if (!id) {
-      message.error("Tournament ID is missing.");
-      return;
-    }
+  if (!id) {
+    message.error("Tournament ID is missing.");
+    return;
+  }
 
-    setJoiningId(id);
+  if (joiningId) return;
 
-    try {
-      console.log("Logged-in user:", user?._id || user?.id);
-console.log(
-  "Tournament players:",
-  items.map((t) => ({
-    name: t.name,
-    joinedByMe: t.joinedByMe,
-    players: t.players,
-    participants: t.participants,
-  }))
-);
+  setJoiningId(id);
 
-setTournaments(items);
-      await api.post(`/chess/tournaments/${id}/join`);
+  try {
+    const response = await api.post(
+      `/chess/tournaments/${id}/join`
+    );
 
-      message.success(`You joined ${tournament.name}!`);
-      await loadTournaments();
-    } catch (err) {
-      message.error(
-        err?.response?.data?.message ||
-          "Could not join this tournament."
-      );
-    } finally {
-      setJoiningId(null);
-    }
-  };
+    message.success(
+      response?.data?.message ||
+        `You joined ${tournament.name || "the tournament"}!`
+    );
+
+    // Reload tournaments to get the latest players and
+    // joined status from the backend.
+    await loadTournaments();
+  } catch (err) {
+    console.error("Could not join tournament:", err);
+
+    message.error(
+      err?.response?.data?.message ||
+        "Could not join this tournament. Please try again."
+    );
+  } finally {
+    setJoiningId(null);
+  }
+};
+
 
   const getStatus = (tournament) =>
     String(tournament.status || "open").toLowerCase();
@@ -477,6 +479,17 @@ const isJoined = (tournament) => {
                     />
 
                     <div className="chess-tournament-footer">
+                      {["ongoing", "in-progress"].includes(status) && (
+  <Button
+    block
+    size="large"
+    type="primary"
+    onClick={() => navigate(`/chess/tournaments/${id}`)}
+  >
+    ♟️ View Tournament Matches
+  </Button>
+)}
+                      
                     {joined ? (
   <>
     <Button

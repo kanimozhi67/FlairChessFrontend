@@ -836,7 +836,7 @@ transform: "translateX(-50%)",        // ✅ FORCE full width
         setModalOpen(true);
       }}
     >
-      LOGIN / SIGNUP FOR FLAIR VOCO FEAST
+      LOGIN / SIGNUP FOR FLAIR CHESS FEAST
     </Button>
   </div>
 ) : (
