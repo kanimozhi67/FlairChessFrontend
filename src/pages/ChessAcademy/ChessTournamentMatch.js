@@ -18,9 +18,14 @@ import "./ChessTournamentMatch.css";
 
 const { Title, Text } = Typography;
 
-const SOCKET_URL =
-  process.env.REACT_APP_API_URL ||
-  "http://localhost:5000";
+const S_API_URL = (
+  process.env.REACT_APP_API_URL || "http://localhost:5000"
+).replace(/\/+$/, "");
+
+// Socket.IO connects to the backend root, not the REST "/api" path.
+const SOCKET_URL = S_API_URL.replace(/\/api$/, "");
+
+const SOCKET_PATH = "/socket.io";
 
 function getAuthToken() {
   return (
@@ -74,46 +79,61 @@ export default function ChessTournamentMatch({ user }) {
       return;
     }
 
-    const socket = io(SOCKET_URL, {
-      withCredentials: true,
-      auth: {
-        token: getAuthToken(),
-      },
-      transports: ["websocket", "polling"],
-      reconnection: true,
-    });
-
+const socket = io(SOCKET_URL, {
+  path: SOCKET_PATH,
+  transports: ["websocket"],
+  withCredentials: true,
+  auth: {
+    token: getAuthToken(),
+  },
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
+  reconnectionDelayMax: 10000,
+  timeout: 20000,
+});
     socketRef.current = socket;
 
-    socket.on("connect", () => {
-      setConnected(true);
+   
+socket.on("connect", () => {
+  console.info("[Chess Socket] Connected:", socket.id);
+  setConnected(true);
 
-      socket.emit(
-        "tournament:join-match",
-        { tournamentId, roundNumber, pairingId },
-        (response) => {
-          setLoading(false);
-
-          if (!response?.ok) {
-            message.error(response?.message || "Unable to join match.");
-            return;
-          }
-
-          setColor(response.color);
-          applyState(response.state);
-        }
-      );
-    });
-
-    socket.on("disconnect", () => {
-      setConnected(false);
-    });
-
-    socket.on("connect_error", (error) => {
+  socket.emit(
+    "tournament:join-match",
+    { tournamentId, roundNumber, pairingId },
+    (response) => {
       setLoading(false);
-      console.error("Socket connection error:", error.message);
-    });
 
+      if (!response?.ok) {
+        console.error("[Chess Socket] Join rejected:", response?.message);
+        message.error(response?.message || "Unable to join match.");
+        return;
+      }
+
+      setColor(response.color);
+      setOpponentConnected(false);
+      applyState(response.state);
+    }
+  );
+});
+
+socket.on("disconnect", (reason) => {
+  console.warn("[Chess Socket] Disconnected:", reason);
+  setConnected(false);
+  setOpponentConnected(false);
+});
+
+socket.on("connect_error", (error) => {
+  setLoading(false);
+  setConnected(false);
+  console.error("[Chess Socket] Connection failed:", {
+    message: error.message,
+    description: error.description,
+    context: error.context,
+  });
+});
+   
     socket.on("tournament:state", (state) => {
       applyState(state);
       setLastMove(state.lastMove || null);
