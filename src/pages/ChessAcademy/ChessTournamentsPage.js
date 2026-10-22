@@ -49,6 +49,39 @@ export default function ChessTournamentsPage({user}) {
 
   useEffect(() => { load(); }, []); // initial load only
 
+
+
+useEffect(() => {
+  let cancelled = false;
+
+  const refreshTournamentData = async () => {
+    try {
+      const { data } = await api.get("/chess/tournaments/");
+      if (cancelled) return;
+
+      const list = Array.isArray(data) ? data : [];
+
+      setTournaments(list);
+
+      setSelectedId((currentId) =>
+        list.some((t) => t._id === currentId)
+          ? currentId
+          : list[0]?._id || null
+      );
+    } catch (error) {
+      console.error("Automatic tournament refresh failed:", error);
+    }
+  };
+
+  const intervalId = setInterval(refreshTournamentData, 5000);
+
+  return () => {
+    cancelled = true;
+    clearInterval(intervalId);
+  };
+}, []);
+
+
   const createTournament = async (values) => {
     setSaving(true);
     try {
@@ -146,28 +179,35 @@ export default function ChessTournamentsPage({user}) {
       title: "Black",
       render: (_, p) => p.blackPlayer ? playerName(p.blackPlayer) : <Tag color="gold">BYE</Tag>,
     },
-    {
-      title: "Result",
-      render: (_, p) => {
-        if (p.status === "bye") return <Tag color="green">+1 point</Tag>;
-        if (p.result !== "pending") return <Tag color="blue">{p.result}</Tag>;
-        if (round.status !== "published") return <Tag>Draft</Tag>;
-        return (
-          <Select
-            size="small"
-            placeholder="Enter result"
-            style={{ width: 145 }}
-            value={undefined}
-            onChange={(value) => recordResult(round.roundNumber, p._id, value)}
-            options={[
-              { value: "1-0", label: "White wins (1-0)" },
-              { value: "1/2-1/2", label: "Draw (½-½)" },
-              { value: "0-1", label: "Black wins (0-1)" },
-            ]}
-          />
-        );
-      },
-    },
+   
+{
+  title: "Result",
+  render: (_, pairing) => {
+    if (
+      pairing.status === "bye" ||
+      pairing.result === "bye"
+    ) {
+      return <Tag color="green">BYE · +1 point</Tag>;
+    }
+
+    if (pairing.status === "completed") {
+      return (
+        <Tag color="success">
+          {pairing.result}
+        </Tag>
+      );
+    }
+
+    return (
+      <Tag color="processing">
+        {pairing.status === "in-progress"
+          ? "Match in progress"
+          : "Ready to play"}
+      </Tag>
+    );
+  },
+}
+
   ];
 
   return (
@@ -242,11 +282,7 @@ export default function ChessTournamentsPage({user}) {
                   {selected.status === "registration" && (
                     <Alert style={{ marginTop: 16 }} type="info" showIcon message="Registration is open" description="Once players have joined, an organiser can generate the first round." />
                   )}
-                  {selected.status === "in-progress" && (
-                    <Space wrap style={{ marginTop: 16 }}>
-                      <Button type="primary" icon={<ThunderboltOutlined />} onClick={generatePairings} loading={saving}>Generate next round</Button>
-                    </Space>
-                  )}
+                
                   {selected.status === "registration" && (
                     <Space wrap style={{ marginTop: 16 }}>
                       <Button type="primary" ghost icon={<ThunderboltOutlined />} onClick={generatePairings} loading={saving}>Generate Round 1</Button>
@@ -259,11 +295,19 @@ export default function ChessTournamentsPage({user}) {
                     key={round.roundNumber}
                     className="chess-panel"
                     title={`Round ${round.roundNumber}`}
-                    extra={
-                      round.status === "draft"
-                        ? <Button size="small" type="primary" onClick={() => publishRound(round.roundNumber)} loading={saving}>Publish pairings</Button>
-                        : <Tag color={round.status === "completed" ? "green" : "blue"}>{round.status}</Tag>
-                    }
+                   extra={
+  <Tag
+    color={
+      round.status === "completed"
+        ? "success"
+        : "processing"
+    }
+  >
+    {round.status === "published"
+      ? "Round active"
+      : round.status}
+  </Tag>
+}
                   >
                     <Table
                       rowKey="_id"
