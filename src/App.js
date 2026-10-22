@@ -119,7 +119,7 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
             element={
               <PrivateRoute user={user}>
                 {/* <QuizCategories user={user} setUser={setUser} /> */}
-                <ChessAcademyPage user={user} />
+                <ChessAcademyPage user={user} setUser={setUser} />
               </PrivateRoute>
             }
           />

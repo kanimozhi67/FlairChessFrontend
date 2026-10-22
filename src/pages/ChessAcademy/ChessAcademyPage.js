@@ -10,7 +10,7 @@ import {
   Row,
   Spin,
   Tag,
-  Typography,
+  Typography,Modal
 } from "antd";
 import {
   TrophyOutlined,
@@ -26,18 +26,20 @@ import {
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axiosClient";
 import "./ChessAcademyPage.css";
+import Signup from "../Signup";
 
 const { Title, Text, Paragraph } = Typography;
 
-const ChessAcademyPage = ({ user }) => {
+const ChessAcademyPage = ({ user,setUser }) => {
   const navigate = useNavigate();
 
   const [tournaments, setTournaments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [joiningId, setJoiningId] = useState(null);
   const [error, setError] = useState("");
-
-
+const [joinedTournamentIds, setJoinedTournamentIds] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
 
 const handlePlayMatch = (tournamentId, roundNumber, pairingId) => {
@@ -90,29 +92,34 @@ const joinTournament = async (tournament) => {
 
   setJoiningId(id);
 
-  try {
-    const response = await api.post(
-      `/chess/tournaments/${id}/join`
-    );
+ try {
+  const response = await api.post(
+    `/chess/tournaments/${id}/join`
+  );
 
-    message.success(
-      response?.data?.message ||
-        `You joined ${tournament.name || "the tournament"}!`
-    );
+  // Update the button immediately after successful registration
+  setJoinedTournamentIds((previous) =>
+    previous.includes(String(id))
+      ? previous
+      : [...previous, String(id)]
+  );
 
-    // Reload tournaments to get the latest players and
-    // joined status from the backend.
-    await loadTournaments();
-  } catch (err) {
-    console.error("Could not join tournament:", err);
+  message.success(
+    response?.data?.message ||
+      `You joined ${tournament.name || "the tournament"}!`
+  );
 
-    message.error(
-      err?.response?.data?.message ||
-        "Could not join this tournament. Please try again."
-    );
-  } finally {
-    setJoiningId(null);
-  }
+  await loadTournaments();
+} catch (err) {
+  console.error("Tournament registration failed:", err);
+
+  message.error(
+    err?.response?.data?.message ||
+      "Unable to register for this tournament."
+  );
+} finally {
+  setJoiningId(null);
+}
 };
 
 
@@ -167,37 +174,41 @@ const getStandings = (tournament) => {
 
 
 const isJoined = (tournament) => {
-  // Trust an explicit backend flag when available.
-  if (
-    tournament.joinedByMe === true ||
-    tournament.isJoined === true
-  ) {
+  const tournamentId = String(tournament._id || tournament.id || "");
+
+  // Immediately recognize successful registrations in this session
+  if (joinedTournamentIds.includes(tournamentId)) {
     return true;
   }
 
+  // Check the backend's joined status
+  if (tournament.joinedByMe === true || tournament.isJoined === true) {
+    return true;
+  }
+
+  // Check registered players against the logged-in user
   const currentUserId = String(
     user?._id || user?.id || user?.userId || ""
   );
 
-  if (!currentUserId) return false;
+  const players = tournament.players || tournament.participants || [];
 
-  const participants =
-    tournament.players || tournament.participants || [];
+  if (!currentUserId || !Array.isArray(players)) {
+    return false;
+  }
 
-  if (!Array.isArray(participants)) return false;
+  return players.some((player) => {
+    const registeredUserId =
+      player?.userId?._id ||
+      player?.userId?.id ||
+      player?.userId ||
+      player?.studentId?._id ||
+      player?.studentId;
 
-  return participants.some((player) => {
-    const playerUserId =
-      player && typeof player === "object"
-        ? player.userId?._id ||
-          player.userId ||
-          player.studentId?._id ||
-          player.studentId
-        : player;
-
-    return String(playerUserId || "") === currentUserId;
+    return String(registeredUserId || "") === currentUserId;
   });
 };
+
   const canJoin = (tournament) => {
     const status = getStatus(tournament);
     const players = getPlayers(tournament);
@@ -513,51 +524,54 @@ const isJoined = (tournament) => {
     ♟️ View Tournament Matches
   </Button>
 )}
-                      
-                    {joined ? (
-  <>
-    <Button
-      block
-      size="large"
-      onClick={() => navigate(`/chess/tournaments/${id}`)}
-    >
-      View Tournament <RightOutlined />
-    </Button>
+{console.log("username:", user?.username, "joined:", joined, "available:", available)}
 
-    {status === "in-progress" && (
-      <Button
-        block
-        size="large"
-        type="primary"
-        onClick={() =>
-          navigate(`/chess/tournaments/${id}`)
-        }
-      >
-        ♟️ View Tournament Matches
-      </Button>
-    )}
-  </>
+{user?.username === "Guest" ? (<>
+<p>To join tournament, </p>
+<Button
+    type="primary"
+    block
+  
+    onClick={() =>  {setIsLogin(true); setModalOpen(true); }}
+    style={{
+      background: "linear-gradient(135deg, #667EEA, #764BA2)",
+      border: "none",
+      borderRadius: 12,
+      fontWeight: 700,
+    }}
+  >
+    📝 Sign Up Flair Chess 
+  </Button></>)
+: joined ? (
+  <Button
+    type="default"
+    block
+    disabled
+    style={{
+      background: "#E8F8EE",
+      color: "#23864A",
+      borderColor: "#9AD9AF",
+      borderRadius: 12,
+      fontWeight: 700,
+    }}
+  >
+    ✅ Already Registered
+  </Button>
 ) : available ? (
   <Button
-    block
-    size="large"
     type="primary"
+    block
     loading={joiningId === id}
     onClick={() => joinTournament(tournament)}
   >
-    Register Tournament <RightOutlined />
+    ♟️ Register Tournament
   </Button>
 ) : (
-  <Button block size="large" disabled>
-    {players >= maxPlayers
-      ? "Tournament Full"
-      : status === "completed"
-      ? "Tournament Completed"
-      : status === "in-progress"
-      ? "Tournament In Progress"
-      : "Registration Closed"}
+  <Button block disabled>
+    Registration Closed
   </Button>
 )}
+
                     </div>
 
 
@@ -638,6 +652,23 @@ const isJoined = (tournament) => {
           Challenge Your Brain <RightOutlined />
         </Button>
       </section>
+
+         <Modal open={modalOpen} onCancel={() => setModalOpen(false)} footer={null} centered width={380}>
+            <div style={{ textAlign: "center", marginBottom: 18 }}>
+              <h2 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: "#7b2ff7" }}>
+                {isLogin ? "Welcome Back" : "Create Account"}
+              </h2>
+              <p style={{ color: "#666", marginTop: 4 }}>
+                {isLogin ? "Login to continue" : "Sign up to get started"}
+              </p>
+            </div>
+    
+          
+              <Signup onSuccess={() => setModalOpen(false)} setUser={setUser} />
+          
+    
+          
+          </Modal>
     </div>
   );
 };
