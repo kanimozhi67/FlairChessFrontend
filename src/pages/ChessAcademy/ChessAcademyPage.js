@@ -150,11 +150,11 @@ const joinTournament = async (tournament) => {
     Number(tournament.maxPlayers || 16);
 
 
-const getStandings = async(tournament) => {
+const getStandings = (tournament) => {
   const players = Array.isArray(tournament.players)
     ? tournament.players
     : [];
-  await loadTournaments();
+ 
   return players
     .filter((player) => !player.withdrawn)
     .sort(
