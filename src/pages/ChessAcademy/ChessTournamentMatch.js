@@ -319,23 +319,100 @@ useEffect(() => {
     [color, waitingForMove, gameStatus, selectedSquare, makeMove]
   );
 
-  const boardStyles = {};
+const boardStyles = {};
 
-  if (selectedSquare) {
-    boardStyles[selectedSquare] = {
-      backgroundColor: "rgba(255, 211, 91, 0.85)",
-      boxShadow: "inset 0 0 0 4px #e5a72c",
+// Highlight the selected square.
+if (selectedSquare) {
+  boardStyles[selectedSquare] = {
+    backgroundColor: "rgba(255, 211, 91, 0.85)",
+    boxShadow: "inset 0 0 0 4px #e5a72c",
+  };
+}
+
+// Highlight the last move.
+if (lastMove?.from && lastMove?.to) {
+  boardStyles[lastMove.from] = {
+    backgroundColor: "rgba(255, 211, 91, 0.55)",
+  };
+
+  boardStyles[lastMove.to] = {
+    backgroundColor: "rgba(255, 211, 91, 0.75)",
+  };
+}
+
+// Find the current squares occupied by both kings.
+let whiteKingSquare = null;
+let blackKingSquare = null;
+
+const boardPosition = gameRef.current.board();
+const files = "abcdefgh";
+
+boardPosition.forEach((row, rowIndex) => {
+  row.forEach((piece, colIndex) => {
+    if (piece?.type !== "k") return;
+
+    const square = `${files[colIndex]}${8 - rowIndex}`;
+
+    if (piece.color === "w") {
+      whiteKingSquare = square;
+    } else if (piece.color === "b") {
+      blackKingSquare = square;
+    }
+  });
+});
+
+// Draw: highlight both kings in green.
+if (gameStatus === "completed" && result === "1/2-1/2") {
+  if (whiteKingSquare) {
+    boardStyles[whiteKingSquare] = {
+      backgroundColor: "#86EFAC",
+      boxShadow: "inset 0 0 0 4px #16A34A",
     };
   }
 
-  if (lastMove?.from && lastMove?.to) {
-    boardStyles[lastMove.from] = {
-      backgroundColor: "rgba(255, 211, 91, 0.55)",
-    };
-    boardStyles[lastMove.to] = {
-      backgroundColor: "rgba(255, 211, 91, 0.75)",
+  if (blackKingSquare) {
+    boardStyles[blackKingSquare] = {
+      backgroundColor: "#86EFAC",
+      boxShadow: "inset 0 0 0 4px #16A34A",
     };
   }
+}
+
+// White wins: losing black king becomes red.
+else if (gameStatus === "completed" && result === "1-0") {
+  if (blackKingSquare) {
+    boardStyles[blackKingSquare] = {
+      backgroundColor: "#FCA5A5",
+      boxShadow: "inset 0 0 0 4px #DC2626",
+    };
+  }
+}
+
+// Black wins: losing white king becomes red.
+else if (gameStatus === "completed" && result === "0-1") {
+  if (whiteKingSquare) {
+    boardStyles[whiteKingSquare] = {
+      backgroundColor: "#FCA5A5",
+      boxShadow: "inset 0 0 0 4px #DC2626",
+    };
+  }
+}
+
+// While the game is active, highlight the checked king in light orange.
+else if (gameStatus !== "completed" && gameRef.current.isCheck()) {
+  const checkedKingSquare =
+    gameRef.current.turn() === "w"
+      ? whiteKingSquare
+      : blackKingSquare;
+
+  if (checkedKingSquare) {
+    boardStyles[checkedKingSquare] = {
+      backgroundColor: "#FED7AA",
+      boxShadow: "inset 0 0 0 4px #F97316",
+    };
+  }
+}
+
 
   if (!tournamentId || !pairingId || !roundNumber) {
     return (
