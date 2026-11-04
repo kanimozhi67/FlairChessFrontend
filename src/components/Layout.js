@@ -45,11 +45,11 @@ const Layout = ({ user, setUser,todayTaskCount }) => {
     <span style={{ display: "flex",marginLeft:30,
      alignItems: "center", gap: 8 
      }}>
-    🎯 Today's Task<TaskBadge count={todayTaskCount} isMobile={false} />
+    🎯 Tournaments<TaskBadge count={todayTaskCount} isMobile={false} />
     
     </span>
   ),
-  path: "/task",
+  path: "/tournaments",
 },
 
 
@@ -91,7 +91,7 @@ const Layout = ({ user, setUser,todayTaskCount }) => {
     
     </span>
   ),
-  path: "/task",
+  path: "/tournaments",
 },
 //  { key: "mystickers", label: "📝 ", path: "/mystickers" },
 

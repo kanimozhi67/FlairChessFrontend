@@ -91,7 +91,7 @@ const handlePlayMatch = (tournamentId, roundNumber, pairingId) => {
   const shareTournament = async (tournament) => {
   const id = tournament._id || tournament.id;
 
-  const shareUrl = `${window.location.origin}/chess/tournaments/${id}`;
+  const shareUrl = `${window.location.origin}/tournaments`;
 
   const shareData = {
     title: tournament.name || "Flair Chess Tournament",

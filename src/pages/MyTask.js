@@ -1,63 +1,115 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
-  Card,
   Spin,
-  Row,
-  Col,
-  Empty,
   Button,
   message,
   Typography,
   Tag,
+  Modal,
+  Card,
+  Row,
+  Col,
+  Empty,
 } from "antd";
+import { useNavigate } from "react-router-dom";
 import {
-  Link,
-} from "react-router-dom";
-import {
-  BookOutlined,
-  RocketOutlined,
-  StarFilled,
-  TrophyOutlined,
+  ShareAltOutlined,
   ReloadOutlined,
+  TrophyOutlined,
 } from "@ant-design/icons";
 
+
 import api from "../api/axiosClient";
-import { categoryRouteMap } from "../utils/categoryRouteMap";
 import CompletedTask from "./CompletedTask";
-// import CompletedVocabulary from "./ReadingComprehension/CompletedVocabulary";
 import "./MyTasks.css";
+import Signup from "./Signup";
 
-const { Title, Text, Paragraph } = Typography;
-
-const taskColors = [
-  { background: "#FFF0B3", accent: "#F59E0B", emoji: "🚀" },
-  { background: "#DDF7E8", accent: "#16A34A", emoji: "🧩" },
-  { background: "#E8E4FF", accent: "#7C3AED", emoji: "🎨" },
-  { background: "#FFE1EC", accent: "#E84393", emoji: "📚" },
-  { background: "#DDF4FF", accent: "#0284C7", emoji: "🔬" },
-  { background: "#FFE9D5", accent: "#EA580C", emoji: "🌟" },
-];
+const { Title, Text } = Typography;
 
 const MyTask = ({
   user,
+  setUser,
   todayTaskCount,
   setTodayTaskCount,
 }) => {
+  const navigate = useNavigate();
+
+  // Task states
   const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [taskLoading, setTaskLoading] = useState(true);
   const [retryKey, setRetryKey] = useState(0);
+
+  // Tournament states
+  const [tournaments, setTournaments] = useState([]);
+  const [tournamentLoading, setTournamentLoading] = useState(true);
+  const [tournamentError, setTournamentError] = useState("");
+  const [joiningId, setJoiningId] = useState(null);
+  const [joinedTournamentIds, setJoinedTournamentIds] = useState([]);
+
+  // Signup modal
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+
+  // --------------------------------
+  // Load tournaments
+  // --------------------------------
+
+  const loadTournaments = useCallback(async () => {
+    setTournamentLoading(true);
+    setTournamentError("");
+
+    try {
+      const response = await api.get("/chess/tournaments");
+
+      const data = response?.data;
+
+      const items = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.tournaments)
+        ? data.tournaments
+        : Array.isArray(data?.items)
+        ? data.items
+        : [];
+
+      setTournaments(items);
+    } catch (error) {
+      console.error("Could not load tournaments:", error);
+
+      setTournamentError(
+        error?.response?.data?.message ||
+          "Could not load tournaments. Please try again."
+      );
+    } finally {
+      setTournamentLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadTournaments();
+
+    const interval = setInterval(() => {
+      loadTournaments();
+    }, 300000);
+
+    return () => clearInterval(interval);
+  }, [loadTournaments]);
+
+  // --------------------------------
+  // Load today's tasks
+  // --------------------------------
 
   useEffect(() => {
     let cancelled = false;
 
     const fetchTasks = async () => {
       if (!user) {
-        setLoading(false);
+        setTasks([]);
+        setTaskLoading(false);
         return;
       }
 
-      setLoading(true);
+      setTaskLoading(true);
 
       try {
         const endpoint =
@@ -65,23 +117,26 @@ const MyTask = ({
             ? "/users/todaytaskstudent"
             : "/users/todaytask";
 
-        const res = await api.get(endpoint);
+        const response = await api.get(endpoint);
 
         if (cancelled) return;
 
-        const taskList = Array.isArray(res.data)
-          ? res.data
+        const taskList = Array.isArray(response.data)
+          ? response.data
           : [];
 
         setTasks(taskList);
         setTodayTaskCount?.(taskList.length);
       } catch (error) {
         if (!cancelled) {
-          message.error("Oops! We couldn't load your tasks. Please try again.");
+          console.error("Task loading error:", error);
+          message.error(
+            "Oops! We couldn't load your tasks. Please try again."
+          );
         }
       } finally {
         if (!cancelled) {
-          setLoading(false);
+          setTaskLoading(false);
         }
       }
     };
@@ -97,12 +152,215 @@ const MyTask = ({
     setRetryKey((previous) => previous + 1);
   };
 
-  if (loading) {
+  // --------------------------------
+  // Tournament helpers
+  // --------------------------------
+
+  const getTournamentId = (tournament) =>
+    String(tournament?._id || tournament?.id || "");
+
+  const getStatus = (tournament) =>
+    String(tournament?.status || "open").toLowerCase();
+
+  const getPlayers = (tournament) => {
+    if (typeof tournament.playerCount === "number") {
+      return tournament.playerCount;
+    }
+
+    if (typeof tournament.playersCount === "number") {
+      return tournament.playersCount;
+    }
+
+    if (Array.isArray(tournament.players)) {
+      return tournament.players.length;
+    }
+
+    if (Array.isArray(tournament.participants)) {
+      return tournament.participants.length;
+    }
+
+    return 0;
+  };
+
+  const getMaxPlayers = (tournament) =>
+    Number(tournament.maxPlayers || 16);
+
+  const isJoined = (tournament) => {
+    const tournamentId = getTournamentId(tournament);
+
+    if (joinedTournamentIds.includes(tournamentId)) {
+      return true;
+    }
+
+    if (
+      tournament.joinedByMe === true ||
+      tournament.isJoined === true
+    ) {
+      return true;
+    }
+
+    const currentUserId = String(
+      user?._id || user?.id || user?.userId || ""
+    );
+
+    const players =
+      tournament.players || tournament.participants || [];
+
+    if (!currentUserId || !Array.isArray(players)) {
+      return false;
+    }
+
+    return players.some((player) => {
+      const registeredUserId =
+        player?.userId?._id ||
+        player?.userId?.id ||
+        player?.userId ||
+        player?.studentId?._id ||
+        player?.studentId?.id ||
+        player?.studentId;
+
+      return String(registeredUserId || "") === currentUserId;
+    });
+  };
+
+  const canJoin = (tournament) => {
+    const status = getStatus(tournament);
+
+    return (
+      ["open", "upcoming", "registration"].includes(status) &&
+      getPlayers(tournament) < getMaxPlayers(tournament) &&
+      !isJoined(tournament)
+    );
+  };
+
+  const getStatusColor = (statusValue) => {
+    if (["open", "registration"].includes(statusValue)) {
+      return "green";
+    }
+
+    if (statusValue === "upcoming") return "blue";
+    if (statusValue === "ongoing" || statusValue === "in-progress") {
+      return "orange";
+    }
+
+    if (statusValue === "completed") return "default";
+
+    return "purple";
+  };
+
+  // --------------------------------
+  // Join tournament
+  // --------------------------------
+
+  const joinTournament = async (tournament) => {
+    const id = getTournamentId(tournament);
+
+    if (!id) {
+      message.error("Tournament ID is missing.");
+      return;
+    }
+
+    if (joiningId) return;
+
+    setJoiningId(id);
+
+    try {
+      const response = await api.post(
+        `/chess/tournaments/${id}/join`
+      );
+
+      setJoinedTournamentIds((previous) =>
+        previous.includes(id) ? previous : [...previous, id]
+      );
+
+      message.success(
+        response?.data?.message ||
+          `You joined ${tournament.name || "the tournament"}!`
+      );
+
+      await loadTournaments();
+    } catch (error) {
+      console.error("Tournament registration failed:", error);
+
+      message.error(
+        error?.response?.data?.message ||
+          "Unable to register for this tournament."
+      );
+    } finally {
+      setJoiningId(null);
+    }
+  };
+
+  // --------------------------------
+  // Share tournament
+  // --------------------------------
+
+  const shareTournament = async (tournament) => {
+    const id = getTournamentId(tournament);
+
+    if (!id) {
+      message.error("Tournament ID is missing.");
+      return;
+    }
+
+    const shareUrl =
+      `${window.location.origin}/tournaments`;
+
+    const shareData = {
+      title: tournament.name || "Flair Chess Tournament",
+      text: `♟️ Join me in ${
+        tournament.name || "Flair Chess Tournament"
+      }! Register now and let's play chess together!`,
+      url: shareUrl,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareUrl);
+        message.success(
+          "Tournament link copied! Share it with your friends."
+        );
+      }
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          message.success("Tournament link copied!");
+        } catch {
+          message.error("Unable to share tournament link.");
+        }
+      }
+    }
+  };
+
+  // --------------------------------
+  // Match navigation
+  // --------------------------------
+
+  const handlePlayMatch = (
+    tournamentId,
+    roundNumber,
+    pairingId
+  ) => {
+    navigate(
+      `/chess/tournaments/${tournamentId}/match?round=${roundNumber}&pairingId=${pairingId}`
+    );
+  };
+
+  // --------------------------------
+  // Loading
+  // --------------------------------
+
+  if (taskLoading) {
     return (
       <div className="mytask-loading">
         <div className="mytask-loading-emoji">🪄</div>
         <Spin size="large" />
-        <Title level={4}>Getting your fun activities ready...</Title>
+        <Title level={4}>
+          Getting your fun activities ready...
+        </Title>
         <Text type="secondary">
           Your next adventure is coming!
         </Text>
@@ -110,256 +368,235 @@ const MyTask = ({
     );
   }
 
+  // --------------------------------
+  // Main UI
+  // --------------------------------
+
   return (
     <div className="mytask-page">
-      {/* Vocabulary section */}
-     
 
-      {/* Hero section */}
-      {/* <div className="mytask-hero">
-        <div className="mytask-hero-content">
-          <div className="mytask-hero-label">
-            <StarFilled /> YOUR LEARNING ADVENTURE
-          </div>
+      {/* Today's Tasks */}
 
-          <Title className="mytask-hero-title">
-            My Fun Tasks <span>🌈</span>
-          </Title>
+    
+      
 
-          <Paragraph className="mytask-hero-description">
-            Learn something new, complete your activities,
-            and become a superstar!
-          </Paragraph>
 
-          <div className="mytask-stats">
-            <div className="mytask-stat">
-              <span className="mytask-stat-icon">🎯</span>
-              <div>
-                <strong>{tasks.length}</strong>
-                <span>Tasks today</span>
-              </div>
-            </div>
+      {/* Chess Tournaments */}
 
-            <div className="mytask-stat">
-              <span className="mytask-stat-icon">⭐</span>
-              <div>
-                <strong>
-                  {typeof todayTaskCount === "number"
-                    ? todayTaskCount
-                    : tasks.length}
-                </strong>
-                <span>On your list</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mytask-hero-art" aria-hidden="true">
-          <div className="mytask-orbit">✨</div>
-          <div className="mytask-rocket">🚀</div>
-          <div className="mytask-planet">🪐</div>
-          <div className="mytask-cloud">☁️</div>
-        </div>
-      </div> */}
-
-      {/* Task list heading */}
-      <div className="mytask-heading">
-        <div>
+      <div className="mytask-tournament-section">
+        <div style={{ marginBottom: 20 }}>
           <Title level={2}>
-            <RocketOutlined /> Today's Adventures
+            ♟️ Flair Chess Tournaments
           </Title>
+
           <Text type="secondary">
-            Pick an activity and let's get started!
+            Join tournaments, challenge your friends and become a chess champion!
           </Text>
         </div>
 
-        <Tag color="purple" className="mytask-count-tag">
-          {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
-        </Tag>
-      </div>
-
-      {/* Empty state */}
-      {tasks.length === 0 ? (
-        <Card className="mytask-empty-card">
-          <Empty
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description={
-              <div className="mytask-empty-content">
-                <Title level={4}>No tasks for now! 🌻</Title>
-                <Text type="secondary">
-                  Take a little break. Your next learning
-                  adventure may be coming soon.
-                </Text>
-              </div>
-            }
-          />
-
-          <div className="mytask-retry">
+        {tournamentLoading ? (
+          <div style={{ textAlign: "center", padding: 30 }}>
+            <Spin size="large" />
+            <p>Loading chess tournaments...</p>
+          </div>
+        ) : tournamentError ? (
+          <div style={{ textAlign: "center", padding: 20 }}>
+            <Text type="danger">{tournamentError}</Text>
+            <br />
             <Button
-              type="primary"
-              icon={<ReloadOutlined />}
-              onClick={retryFetch}
-              className="mytask-retry-button"
+              onClick={loadTournaments}
+              style={{ marginTop: 12 }}
             >
-              Check Again
+              Try Again
             </Button>
           </div>
-        </Card>
-      ) : (
-        <Row gutter={[20, 20]} className="mytask-grid">
-          {tasks.map((task, taskIndex) => {
-            const theme = taskColors[taskIndex % taskColors.length];
+        ) : tournaments.length === 0 ? (
+          <Empty description="No chess tournaments available yet." />
+        ) : (
+          <Row gutter={[16, 16]}>
+            {tournaments.map((tournament) => {
+              const id = getTournamentId(tournament);
+              const status = getStatus(tournament);
+              const joined = isJoined(tournament);
+              const available = canJoin(tournament);
 
-            const categories = Array.isArray(task.categories)
-              ? task.categories
-              : [];
+              const playerCount = getPlayers(tournament);
+              const maxPlayers = getMaxPlayers(tournament);
 
-            const activityCount = categories.reduce(
-              (total, category) =>
-                total +
-                (Array.isArray(category.levels)
-                  ? category.levels.length
-                  : 0),
-              0
-            );
+              const isGuest =
+                !user || user?.username === "Guest";
 
-            return (
-              <Col
-                xs={24}
-                sm={12}
-                lg={8}
-                xl={8}
-                key={task.userTaskId || task._id || taskIndex}
-                className="mytask-column"
-              >
-                <Card
-                  className="mytask-card"
-                  bordered={false}
-                  style={{
-                    "--task-accent": theme.accent,
-                    "--task-tint": theme.background,
-                  }}
-                >
-                  {/* Card header */}
-                  <div className="mytask-card-top">
-                    <div className="mytask-card-icon">
-                      {theme.emoji}
+              return (
+                <Col xs={24} sm={12} lg={8} key={id}>
+                  <Card
+                    hoverable
+                    style={{
+                      height: "100%",
+                      borderRadius: 20,
+                      border: "2px solid #E9D5FF",
+                      boxShadow:
+                        "0 5px 18px rgba(124,58,237,0.10)",
+                    }}
+                    bodyStyle={{ padding: 20 }}
+                  >
+                    <div style={{ marginBottom: 14 }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          gap: 8,
+                        }}
+                      >
+                        <Title
+                          level={4}
+                          style={{ margin: 0 }}
+                        >
+                          ♟️ {tournament.name || "Chess Tournament"}
+                        </Title>
+
+                        <Tag color={getStatusColor(status)}>
+                          {status.toUpperCase()}
+                        </Tag>
+                      </div>
+
+                      <Text type="secondary">
+                        {tournament.description ||
+                          "Join the chess challenge and show your skills!"}
+                      </Text>
                     </div>
 
-                    <Tag color="success" className="mytask-active-tag">
-                      <span className="mytask-status-dot" />
-                      Active
-                    </Tag>
-                  </div>
+                    <div
+                      style={{
+                        background: "#F5F0FF",
+                        padding: 14,
+                        borderRadius: 12,
+                        marginBottom: 16,
+                      }}
+                    >
+                      <Row justify="space-between">
+                        <Col>
+                          <Text type="secondary">Players</Text>
+                          <Title level={4} style={{ margin: 0 }}>
+                            👥 {playerCount}/{maxPlayers}
+                          </Title>
+                        </Col>
 
-                  <Title level={3} className="mytask-card-title">
-                    {task.title || "My Learning Task"}
-                  </Title>
+                        <Col>
+                          <Text type="secondary">Format</Text>
+                          <Title level={4} style={{ margin: 0 }}>
+                            🏆 {tournament.format || "Swiss"}
+                          </Title>
+                        </Col>
+                      </Row>
+                    </div>
 
-                  {task.description && (
-                    <Paragraph className="mytask-card-description">
-                      {task.description}
-                    </Paragraph>
-                  )}
+                    {/* Tournament footer */}
 
-                  <div className="mytask-activity-heading">
-                    <BookOutlined />
-                    <span>Choose your activity</span>
-                  </div>
+                    <div className="chess-tournament-footer">
 
-                  {/* Category and level links */}
-                  <div className="mytask-activities">
-                    {categories.length === 0 ? (
-                      <Text type="secondary">
-                        No activities have been added yet.
-                      </Text>
-                    ) : (
-                      categories.map((cat, categoryIndex) => {
-                        const levels = Array.isArray(cat.levels)
-                          ? cat.levels
-                          : [];
+                      {["ongoing", "in-progress"].includes(status) && (
+                        <Button
+                          block
+                          size="large"
+                          type="primary"
+                          onClick={() =>
+                            navigate(`/chess/tournaments/${id}`)
+                          }
+                          style={{ marginBottom: 10 }}
+                        >
+                          ♟️ View Tournament Matches
+                        </Button>
+                      )}
 
-                        return levels.map((lvl, levelIndex) => {
-                          const route = categoryRouteMap[cat.name];
+                      {isGuest ? (
+                        <>
+                          <p>To join this tournament, please sign up.</p>
 
-                          const selectedLevel = lvl.selectedLevel;
-                          const taskId = task.userTaskId;
+                          <Button
+                            type="primary"
+                            block
+                            onClick={() => {
+                              setIsLogin(true);
+                              setModalOpen(true);
+                            }}
+                            style={{
+                              background:
+                                "linear-gradient(135deg, #667EEA, #764BA2)",
+                              border: "none",
+                              borderRadius: 12,
+                              fontWeight: 700,
+                            }}
+                          >
+                            📝 Sign Up Flair Chess
+                          </Button>
+                        </>
+                      ) : joined ? (
+                        <Button
+                          type="default"
+                          block
+                          disabled
+                          style={{
+                            background: "#E8F8EE",
+                            color: "#23864A",
+                            borderColor: "#9AD9AF",
+                            borderRadius: 12,
+                            fontWeight: 700,
+                          }}
+                        >
+                          ✅ Already Registered
+                        </Button>
+                      ) : available ? (
+                        <Button
+                          type="primary"
+                          block
+                          loading={joiningId === id}
+                          onClick={() => joinTournament(tournament)}
+                          style={{
+                            borderRadius: 12,
+                            fontWeight: 700,
+                          }}
+                        >
+                          ♟️ Register Tournament
+                        </Button>
+                      ) : (
+                        <Button block disabled>
+                          Registration Closed
+                        </Button>
+                      )}
 
-                          const activityUrl = route
-                            ? `${route}?selectedLevel=${encodeURIComponent(
-                                selectedLevel ?? ""
-                              )}&userTaskId=${encodeURIComponent(
-                                taskId ?? ""
-                              )}&category=${encodeURIComponent(cat.name)}`
-                            : null;
+                      <Button
+                        block
+                        size="large"
+                        icon={<ShareAltOutlined />}
+                        onClick={() =>
+                          shareTournament(tournament)
+                        }
+                        style={{
+                          marginTop: 10,
+                          borderRadius: 12,
+                          border: "1px solid #8b5cf6",
+                          color: "#7c3aed",
+                          fontWeight: 700,
+                        }}
+                      >
+                        Share Tournament Link
+                      </Button>
+                    </div>
+                  </Card>
+                </Col>
+              );
+            })}
+          </Row>
+        )}
+      </div>
 
-                          return (
-                            <div
-                              className="mytask-activity-item"
-                              key={`${cat.name}-${selectedLevel}-${categoryIndex}-${levelIndex}`}
-                            >
-                              {activityUrl ? (
-                                <Link
-                                  to={activityUrl}
-                                  className="mytask-activity-link"
-                                >
-                                  <Button
-                                    block
-                                    className="mytask-activity-button"
-                                    style={{
-                                      "--activity-accent": theme.accent,
-                                    }}
-                                  >
-                                    <span className="mytask-activity-emoji">
-                                      {theme.emoji}
-                                    </span>
+      {/* Achievements */}
 
-                                    <span className="mytask-activity-text">
-                                      <strong>{cat.name}</strong>
-                                      <span>
-                                        Level: {selectedLevel}
-                                      </span>
-                                    </span>
-
-                                    <span className="mytask-activity-arrow">
-                                      →
-                                    </span>
-                                  </Button>
-                                </Link>
-                              ) : (
-                                <div className="mytask-route-error">
-                                  ⚠️ Activity route not found for{" "}
-                                  {cat.name}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        });
-                      })
-                    )}
-                  </div>
-
-                  {/* Card footer */}
-                  <div className="mytask-card-footer">
-                    <span>
-                      <TrophyOutlined /> Let's do our best!
-                    </span>
-                    <span>
-                      {activityCount}{" "}
-                      {activityCount === 1 ? "activity" : "activities"}
-                    </span>
-                  </div>
-                </Card>
-              </Col>
-            );
-          })}
-        </Row>
-      )}
-
-      {/* Completed tasks */}
       <div className="mytask-completed-section">
         <div className="mytask-completed-heading">
           <span className="mytask-completed-emoji">🏆</span>
+
           <div>
             <Title level={2}>My Achievements</Title>
             <Text type="secondary">
@@ -370,6 +607,45 @@ const MyTask = ({
 
         <CompletedTask user={user} />
       </div>
+
+      {/* Signup Modal */}
+
+      <Modal
+        open={modalOpen}
+        onCancel={() => setModalOpen(false)}
+        footer={null}
+        centered
+        width={380}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: 18,
+          }}
+        >
+          <h2
+            style={{
+              margin: 0,
+              fontSize: 24,
+              fontWeight: 700,
+              color: "#7b2ff7",
+            }}
+          >
+            {isLogin ? "Welcome Back" : "Create Account"}
+          </h2>
+
+          <p style={{ color: "#666", marginTop: 4 }}>
+            {isLogin
+              ? "Login to continue"
+              : "Sign up to get started"}
+          </p>
+        </div>
+
+        <Signup
+          onSuccess={() => setModalOpen(false)}
+          setUser={setUser}
+        />
+      </Modal>
     </div>
   );
 };

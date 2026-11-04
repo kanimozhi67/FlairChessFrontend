@@ -222,7 +222,7 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
             }
           />
           <Route
-            path="/task"
+            path="/tournaments"
             element={
               <PrivateRoute user={user}>
                 <MyTask
