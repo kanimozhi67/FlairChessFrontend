@@ -27,6 +27,7 @@ import ChessAcademyPage from "./pages/ChessAcademy/ChessAcademyPage";
 import ChessComputerPage from "./pages/ChessAcademy/ChessComputerPage";
 import ChessTournamentMatch from "./pages/ChessAcademy/ChessTournamentMatch";
 import ChessTournamentDetailsPage from "./pages/ChessAcademy/ChessTournamentDetailsPage";
+import ChessPuzzlesPage from "./pages/ChessAcademy/ChessPuzzlesPage";
 
 
 const App = () => {
@@ -123,6 +124,10 @@ const[todayTaskCount,setTodayTaskCount]=useState(0);
               </PrivateRoute>
             }
           />
+          <Route
+  path="/chess/puzzles"
+  element={<ChessPuzzlesPage user={user} />}
+/>
           <Route
             path="/payment"
             element={

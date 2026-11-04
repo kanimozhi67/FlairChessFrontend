@@ -31,30 +31,59 @@ const ChessTournamentDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const loadTournament = async () => {
+  // const loadTournament = async () => {
+  //   setLoading(true);
+  //   setError("");
+
+  //   try {
+  //     const response = await api.get(
+  //       `/chess/tournaments/${tournamentId}`
+  //     );
+
+  //     setTournament(response.data);
+  //   } catch (err) {
+  //     console.error("Failed to load tournament:", err);
+  //     setError(
+  //       err?.response?.data?.message ||
+  //         "Could not load tournament details."
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+const loadTournament = async (showLoader = false) => {
+  if (showLoader) {
     setLoading(true);
-    setError("");
+  }
 
-    try {
-      const response = await api.get(
-        `/chess/tournaments/${tournamentId}`
-      );
+  setError("");
 
-      setTournament(response.data);
-    } catch (err) {
-      console.error("Failed to load tournament:", err);
+  try {
+    const response = await api.get(
+      `/chess/tournaments/${tournamentId}`
+    );
+
+    setTournament(response.data);
+  } catch (err) {
+    console.error("Failed to load tournament:", err);
+
+    if (!tournament) {
       setError(
         err?.response?.data?.message ||
           "Could not load tournament details."
       );
-    } finally {
+    }
+  } finally {
+    if (showLoader) {
       setLoading(false);
     }
-  };
+  }
+};
+ useEffect(() => {
+  loadTournament();
 
-  useEffect(() => {
-    loadTournament();
-  }, [tournamentId]);
+ 
+}, [tournamentId]);
 
   const getPlayerName = (playerId) => {
     if (!playerId) return "Not assigned";

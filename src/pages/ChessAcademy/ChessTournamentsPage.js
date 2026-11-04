@@ -3,9 +3,15 @@ import {
   Alert, Button, Card, Col, Empty, Form, Input, InputNumber, message,
   Modal, Row, Select, Space, Spin, Statistic, Table, Tag, Typography,
 } from "antd";
+
 import {
-  PlusOutlined, ReloadOutlined, TrophyOutlined, TeamOutlined,
-  ThunderboltOutlined, CalendarOutlined,
+  PlusOutlined,
+  ReloadOutlined,
+  TrophyOutlined,
+  TeamOutlined,
+  ThunderboltOutlined,
+  CalendarOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import api from "../../api/axiosClient";
 import "./chessAcademy.css";
@@ -111,6 +117,48 @@ useEffect(() => {
       setSaving(false);
     }
   };
+
+const deleteTournament = () => {
+  if (!selected) return;
+
+  Modal.confirm({
+    title: "Delete Tournament?",
+    content: (
+      <>
+        Are you sure you want to delete <strong>{selected.name}</strong>?
+        <br />
+        This action cannot be undone.
+      </>
+    ),
+    okText: "Yes, Delete",
+    okType: "danger",
+    cancelText: "Cancel",
+
+    onOk: async () => {
+      setSaving(true);
+
+      try {
+        await api.delete(`/chess/tournaments/${selected._id}`);
+
+        message.success("Tournament deleted successfully!");
+
+        const remaining = tournaments.filter(
+          (t) => t._id !== selected._id
+        );
+
+        setTournaments(remaining);
+        setSelectedId(remaining[0]?._id || null);
+      } catch (error) {
+        message.error(
+          error?.response?.data?.message ||
+          "Could not delete tournament."
+        );
+      } finally {
+        setSaving(false);
+      }
+    },
+  });
+};
 
   const generatePairings = async () => {
     if (!selected) return;
@@ -265,20 +313,54 @@ useEffect(() => {
             {!selected ? <Card><Empty description="Choose a tournament to view details." /></Card> : (
               <Space direction="vertical" size="middle" style={{ width: "100%" }}>
                 <Card className="chess-panel">
-                  <Space align="start" style={{ width: "100%", justifyContent: "space-between" }}>
-                    <div>
-                      <Title level={3}>{selected.name}</Title>
-                      <Paragraph>{selected.description || "A friendly Flair chess competition."}</Paragraph>
-                      <Space wrap>
-                        <Tag color={statusColor[selected.status]}>{selected.status}</Tag>
-                        <Tag>{selected.timeControlMinutes} min per player</Tag>
-                        <Tag>{selected.roundsCount} rounds</Tag>
-                      </Space>
-                    </div>
-                    {selected.status === "registration" && (
-                      <Button type="primary" onClick={joinTournament} loading={saving}>Join tournament</Button>
-                    )}
-                  </Space>
+                <Space
+  align="start"
+  style={{
+    width: "100%",
+    justifyContent: "space-between",
+  }}
+>
+  <div>
+    <Title level={3}>{selected.name}</Title>
+
+    <Paragraph>
+      {selected.description || "A friendly Flair chess competition."}
+    </Paragraph>
+
+    <Space wrap>
+      <Tag color={statusColor[selected.status]}>
+        {selected.status}
+      </Tag>
+
+      <Tag>{selected.timeControlMinutes} min per player</Tag>
+
+      <Tag>{selected.roundsCount} rounds</Tag>
+    </Space>
+  </div>
+
+  <Space wrap>
+    {/* {selected.status === "registration" && (
+      <Button
+        type="primary"
+        onClick={joinTournament}
+        loading={saving}
+      >
+        Join tournament
+      </Button>
+    )} */}
+
+    {String(user?.role || "").toLowerCase() === "admin" && (
+      <Button
+        danger
+        icon={<DeleteOutlined />}
+        onClick={deleteTournament}
+        loading={saving}
+      >
+        Delete
+      </Button>
+    )}
+  </Space>
+</Space>
                   {selected.status === "registration" && (
                     <Alert style={{ marginTop: 16 }} type="info" showIcon message="Registration is open" description="Once players have joined, an organiser can generate the first round." />
                   )}

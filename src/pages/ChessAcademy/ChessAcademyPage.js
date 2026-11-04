@@ -16,6 +16,7 @@ import {
   TrophyOutlined,
   RobotOutlined,
     AppstoreOutlined,
+     ShareAltOutlined,
   CrownOutlined,
   TeamOutlined,
   RightOutlined,
@@ -77,8 +78,45 @@ const handlePlayMatch = (tournamentId, roundNumber, pairingId) => {
 
   useEffect(() => {
     loadTournaments();
+
+    const refreshInterval = setInterval(() => {
+    loadTournaments();
+  }, 300000); // Refresh every 5 mins
+
+  return () => clearInterval(refreshInterval);
+
   }, [loadTournaments]);
 
+
+  const shareTournament = async (tournament) => {
+  const id = tournament._id || tournament.id;
+
+  const shareUrl = `${window.location.origin}/chess/tournaments/${id}`;
+
+  const shareData = {
+    title: tournament.name || "Flair Chess Tournament",
+    text: `♟️ Join me in ${tournament.name || "Flair Chess Tournament"}! Register now and let's play chess together!`,
+    url: shareUrl,
+  };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      await navigator.clipboard.writeText(shareUrl);
+      message.success("Tournament link copied! Share it with your friends.");
+    }
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        message.success("Tournament link copied!");
+      } catch {
+        message.error("Unable to share tournament link.");
+      }
+    }
+  }
+};
  
 const joinTournament = async (tournament) => {
   const id = tournament._id || tournament.id;
@@ -573,7 +611,21 @@ const isJoined = (tournament) => {
     Registration Closed
   </Button>
 )}
-
+<Button
+  block
+  size="large"
+  icon={<ShareAltOutlined />}
+  onClick={() => shareTournament(tournament)}
+  style={{
+    marginBottom: 10,
+    borderRadius: 12,
+    border: "1px solid #8b5cf6",
+    color: "#7c3aed",
+    fontWeight: 700,
+  }}
+>
+  Share Tournament Link
+</Button>
                     </div>
 
 
